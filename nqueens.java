@@ -59,32 +59,30 @@ class nqueens{
 		int i = 0;
 		int qRow;
 		int qCol;
-		while (dCol<board.length && dRow < board.length){ 
-		System.out.printf(dRow-i+" "+(dCol-i));
-			board[dRow-i][dCol-i]=true;//upper left diagonal
-			dRow=qRow;
-			dCol=qCol;
+		while (qCol<board.length && qRow < board.length){ 
+		System.out.printf(qRow-i+" "+(qCol-i));
+			board[qRow-i][qCol-i]=true;//upper left diagonal
 			i++;
 		}/*
 		i = 0;
-		while (dCol>0 && dRow > 0){ 
-			board[dRow+i][dCol+i]=true;//lower right diagonal
-			dRow=qRow;
-			dCol=qCol;
+		while (qCol>0 && qRow > 0){ 
+			board[qRow+i][qCol+i]=true;//lower right diagonal
+			qRow=qRow;
+			qCol=qCol;
 			i++;
 		}
 		i=0;
-		while (dCol>0 && dRow > 0){ 
-			board[dRow-i][dCol+i]=true;//upper right diagonal
-			dRow=qRow;
-			dCol=qCol;
+		while (qCol>0 && qRow > 0){ 
+			board[qRow-i][qCol+i]=true;//upper right diagonal
+			qRow=qRow;
+			qCol=qCol;
 			i++;
 		}
 		i=0;
-		while (dCol>0 && dRow > 0){ 
-			board[dRow+i][dCol-i]=true;//lower left diagonal
-			dRow=qRow;
-			dCol=qCol;
+		while (qCol>0 && qRow > 0){ 
+			board[qRow+i][qCol-i]=true;//lower left diagonal
+			qRow=qRow;
+			qCol=qCol;
 			i++;
 		}
 		*/
