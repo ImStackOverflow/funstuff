@@ -22,6 +22,7 @@ class nqueens{
 	public static void main(String[] args){
 		int[][] check = new int[16][16];
 		boolean[][] chessBoard = initial(); //create chess board
+		System.out.println(qLocation[0][0]+" "+qLocation[0][1]);
 		fillIn(chessBoard, qLocation[0][0], qLocation[0][1]);
 		
 		
@@ -56,9 +57,14 @@ class nqueens{
 			board[i][qCol]=true; //all spaces left and right
 		}
 
-		int i = 0;
-		int qRow;
-		int qCol;
+		int bDiag = board.length-qRow-1;//get to lower most right diagonal bound of board
+		int dRow = qRow+bDiag;
+		int dCol = qCol+bDiag;
+		for (int i =0; dCol-i>=0;i++){
+			System.out.println(dCol-i+" "+(dRow-i));
+			board[dRow-i][dCol-i]=true;
+		}
+		/*
 		while (qCol<board.length && qRow < board.length){ 
 		System.out.printf(qRow-i+" "+(qCol-i));
 			board[qRow-i][qCol-i]=true;//upper left diagonal
