@@ -14,7 +14,7 @@ class nqueens{
 	boolean[][] board = new boolean[size][size]; //create board
 	qLocation[0][0] = sc.nextInt(); //set location of given queen to first index
 	qLocation[0][1] = sc.nextInt(); // in form (x)(y)
-	board[qLocation[0][0]-1][qLocation[0][1]-1] = true; //set location to true
+	board[qLocation[0][0]][qLocation[0][1]] = true; //set location to true
 	return board;
 
 	}
@@ -52,13 +52,13 @@ class nqueens{
 	static void fillIn(boolean[][] board, int qRow, int qCol) { 
 
 		for (int i = 0;i<board.length;i++){
-			board[qRow-1][i]= true; //all spaces above and below
-			board[i][qCol-1]=true; //all spaces left and right
+			board[qRow][i]= true; //all spaces above and below
+			board[i][qCol]=true; //all spaces left and right
 		}
 
 		int i = 0;
-		int dRow = qRow+1;
-		int dCol = qCol+1;
+		int qRow;
+		int qCol;
 		while (dCol<board.length && dRow < board.length){ 
 		System.out.printf(dRow-i+" "+(dCol-i));
 			board[dRow-i][dCol-i]=true;//upper left diagonal
