@@ -108,7 +108,8 @@ public class nqueens extends queens{
 			i++;
 		}
 		i=0;
-		while (piece.qY+i!=(board.length) && piece.qX-i>=0){//up and right
+		while (piece.qY-i!=(board.length) && piece.qX+i>=0){//up and right
+		System.out.println(piece.qY-i+" "+(piece.qX+i));
 			board[piece.qY-i][piece.qX+i] = true;			
 			i++;
 		}
