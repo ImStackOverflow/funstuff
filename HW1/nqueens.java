@@ -33,7 +33,7 @@ public class nqueens extends queens{
 		boolean[][] chessBoard = initial(piece); //create chess board
 		
 		if (generate(chessBoard,piece,0,chessBoard.length)==1){//if successfull in placing all queens
-			output.println("Solutions are:");
+			//output.println("Solutions are:");
 			for (int i=0; i < chessBoard.length; i++){//print solution array
 				for (int j=0;j<2;j++){
 					output.print((qLocation[i][j]+1)+" ");
