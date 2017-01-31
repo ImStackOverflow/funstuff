@@ -3,45 +3,142 @@ import java.util.Scanner;
 
 
 class Node {
-	Node before = new Node();
-	Node after = new Node();
-	chessPiece piece = new chessPiece();
-	static int createNode(Node before, Node after){//creates node inbetween before and after
+	Node head;
+	Node after;
+	chessPiece piece;
+
+
+	static Node createNode(Node before){//creates node returns created node
 		Node create = new Node();//make sure can make new node
-		create.before = before; //point to node before
-		create.after = after; //point to node after
-		before.after = create;//make post node point to new node
-		after.before = create; //make previous node point to new node 
-		return 1;//success!
-	}
-	static int deleteNode(Node delete){//deletes given node
-		Node helper = delete.before;//set new node to previous one
-		helper.after = delete.after;//point previous node to node after delete
-		helper = delete.after;//set node to after delete
-		helper.before = delete.before;//point post node to node before delete
-		if (helper.before == delete.before){
-			helper = delete.before;
-			helper.after = delete.after
-			if (helper.after == delete.after){
-				return 1;//success!
-			}
-			else return 0;//not able to splice post node
+		if (before == null){//trying to make new head
+			return null;//fail
 		}
-		else return -1;//not able to splice previous node
+		create.head = before.head;//set head
+		create.after = before.after; //point to node after
+		before.after = create;//make post node point to new node
+		return create;//success!
+	}
+
+	static Node deleteNode(Node delete){//deletes given node, returns node before
+		Node helper = delete.head;//set new node to head
+		if (delete == delete.head){//if trying to delete head
+			while (helper != null){//go through whole linked list
+				helper.head = delete.after;//set head to new head
+				helper = helper.after;//go through list
+			}
+			helper = delete.after;
+			delete.after = null;//free pointer
+			return helper.head;//success return head
+		}
+		//not deleting head
+		while (helper.after != delete){//get to node before delete
+			helper = helper.after;
+		}
+		helper.after = delete.after;//point previous node to node after delete
+			if (helper.after == delete.after){
+				return helper;//success!
+			}
+			else return null;//not able to splice in node
 	}
 }
-class chessBoard extends Node{
-	static int verify(Node node, int X, int Y){
+class chess extends Node{
+	static Node createBoard(String firstL, Node helper) throws IOException{//returns linked list of board
+		String[] data = firstL.split("");//split line into characters
+		int length = data.length-1;//last place in array
+		int i = 0;//start after board size
+		while (i<=length){//for all data
+			switch (data[++i].toUpperCase()) {//create chess piece type
+				case "K":
+					helper.piece = new King();
+					break;
 
-	}	
-	static int find(int X, int Y){
-		//while 
+				case "Q":
+					helper.piece = new queen();
+					break;
+
+				case "R":
+					helper.piece = new Rook();
+					break;
+
+				case "B":
+					helper.piece = new Bishop();
+					break;
+
+				case "N":
+					helper.piece = new Knight();
+					break;
+			}
+			if(data[i]==data[i].toUpperCase()){//check if black
+				helper.piece.color = 'b';
+			}
+			else {//otherwise white
+				helper.piece.color = 'c';	
+			}
+			helper.piece.X = data[++i].parseInt;//add x place 
+			helper.piece.Y = data[++i].parseInt;//add y place
+			helper.piece.boardSize = data[0];//add board size
+
+			helper = createNode(helper);//make next node
+		}
+		return helper.head;
+	}
+
+	static Node find(int x, int y, Node helper){//takes in (x,y) returns found node
+		while (helper != null){//till end of linked list
+			if (x == helper.piece.X && y == helper.piece.Y){
+				return helper;
+			}
+			helper=helper.after;
+		}
+		return null;
+	}
+
+	static boolean verify(Node lala){
+		lala = lala.head;
+		Node helper;
+		while (lala.after != null){
+			helper = lala.after;
+			while (helper != null){
+				if (lala.piece.X == helper.piece.X
+				&& lala.piece.Y == helper.piece.Y){//x y cordinates match
+					return false;//2 pieces in same place
+			}
+			helper=helper.after;
+			}
+			lala = lala.after;
+		}
+		return true;
+	}
+
+	static public void main(String[] args){
+		Scanner in = new Scanner(new File(args[0]));
+
+		Node poop = new Node();
+		poop.head = poop;
+		Knight ass = new Knight();
+		for (int i = 0; i < 5; i++){
+			poop = createNode(poop, ass);
+		}
+		Node helper = poop;
+		poop = poop.head;
+		while (poop != null){
+			poop = deleteNode(poop);
+			helper = poop;
+			poop = poop.after;
+		}
+		helper = helper.head;
+		while (helper != null){
+			System.out.println(helper);
+			helper = helper.after;
+		}
+		
+
 	}
 }
 
 class chessPiece{
 	int boardSize = 0;
-	char color;//stores whether its white or black
+	char color = 'u';//stores whether its white(w) or black(b)
 	int X = 0;
 	int Y = 0;
 }
@@ -98,7 +195,7 @@ class Rook extends chessPiece{
 	static int[] attack(chessPiece piece){
 		int[] spots = new int[piece.boardSize*piece.boardSize];
 		int i = 0;
-		for (int j = 0; j<boardSize;j++){
+		for (int j = 0; j<piece.boardSize;j++){
 			if(j == piece.Y){}//dont store current piece position in attack array
 			else {
 				spots[i++] = piece.X;//store up and down attack spaces
@@ -151,10 +248,11 @@ class Bishop extends chessPiece{
 }
 
 class King extends chessPiece{
+	/* needs work
 	static int[] attack(chessPiece piece){
 		int[] spots = new int[piece.boardSize*piece.boardSize];
 		int i = 0;
-		/* needs work
+		
 
 
 		if (piece.x >= 0){//if not at left edge of board
@@ -195,10 +293,10 @@ class King extends chessPiece{
 			spots[i++] = piece.Y+1;
 			spots[i++] = piece.X;
 		}
-		*/
-		
+
 
 	}
+	*/
 
 }
 
@@ -208,7 +306,7 @@ class queen extends chessPiece{
 		int i=0;
 		int j;
 
-		for (j=0; j<boardSize;j++){//up down left right
+		for (j=0; j<piece.boardSize;j++){//up down left right
 			if(j == piece.Y){}//dont store current piece position in attack array
 			else {
 				spots[i++] = piece.X;//store up and down attack spaces
@@ -248,5 +346,6 @@ class queen extends chessPiece{
 			spots[i++] = piece.Y-j;		
 			j++;
 		}
+		return spots;
 	}
 }
