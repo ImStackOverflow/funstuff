@@ -5,7 +5,7 @@ import java.util.*;
 class Node {
 	Node head;
 	Node after = null;
-	chessPiece piece = new chessPiece();
+	chessPiece piece;
 
 
 	static Node createNode(Node before){//creates node returns created node
@@ -40,41 +40,42 @@ class Node {
 			}
 			else return null;//not able to splice in node
 	}
-	static Node clearList(Node clear){
+	static Node clearList(Node clear){//clears list starting from top, returns last node
 		clear = clear.head;
 		while (clear.after != null){
+			System.out.println("the head node is: "+clear.head.piece);
 			clear = deleteNode(clear);
+			
 		}
 		return clear;
 	}
 }
 class chess extends Node{
 
-
 	static public void main(String[] args) throws IOException{
 		Scanner in = new Scanner(new File(args[0]));//in file
 		PrintWriter out = new PrintWriter(new File(args[1]));//out file
 		Node poop = new Node();//initiate linked list
 		poop.head = poop;
-		Node head = poop.head;//keep track of linked list
 		String[] find = new String[2];
 		String input;
 		int i = 0;
-		while (i<=2){
+		while (in.hasNextLine()){
 			System.out.println(i++);
 			input = in.nextLine();//get board data line
+			poop = clearList(poop);
 			poop = createBoard(input, poop);//make linked list of pieces
-
+/*
 			
 			System.out.println("the board is: "+verify(poop));
+			poop = poop.head;
 			while (poop!=null){
 			System.out.print("Bsize: "+poop.piece.boardSize);
 			System.out.print("  (x,y): "+(poop.piece.X)+","+(poop.piece.Y));
 			System.out.println("  piece: "+poop.piece);
 			poop = poop.after;
 		}
-		poop = head;
-		
+		*/
 			input = in.nextLine();//get square
 			if (verify(poop)==true){//board is good
 				find = input.split(" ");//parse second line and get piece at space
@@ -89,19 +90,22 @@ class chess extends Node{
 			else {
 				out.println("Invalid");
 			}
-			poop = clearList(poop);
+			poop = poop.head;
+			/*
+			while (poop!=null){
+				System.out.println(poop.piece);
+				poop = poop.after;
+			}
+			*/
+			poop=poop.head;
+			while(poop.after!=null){
+				poop=poop.after;
+			}
+			System.out.println("last node is: "+poop.piece);
+
 		}
 		in.close();
 		out.close();
-
-		//poop = createNode(poop);
-		//System.out.println("poop after is: "+poop.after);
-		poop=head;
-		
-		
-		
-
-
 		/*
 		int[] attacks = new int[poop.piece.boardSize*poop.piece.boardSize];
 
@@ -116,25 +120,51 @@ class chess extends Node{
 		queef.Y = 3;
 		
 		/*
-		attacks = queef.attack(queef);
 		for(int i = 0; attacks[i]!= -1;){
 			System.out.println(attacks[i++]+" "+attacks[i++]);
 		}
-		chessPiece ass = poop.piece;
-		poop.piece tit;
-		System.out.println(queef);
-		System.out.println(ass);
-		/*
-		attacks = ass.attack(poop.piece);//generate attack array
-		for (int i = 0; attacks[i] != -1;){//all elements in attack array
+		
+	
+		input = "8 q 4 3 k 4 4 r 8 2 r 8 8 b 1 1 K 4 8 N 7 7";
+		poop = createBoard(input, poop);//make linked list of pieces
+		Node helper = poop;
+		int[] attacks = new int[poop.piece.boardSize*poop.piece.boardSize];
+		System.out.print("Bsize: "+poop.piece.boardSize);
+			System.out.print("  (x,y): "+(poop.piece.X)+","+(poop.piece.Y));
+			System.out.println("  piece: "+poop.piece);	
+		attacks = poop.piece.attack(poop.piece);//generate attack array
+		for (i=0; i<attacks.length;){
+			System.out.println("attacks: "+attacks[i++]+" "+attacks[i++]);
+		}
+		for (i = 0; attacks[i] != 0;){//all elements in attack array
 			helper = find(attacks[i++],attacks[i++],poop);//search list for attack spaces
 			 if(helper != null){//node at piece it can attack
 			 	attacks[i] = 0;//exit loop
 			 }
+			 //if
 		}
+		/*
+		poop = head;
+		while (i<=2){
+			System.out.println(i++);
+			input = in.nextLine();//get board data line
+			poop = createBoard(input, poop);//make linked list of pieces
+
+			
+			System.out.println("the board is: "+verify(poop));
+			poop = poop.head;
+			while (poop!=null){
+			System.out.print("Bsize: "+poop.piece.boardSize);
+			System.out.print("  (x,y): "+(poop.piece.X)+","+(poop.piece.Y));
+			System.out.println("  piece: "+poop.piece);
+			poop = poop.after;
+		}
+		}
+		
 		System.out.println("piece "+poop.piece.type+" at ("+poop.piece.X+","+poop.piece.Y+")"+
 			" attacks "+helper.piece.type+" at ("+helper.piece.X+","+helper.piece.Y+")");
-			*/
+		*/	
+			
 	}
 
 
@@ -150,7 +180,6 @@ class chess extends Node{
 		int i = 0;//start after board size
 		//System.out.println("lengnth is: "+length);
 		while (i<length){//for all data
-			helper = createNode(helper);//make node
 			
 			//System.out.println("i is: "+i);
 			switch (data[++i].toUpperCase()) {//create chess piece type
@@ -187,9 +216,11 @@ class chess extends Node{
 			helper.piece.X = Integer.parseInt(data[++i]);//add x place 
 			helper.piece.Y = Integer.parseInt(data[++i]);//add y place
 			helper.piece.boardSize = Integer.parseInt(data[0]);//add board size
+			if(i<length){
+				helper=createNode(helper);
+			}
 		}
-		helper = deleteNode(helper.head);
-		return helper;
+		return helper.head;
 	}
 
 	static Node find(int x, int y, Node helper){//takes in (x,y) returns found node
@@ -236,15 +267,8 @@ class chess extends Node{
 	
 }
 
-class chessPiece{
-	int boardSize = 0;
-	char type = 'u';//stores piece type
-	int X = 0;
-	int Y = 0;
-}
-
 class Knight extends chessPiece {
-	static int[] attack(chessPiece piece){//returns positions that piece can attack
+	int[] attack(chessPiece piece){//returns positions that piece can attack
 		int[] spots = new int[piece.boardSize*piece.boardSize];
 		int i = 0;
 		if (piece.Y-2 > 0){//down
@@ -292,7 +316,7 @@ class Knight extends chessPiece {
 }
 
 class Rook extends chessPiece{
-	static int[] attack(chessPiece piece){
+	int[] attack(chessPiece piece){
 		int[] spots = new int[piece.boardSize*piece.boardSize];
 		int i = 0;
 		for (int j = 1; j<piece.boardSize;j++){
@@ -313,7 +337,7 @@ class Rook extends chessPiece{
 }
 
 class Bishop extends chessPiece{
-	static int[] attack(chessPiece piece){
+	int[] attack(chessPiece piece){
 		int[] spots = new int[piece.boardSize*piece.boardSize];
 		int j = 1;
 		int i = 0;//position in output array
@@ -348,7 +372,7 @@ class Bishop extends chessPiece{
 }
 
 class King extends chessPiece{
-	static int[] attack(chessPiece piece){
+	int[] attack(chessPiece piece){
 		int[] spots = new int[piece.boardSize*piece.boardSize];
 		int i = 0;
 		
@@ -526,7 +550,7 @@ class King extends chessPiece{
 }
 
 class queen extends chessPiece{
-	static int[] attack(chessPiece piece){
+	int[] attack(chessPiece piece){
 		int[] spots = new int[piece.boardSize*piece.boardSize];
 		int i=0;
 		int j;
