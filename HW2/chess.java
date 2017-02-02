@@ -51,8 +51,8 @@ class Node {
 class chess extends Node{
 
 	static public void main(String[] args) throws IOException{
-		Scanner in = new Scanner(new File(args[0]));//in file
-		PrintWriter out = new PrintWriter(new File(args[1]));//out file
+		Scanner in = new Scanner(new File("input.txt"));//in file
+		PrintWriter out = new PrintWriter("analysis.txt");//out file
 		Node poop = new Node();//initiate linked list
 		Node helper = new Node();
 		boolean found = false;
