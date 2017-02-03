@@ -5,7 +5,7 @@
 #define fuckup 1
 #define good 0
 
-int reverse(FILE* file, char word[256]);
+char* reverse(char word[256]);
 
 int main(int argc, char* argv[]){
 	FILE* in;
@@ -31,20 +31,31 @@ int main(int argc, char* argv[]){
 	}
 /* read words from input file, print on separate lines to output file*/ 
 	while(fscanf(in, " %s", word) != EOF ){
-		reverse(out, word);
-
-		fprintf(out, "%s\n", word); }
+		reverse(word);
+		printf("%s\n", word);	
+		fprintf(out, "%s\n", word);
+	}
+		
+		
 
 /* close input and output files */ 
 fclose(in);
 fclose(out);
 return(good); 
+
 }
 
-int reverse(FILE* file, char word[256]){
-			if(*word != '/n'){
-				reverse(file, ++word);
-			}
-			printf("%s", word);
-			return good;
-		}
+char* reverse(char word[256]){
+	int i = 0;
+	int j = 0;
+	char hold;
+	while(word[++j]!='\0');
+	for (int i = 0; i < j;)
+	{
+		hold = word[i];
+		word[i++] = word[--j];
+		word[j] = hold;/* code */
+	}
+	return word;
+	
+}
