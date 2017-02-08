@@ -1,94 +1,46 @@
-// Filename: Node.java
-//
-// Contains the class Node that represents a node in a linked list
-// which is used as node in a linked list
-//
-// Santrupti Nerli, Jan 2017
-
 class Node {
+	Node head;
+	Node after = null;
+	chessPiece piece;
 
-  // This node stores the chess piece as its data
-  private ChessPiece myPiece;
-  // this is the next pointer to contact next node
-  private Node next;
 
-  // simple constructor
-  // I will use this to create head pointer
-  // without any data
-  public Node() {
-    this.myPiece = null;
-    this.next = null;
-  }
+	static Node createNode(Node before){//creates node returns created node
+		Node create = new Node();//make sure can make new node
+		if (before == null){//trying to make new head
+			return null;//fail
+		}
+		create.head = before.head;//set head
+		create.after = before.after; //point to node after
+		before.after = create;//make post node point to new node
+		return create;//success!
+	}
 
-  // Method to create a node so that you can do insertion into the linkedlist afterwards
-  // based on the parameters, create a corresponding chesspiece
-  // Input: parameters of a chesspiece
-  // Output: ChessPiece currently inserted
-  public Node(char piece, int row, int col) {
-    this.myPiece = null;
-    boolean color = identifyColor(piece);
-    if(piece == 'k' || piece == 'K') {
-        this.myPiece = new King(row, col, color);
-    }
-    else if(piece == 'q' || piece == 'Q') {
-        this.myPiece = new Queen(row, col, color);
-    }
-    else if(piece == 'r' || piece == 'R') {
-        this.myPiece = new Rook(row, col, color);
-    }
-    else if(piece == 'b' || piece == 'B') {
-        this.myPiece = new Bishop(row, col, color);
-    }
-    else if(piece == 'n' || piece == 'N') {
-        this.myPiece = new Knight(row, col, color);
-    }
-    else if(piece == 'p' || piece == 'P') {
-        this.myPiece = new Pawn(row, col, color);
-    }
-    else {
-      Utilities.errExit("Cannot recognize chesspiece");
-    }
-  }
-
-  // return the chesspiece stored in this node
-  public ChessPiece getChessPiece() {
-    return this.myPiece;
-  }
-
-  // return the node that is pointed by the current
-  public Node getNext() {
-    return this.next;
-  }
-
-  // at times I need to update this pointer. For example, in insertion case
-  public void setNext(Node next) {
-    this.next = next;
-  }
-
-  // return the row of the current chesspiece
-  public int getRow() {
-    return this.myPiece.getRow();
-  }
-
-  // return the col of the current chesspiece
-  public int getCol() {
-    return this.myPiece.getCol();
-  }
-
-  // return the color of the current chesspiece
-  public boolean getColor() {
-    return this.myPiece.getColor();
-  }
-
-  // I will use identify color based on the character input I receive from solution.txt
-  public boolean identifyColor(char piece) {
-    // black represents false and white represents true
-    if(piece == 'k' || piece == 'q' || piece == 'r' || piece == 'b' || piece == 'n' || piece == 'p') {
-      return true;
-    }
-    return false;
-  }
-
+	static Node deleteNode(Node delete){//deletes given node, returns node before
+		Node helper = delete.head;//set new node to head
+		if (delete == delete.head){//if trying to delete head
+			while (helper != null){//go through whole linked list
+				helper.head = delete.after;//set head to new head
+				helper = helper.after;//go through list
+			}
+			helper = delete.after;
+			delete.after = null;//free pointer
+			return helper.head;//success return head
+		}
+		//not deleting head
+		while (helper.after != delete){//get to node before delete
+			helper = helper.after;
+		}
+		helper.after = delete.after;//point previous node to node after delete
+			if (helper.after == delete.after){
+				return helper;//success!
+			}
+			else return null;//not able to splice in node
+	}
+	static Node clearList(Node clear){//clears list starting from top, returns last node
+		if (clear.after != null){
+			clearList(clear.after);
+		}
+		if (clear != clear.head) deleteNode(clear); //delete up to head
+		return clear;//return head
+	}
 }
-
-// End
