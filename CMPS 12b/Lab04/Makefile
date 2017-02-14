@@ -7,4 +7,4 @@ clean:
 	rm charType output
 
 check:
-	valgrind --leak-check=full charType charType.c output
+	valgrind --leak-check=full ./charType charType.c output

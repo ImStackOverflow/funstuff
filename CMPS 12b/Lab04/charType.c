@@ -60,6 +60,7 @@ int main(int argc, char* argv[]){
 	g = getline(&line,kno,in);
 	i++;
 	}
+	free(line);
 	fclose(in);
 	fclose(out);
 
