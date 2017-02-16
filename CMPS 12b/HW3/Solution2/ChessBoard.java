@@ -158,36 +158,92 @@ class ChessBoard {
     }
     writeToAnalysisFile("-\n");
   }
+  //return pieces that piece is attacking
+  //input: attack piece
+  //return: attacked node
+  public Node Attack(Node piece, Node helper){
+	  while (helper != null){
+	   if(isDifferent(helper, piece) && piece.getChessPiece().isAttacking(helper.getRow(), helper.getCol())) {
+		   return helper;
+	   }
+	   helper = helper.getNext();
+	  }
+	  return helper;
+  }
+  
 
+  public int incriment(int woah){//gets number further from 0
+    if (woah > 0) woah++;
+    else if (woah < 0) woah--;
+    return woah;
+  }
   public int decriment(int woah){//gets number closer to 0
     if (woah > 0) woah--;
     else if (woah < 0) woah++;
     return woah;
   }
 
+  
   //checks for pieces blocking
   //input: 2 nodes want to check
   //output: true is no blocking, false if piece is blocking
   public boolean canAttack(Node attack, Node dicked){//attack = atacking piece, dicked is attacked piece
+  int checkX = Math.abs(attack.getCol() - dicked.getCol());//get dist between dicked and attack
+  int checkY = Math.abs(attack.getRow() - dicked.getRow());
+  int betweenX, betweenY;
+  Node helper = head.getNext();
+  while(helper != null){
+	  helper = attack(attack, helper);
+	  if (helper == dicked || helper == attack){//only want to check for pieces between
+		helper = helper.getNext();//move along
+	  }
+	else if (helper != null){
+		betweenX = Math.abs(attack.getCol() - helper.getCol());//get dist between attack and possible block
+		betweenY = Math.abs(attack.getRow() - helper.getRow());
+		if(betweenX<checkX || betweenY<checkY){//block is closer to attack than desired attack
+			return false;
+		}
+		else helper = helper.getNext();//move along
+	}
+	return true;//can attack piece, no block
+	}
+  }
+  
+  
+  
+  
+  
+  
+  
+  /*
     System.out.println("what");
-    int xDiff = attack.getRow() - dicked.getRow() - 1;//find diference between pieces
-    int yDiff = attack.getCol() - dicked.getCol() - 1;
-    int xPlace = attack.getRow() - xDiff - 1;
-    int yPlace = attack.getCol() - yDiff - 1;
-    System.out.println("attacking: ("+attack.getRow()+","+attack.getCol()+") attacked: ("+dicked.getRow()+","+dicked.getCol()+")");
+	int yDiff = dicked.getRow() - attack.getRow();
+	int Diff = dicked.getCol() - attack.getCol();
+    if(yDiff != 0){
+		yDiff = yDiff % decriment(yDiff);
+	}
+	if (xDiff != 0){
+		xDiff = xDiff % decriment(xDiff);
+	}
+    int xPlace = attack.getCol() + xDiff;//start inward and scan spaces between attacked and dicked
+	int yPlace = attack.getRow() + yDiff;
+    System.out.println("attacking: ("+attack.getCol()+","+attack.getRow()+") attacked: ("+dicked.getCol()+","+dicked.getRow()+")");
     for (int i = 0; i < 2; i++) {
-    //while (xDiff != 0 || yDiff != 0){
-      xPlace = attack.getRow() - xDiff;//start outward and scan spaces between attacked and dicked
-      yPlace = attack.getCol() - yDiff;
-      System.out.println("checking: ("+xPlace+","+yPlace+"'");
-      if(attack.getChessPiece().isAttacking(xPlace, yPlace)){
+    //while (yPlace != dicked.getRow() || xPlace != dicked.getCol()){
+      System.out.println("checking: ("+xPlace+","+yPlace+")");
+      if(findChessPiece(xPlace, yPlace) != null){
         return false;//return false if piece is blocking
       }
-      xPlace = decriment(xPlace);//work inward
-      yPlace = decriment(yPlace);
+	  xDiff = incriment(xDiff);//work inward
+	  yDiff = incriment(yDiff);
+	  System.out.println("xDiff is: "+xDiff);
+	  System.out.println("yDiff is: "+yDiff);
+	  yPlace = attack.getRow() + yDiff;//start inward and scan spaces between attacked and dicked
+      xPlace = attack.getCol() + xDiff;
     }
     return true;
   }
+  */
   // Method to write to the analysis.txt file
   // Input: String to write
   // Output: void, just write
@@ -253,7 +309,7 @@ class ChessBoard {
               Utilities.printList(head);
               c.checkValidity();
               convertFromListToMatrixAndPrint(j);
-              c.canAttack(head, head.getNext());
+              System.out.println(c.canAttack(head.getNext(), head.getNext().getNext()));
               
               
             }
