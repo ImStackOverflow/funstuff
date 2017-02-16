@@ -10,6 +10,7 @@
 // Santrupti Nerli, Jan 2017
 //
 import java.io.*;
+import java.util.*;
 
 class ChessBoard {
 
@@ -22,14 +23,28 @@ class ChessBoard {
     head = new Node();
   }
 
-  // Method to perform insertion at the front of the list
+  // Method to perform insertion at head of list
   // Input: Node to be inserted
   // Output: void
-  public Node insert(Node piece) {
+  public static Node insert(Node ass) {
     Node temp = head.getNext();
-    head.setNext(piece);
-    piece.setNext(temp);
+    head.setNext(ass);
+    ass.setNext(temp);
     return head;
+  }
+
+  public Node delete(Node delete){//deletes given node, returns head
+    Node helper = head;//set new node to head
+    if (delete == head){//if trying to delete head
+      head = head.getNext();
+      delete.setNext(null);
+    }
+    else {//not trying to delete head
+      while(delete != helper.getNext()) helper = helper.getNext();//get node before
+      helper.setNext(delete.getNext());//set previous node to node after delete
+      delete.setNext(null);//delete node
+    }
+      return head;//success return head
   }
 
   // Method to find Node in a given location
@@ -111,19 +126,6 @@ class ChessBoard {
     }
   }
 
-  // Method to check if any piece exists in the query location
-  // Input: integer array query
-  // Output: returns the piece (in character) if found otherwise just returns '-'
-  public char findChessPiece(int[] query) {
-    int col = query[0];
-    int row = query[1];
-    Node foundPiece = findChessPiece(row, col);
-    if ( foundPiece != null) {
-      return Utilities.returnChessPieceType(foundPiece);
-    }
-    return '-';
-  }
-
   // Method to check if two nodes given are different or the same ones
   // It serves as a helper when trying to find the attack
   // Input: two nodes
@@ -139,24 +141,53 @@ class ChessBoard {
   // as soon as you encounter the first attack, just print it and return
   // Input: none
   // Output: returns nothing
-  public void isOneAttackingOther() {
+  public void isOneAttackingOther(Node piece) {
     // get the first valid chesspiece (remember not the head)
-    Node piece = head.getNext();
+    Node helper = head.getNext();
     // loop through each of the remaining chesspieces and check for attack
-    while(piece != null) {
+    while(helper != null) {
       Node other = head.getNext();
       while(other != null) {
-        if(isDifferent(piece, other) && piece.getChessPiece().isAttacking(other.getRow(), other.getCol())) {
-          writeToAnalysisFile(Utilities.returnChessPieceType(piece) + " " + piece.getCol() + " " + piece.getRow() + " " + Utilities.returnChessPieceType(other) + " " + other.getCol() + " " + other.getRow() + "\n");
+        if(isDifferent(helper, other) && helper.getChessPiece().isAttacking(other.getRow(), other.getCol())) {
+          writeToAnalysisFile(Utilities.returnChessPieceType(helper) + " " + helper.getCol() + " " + helper.getRow() + " " + Utilities.returnChessPieceType(other) + " " + other.getCol() + " " + other.getRow() + "\n");
           return;
         }
         other = other.getNext();
       }
-      piece = piece.getNext();
+      helper = helper.getNext();
     }
     writeToAnalysisFile("-\n");
   }
 
+  public int decriment(int woah){//gets number closer to 0
+    if (woah > 0) woah--;
+    else if (woah < 0) woah++;
+    return woah;
+  }
+
+  //checks for pieces blocking
+  //input: 2 nodes want to check
+  //output: true is no blocking, false if piece is blocking
+  public boolean canAttack(Node attack, Node dicked){//attack = atacking piece, dicked is attacked piece
+    System.out.println("what");
+    int xDiff = attack.getRow() - dicked.getRow() - 1;//find diference between pieces
+    int yDiff = attack.getCol() - dicked.getCol() - 1;
+    int xPlace = attack.getRow() - xDiff - 1;
+    int yPlace = attack.getCol() - yDiff - 1;
+    System.out.println("attacking: ("+attack.getRow()+","+attack.getCol()+") attacked: ("+dicked.getRow()+","+dicked.getCol()+")");
+    for (int i = 0; i < 2; i++) {
+    //while (xDiff != 0 || yDiff != 0){
+      xPlace = attack.getRow() - xDiff;//start outward and scan spaces between attacked and dicked
+      yPlace = attack.getCol() - yDiff;
+      System.out.println("checking: ("+xPlace+","+yPlace+"'");
+      if(attack.getChessPiece().isAttacking(xPlace, yPlace)){
+        return false;//return false if piece is blocking
+      }
+      xPlace = decriment(xPlace);//work inward
+      yPlace = decriment(yPlace);
+    }
+    return true;
+  }
   // Method to write to the analysis.txt file
   // Input: String to write
   // Output: void, just write
@@ -197,16 +228,16 @@ class ChessBoard {
   // an then proceed further
   // Input: none
   // Output: void, jusr read and perform requested operations
-  public static void readFromInputFile() {
-
+  public static void readFromInputFile(){
     int lineCtr = 0;
-    int[] query = new int[2];
     ChessBoard c = null;
 
     try {
         BufferedReader reader = new BufferedReader(new FileReader("input.txt"));
         String line;
-        while ((line = reader.readLine()) != null) {
+        line = reader.readLine();
+//              while ((line = reader.readLine()) != null) {
+        for (int j = 0; j<2 ;j++ ) {
             String[] args = line.split(" "); // Reader assumes that the input format is as given in the instruction
             // If the line is 2i, then I know that it is a configuration of a ChessBoard
             // so create a new ChessBoard here, parse board size and insert
@@ -218,14 +249,15 @@ class ChessBoard {
                 head = c.insert(new Node(args[i].charAt(0), Integer.parseInt(args[i+2]), Integer.parseInt(args[i+1])));
               }
             }
-            else {
-                // as soon as you read the query perform the requested
-                // operations
-                query[0] = Integer.parseInt(args[0]);
-                query[1] = Integer.parseInt(args[1]);
-                performOperations(c, query, lineCtr-1);
+            else {//on line after board info
+              Utilities.printList(head);
+              c.checkValidity();
+              convertFromListToMatrixAndPrint(j);
+              c.canAttack(head, head.getNext());
+              
+              
             }
-            lineCtr++; // move to the next line
+            lineCtr++; // move to the getNext() line
         }
         reader.close();
     }
@@ -236,7 +268,8 @@ class ChessBoard {
         Utilities.errExit("Array index is out of bounds"); // throw error when inserting elements into arrays fail
     }
     catch (Exception e) {
-        Utilities.errExit("Exception occurred trying to read file"); // throw a generic exception if failure to read occurs
+        System.out.println(e.getMessage());
+        //Utilities.errExit();//"Exception occurred trying to read file"); // throw a generic exception if failure to read occurs
     }
   }
 
@@ -246,16 +279,22 @@ class ChessBoard {
   // Input: ChessBoard and the query
   // Output: returns the count
   public static void performOperations(ChessBoard c, int[] query, int board_no) {
+    int i = 0;
+    Node helper = new Node();
+    Node compare = new Node();
     try {
       // Check for validity here
       if(c.checkValidity() == false) {
         writer.write("Invalid\n");
         return;
       }
+      //helper = findChessPiece(query[i++][i++]);
+      //compare = findChessPiece(query[i++][i++]);
+      //if()
       // Find the chesspiece given in query location
-      writer.write(c.findChessPiece(query) + " ");
+      //writer.write(c.findChessPiece(query) + " ");
       // See if anyone attacks anyone else
-      c.isOneAttackingOther();
+      //c.isOneAttackingOther();
       convertFromListToMatrixAndPrint(board_no);
     }
     catch(Exception e) {
@@ -265,15 +304,16 @@ class ChessBoard {
   }
 
   // main method
-  public static void main(String[] args) {
+public static void main(String[] args) {
     try{
       writer = new BufferedWriter(new FileWriter("analysis.txt")); // open the file to write
       readFromInputFile(); // read from input file and perform operations
       writer.close(); // close the writer
-    }
+   }
     catch(Exception e) {
-      Utilities.errExit("Error while creating BufferedWriter");
+      Utilities.errExit("Error");
     }
+    
 
   }
 }
