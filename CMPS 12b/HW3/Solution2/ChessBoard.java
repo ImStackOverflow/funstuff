@@ -260,6 +260,48 @@ class ChessBoard {
 	  return true;
   }
 
+  
+  //creates list of dummy kings surrounding real one
+  //input: real king
+  //output: head of linked list 
+  public Node Kings(ChessBoard c, Node king){
+	  Node top;
+	  int attackRow[] = {-1, -1, 0, 1, 0, 1, 1, -1}; // possible attack row positions
+      int attackCol[] = {0, -1, -1, -1, 1, 1, 0, 1}; // possible attack col positions
+        for(int i = 0; i < 8; i++) {
+          if(inBounds(king.getRow() + attackRow[i]) && inBounds(king.getCol() + attackCol[i])) {
+			  
+          }
+        }
+  }
+  
+  
+  //checks if given number is >0 && <boardsize
+  //input: number
+  //output: true for yes false for out of bound
+  public static boolean inBounds(int check){
+	  if (check > 0 && check < board_size){
+		  return true;
+	  }
+	  else return false;
+	  
+  }
+  
+  
+  public boolean checkMate(ChessBoard c){
+	  
+  }
+  
+  
+  //checks origional board to see if any piece is attacking king 
+  //input: chessboard and king piece
+  //output: true if piece is atacking king
+  public boolean checkcheck(ChessBoard c, Node king){
+	  
+  }
+  
+  
+  
   // Method to write to the analysis.txt file
   // Input: String to write
   // Output: void, just write
