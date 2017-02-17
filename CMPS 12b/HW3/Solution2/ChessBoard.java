@@ -26,7 +26,7 @@ class ChessBoard {
   // Method to perform insertion at head of list
   // Input: Node to be inserted
   // Output: void
-  public static Node insert(Node ass) {
+  public Node insert(Node ass) {
     Node temp = head.getNext();
     head.setNext(ass);
     ass.setNext(temp);
@@ -170,18 +170,6 @@ class ChessBoard {
 	  }
 	  return helper;
   }
-  
-
-  public int incriment(int woah){//gets number further from 0
-    if (woah > 0) woah++;
-    else if (woah < 0) woah--;
-    return woah;
-  }
-  public int decriment(int woah){//gets number closer to 0
-    if (woah > 0) woah--;
-    else if (woah < 0) woah++;
-    return woah;
-  }
 
   //method to check if signs match
   //input: 2 numbers
@@ -189,6 +177,7 @@ class ChessBoard {
   public boolean sameSign(int a, int b){
     if(a < 0 && b < 0) return true;
     if (a > 0 && b > 0) return true;
+	if (a == 0 && b == 0) return true;
     //if(a*b > 0) return true;
     else return false;
   }
@@ -203,6 +192,7 @@ class ChessBoard {
   Node helper = head.getNext();
   while(helper != null){
 	  helper = Attack(attack, helper);
+	  if (helper == null) return true;//reached end of list no blocks
 	  if (helper == dicked || helper == attack){//only want to check for pieces between
 		helper = helper.getNext();//move along
 	  }
@@ -219,44 +209,32 @@ class ChessBoard {
 	   } 
      helper = helper.getNext();//move along
 	 }
+	 
   return true;//can attack piece, no block
   }
   
-  
-  
-  
-  
-  
-  
-  /*
-    System.out.println("what");
-	int yDiff = dicked.getRow() - attack.getRow();
-	int Diff = dicked.getCol() - attack.getCol();
-    if(yDiff != 0){
-		yDiff = yDiff % decriment(yDiff);
-	}
-	if (xDiff != 0){
-		xDiff = xDiff % decriment(xDiff);
-	}
-    int xPlace = attack.getCol() + xDiff;//start inward and scan spaces between attacked and dicked
-	int yPlace = attack.getRow() + yDiff;
-    System.out.println("attacking: ("+attack.getCol()+","+attack.getRow()+") attacked: ("+dicked.getCol()+","+dicked.getRow()+")");
-    for (int i = 0; i < 2; i++) {
-    //while (yPlace != dicked.getRow() || xPlace != dicked.getCol()){
-      System.out.println("checking: ("+xPlace+","+yPlace+")");
-      if(findChessPiece(xPlace, yPlace) != null){
-        return false;//return false if piece is blocking
-      }
-	  xDiff = incriment(xDiff);//work inward
-	  yDiff = incriment(yDiff);
-	  System.out.println("xDiff is: "+xDiff);
-	  System.out.println("yDiff is: "+yDiff);
-	  yPlace = attack.getRow() + yDiff;//start inward and scan spaces between attacked and dicked
-      xPlace = attack.getCol() + xDiff;
-    }
-    return true;
+  public static boolean Moving(ChessBoard c, int spaces[]){
+	  System.out.println("at moving");
+	  Node attack = c.findChessPiece(spaces[1], spaces[0]);
+	  Node dicked = c.findChessPiece(spaces[3], spaces[2]);
+	  if (attack == null){
+		  System.out.println("no piece at attacking space");
+		  return false;
+	  }
+	  if (dicked != null){
+		  if (c.canAttack(attack, dicked)){
+			  System.out.println("taking piece");
+			  attack.posSwitch(dicked.getRow(), dicked.getCol());
+			  c.delete(dicked);
+		  }
+		  else System.out.println("position blocked");
+		  return false;
+	  }
+	  else attack.posSwitch(spaces[2], spaces[3]);
+	  convertFromListToMatrixAndPrint(1);
+	  return true;
   }
-  */
+  
   // Method to write to the analysis.txt file
   // Input: String to write
   // Output: void, just write
@@ -304,9 +282,9 @@ class ChessBoard {
     try {
         BufferedReader reader = new BufferedReader(new FileReader("input.txt"));
         String line;
-        line = reader.readLine();
-//              while ((line = reader.readLine()) != null) {
-        for (int j = 0; j<2 ;j++ ) {
+        //line = reader.readLine();
+             while ((line = reader.readLine()) != null) {
+        //for (int j = 0; j<2 ;j++ ) {
             String[] args = line.split(" "); // Reader assumes that the input format is as given in the instruction
             // If the line is 2i, then I know that it is a configuration of a ChessBoard
             // so create a new ChessBoard here, parse board size and insert
@@ -321,10 +299,10 @@ class ChessBoard {
             else {//on line after board info
               Utilities.printList(head);
               c.checkValidity();
-              convertFromListToMatrixAndPrint(j);
+              convertFromListToMatrixAndPrint(1);
+			  parseLine(c,args);
+			  //System.out.println(args);
               System.out.println(c.canAttack(head.getNext(), head.getNext().getNext()));
-              
-              
             }
             lineCtr++; // move to the getNext() line
         }
@@ -373,6 +351,20 @@ class ChessBoard {
   }
 
   // main method
+  public static void parseLine(ChessBoard c, String[] secondLine){
+	  System.out.println("at parseline");
+	  int[] query = new int[4];
+	  for (int i = 0, j = 0; i < secondLine.length; i++, j++){
+		  query[j] = Integer.parseInt(secondLine[i]);
+		  //System.out.println(query[j]);
+		  if (i%3==0 && i>0){
+			  Moving(c, query);
+			  j=0;
+		  }
+		  
+		  
+	  }
+  }
 public static void main(String[] args) {
     try{
       writer = new BufferedWriter(new FileWriter("analysis.txt")); // open the file to write

@@ -46,6 +46,11 @@ class ChessPiece {
   public boolean getColor() {
     return this.color;
   }
+  
+  public void posSwitch(int row, int col){
+	  this.row = row;
+	  this.col = col;
+  }
 
   // Dummy method to check attack
   // It will be overridden by each of the child classes that inherit ChessPiece

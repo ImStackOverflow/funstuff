@@ -74,6 +74,10 @@ class Node {
   public int getCol() {
     return this.myPiece.getCol();
   }
+  
+  public void posSwitch(int row, int col){
+	  this.myPiece.posSwitch(row,col);
+  }
 
   // return the color of the current chesspiece
   public boolean getColor() {
