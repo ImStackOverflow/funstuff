@@ -183,30 +183,43 @@ class ChessBoard {
     return woah;
   }
 
-  
+  //method to check if signs match
+  //input: 2 numbers
+  //return true if sign match false otherwise 
+  public boolean sameSign(int a, int b){
+    if(a < 0 && b < 0) return true;
+    if (a > 0 && b > 0) return true;
+    //if(a*b > 0) return true;
+    else return false;
+  }
   //checks for pieces blocking
   //input: 2 nodes want to check
   //output: true is no blocking, false if piece is blocking
   public boolean canAttack(Node attack, Node dicked){//attack = atacking piece, dicked is attacked piece
-  int checkX = Math.abs(attack.getCol() - dicked.getCol());//get dist between dicked and attack
-  int checkY = Math.abs(attack.getRow() - dicked.getRow());
+  int checkX = attack.getCol() - dicked.getCol();//get dist between dicked and attack
+  int checkY = attack.getRow() - dicked.getRow();
+  System.out.println("attacking: ("+attack.getCol()+","+attack.getRow()+") attacked: ("+dicked.getCol()+","+dicked.getRow()+")");
   int betweenX, betweenY;
   Node helper = head.getNext();
   while(helper != null){
-	  helper = attack(attack, helper);
+	  helper = Attack(attack, helper);
 	  if (helper == dicked || helper == attack){//only want to check for pieces between
 		helper = helper.getNext();//move along
 	  }
 	else if (helper != null){
-		betweenX = Math.abs(attack.getCol() - helper.getCol());//get dist between attack and possible block
-		betweenY = Math.abs(attack.getRow() - helper.getRow());
-		if(betweenX<checkX || betweenY<checkY){//block is closer to attack than desired attack
-			return false;
-		}
-		else helper = helper.getNext();//move along
-	}
-	return true;//can attack piece, no block
-	}
+    System.out.println(helper.getChessPiece()+"x: "+helper.getCol()+"y: "+helper.getRow());
+		betweenX = attack.getCol() - helper.getCol();//get dist between attack and possible block
+		betweenY = attack.getRow() - helper.getRow();
+    System.out.println("bx: "+betweenX+" by: "+betweenY+" cx: "+checkX+" cy: "+checkY);
+		if(Math.abs(betweenX) <= Math.abs(checkX) && Math.abs(betweenY) <= Math.abs(checkY)){//block is closer to attack than desired attack
+      if(sameSign(betweenX,checkX) && sameSign(betweenY,checkY)){//in same attacking path
+        return false;
+        }
+		  }
+	   } 
+     helper = helper.getNext();//move along
+	 }
+  return true;//can attack piece, no block
   }
   
   
