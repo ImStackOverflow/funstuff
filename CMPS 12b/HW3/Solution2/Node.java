@@ -49,6 +49,13 @@ class Node {
       Utilities.errExit("Cannot recognize chesspiece");
     }
   }
+  
+  public Node dummy(){
+	  Node ass = new Node();
+	  ass.myPiece = new ChessPiece(this.getChessPiece());
+	  ass.myPiece.flipColor(this.getColor());
+	  return ass;
+  }
 
   // return the chesspiece stored in this node
   public ChessPiece getChessPiece() {

@@ -47,6 +47,10 @@ class ChessPiece {
     return this.color;
   }
   
+  public void flipColor(boolean color){
+	  this.color = !color;
+  }
+  
   public void posSwitch(int row, int col){
 	  this.row = row;
 	  this.col = col;

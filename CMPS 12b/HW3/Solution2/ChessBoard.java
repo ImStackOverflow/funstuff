@@ -173,7 +173,7 @@ class ChessBoard {
 
   //method to check if signs match
   //input: 2 numbers
-  //return true if sign match false otherwise 
+  //return true if sign match false otherwise
   public boolean sameSign(int a, int b){
     if(a < 0 && b < 0) return true;
     if (a > 0 && b > 0) return true;
@@ -181,10 +181,13 @@ class ChessBoard {
     //if(a*b > 0) return true;
     else return false;
   }
-  //checks for pieces blocking
+  
+	//checks for pieces blocking
   //input: 2 nodes want to check
   //output: true is no blocking, false if piece is blocking
   public boolean canAttack(Node attack, Node dicked){//attack = atacking piece, dicked is attacked piece
+  if(attack.getColor() == dicked.getColor()) return false;//cant attack same color
+  System.out.println("at canAttack");
   int checkX = attack.getCol() - dicked.getCol();//get dist between dicked and attack
   int checkY = attack.getRow() - dicked.getRow();
   System.out.println("attacking: ("+attack.getCol()+","+attack.getRow()+") attacked: ("+dicked.getCol()+","+dicked.getRow()+")");
@@ -193,48 +196,70 @@ class ChessBoard {
   while(helper != null){
 	  helper = Attack(attack, helper);
 	  if (helper == null) return true;//reached end of list no blocks
-	  if (helper == dicked || helper == attack){//only want to check for pieces between
-		helper = helper.getNext();//move along
+	  else if (helper == dicked || helper == attack){//only want to check for pieces between
+	    System.out.println("fuck");
 	  }
 	else if (helper != null){
-    System.out.println(helper.getChessPiece()+"x: "+helper.getCol()+"y: "+helper.getRow());
+		System.out.println(helper.getChessPiece()+"x: "+helper.getCol()+"y: "+helper.getRow());
 		betweenX = attack.getCol() - helper.getCol();//get dist between attack and possible block
 		betweenY = attack.getRow() - helper.getRow();
-    System.out.println("bx: "+betweenX+" by: "+betweenY+" cx: "+checkX+" cy: "+checkY);
+		System.out.println("bx: "+betweenX+" by: "+betweenY+" cx: "+checkX+" cy: "+checkY);
 		if(Math.abs(betweenX) <= Math.abs(checkX) && Math.abs(betweenY) <= Math.abs(checkY)){//block is closer to attack than desired attack
-      if(sameSign(betweenX,checkX) && sameSign(betweenY,checkY)){//in same attacking path
-        return false;
+			if(sameSign(betweenX,checkX) && sameSign(betweenY,checkY)){//in same attacking path
+				return false;
         }
 		  }
-	   } 
+	   }
      helper = helper.getNext();//move along
 	 }
-	 
+
   return true;//can attack piece, no block
   }
-  
+
   public static boolean Moving(ChessBoard c, int spaces[]){
 	  System.out.println("at moving");
+	  System.out.println("x: "+spaces[0]+" y: "+spaces[1]);
 	  Node attack = c.findChessPiece(spaces[1], spaces[0]);
 	  Node dicked = c.findChessPiece(spaces[3], spaces[2]);
-	  if (attack == null){
-		  System.out.println("no piece at attacking space");
+	  Node penis = dicked;
+	  if (attack == null){//check piece at attacking space
+		  System.out.println("no piece at attack space");
 		  return false;
 	  }
-	  if (dicked != null){
-		  if (c.canAttack(attack, dicked)){
+	  if (dicked != null){//piece at moving space
+		  if (attack.getChessPiece().isAttacking(spaces[3],spaces[2])){//if piece can move there
+			   if (c.canAttack(attack, dicked)){//if no block
 			  System.out.println("taking piece");
 			  attack.posSwitch(dicked.getRow(), dicked.getCol());
 			  c.delete(dicked);
+			  convertFromListToMatrixAndPrint(1);
 		  }
-		  else System.out.println("position blocked");
-		  return false;
+		  else{//blocked
+				System.out.println("position blocked");
+				return false;
+		  }
+		  }
+		 else{
+			 System.out.println("piece cant move there invalid");
+			 return false;
+		 }
 	  }
-	  else attack.posSwitch(spaces[2], spaces[3]);
+	  else {//trying to move to empty space
+		  dicked = attack.dummy();
+		  dicked.posSwitch(spaces[3],spaces[2]);
+		  //System.out.println("penis");
+		  if (c.canAttack(attack, dicked)){//if no block
+		  attack.posSwitch(spaces[3], spaces[2]);
+		  }
+		  else{//blocked
+				System.out.println("position blocked");
+				return false;
+		  }
+	  }
 	  convertFromListToMatrixAndPrint(1);
 	  return true;
   }
-  
+
   // Method to write to the analysis.txt file
   // Input: String to write
   // Output: void, just write
@@ -302,7 +327,6 @@ class ChessBoard {
               convertFromListToMatrixAndPrint(1);
 			  parseLine(c,args);
 			  //System.out.println(args);
-              System.out.println(c.canAttack(head.getNext(), head.getNext().getNext()));
             }
             lineCtr++; // move to the getNext() line
         }
@@ -354,15 +378,12 @@ class ChessBoard {
   public static void parseLine(ChessBoard c, String[] secondLine){
 	  System.out.println("at parseline");
 	  int[] query = new int[4];
-	  for (int i = 0, j = 0; i < secondLine.length; i++, j++){
+	  for (int i = 0, j = 0; i < secondLine.length; i+=4){
 		  query[j] = Integer.parseInt(secondLine[i]);
-		  //System.out.println(query[j]);
-		  if (i%3==0 && i>0){
-			  Moving(c, query);
-			  j=0;
-		  }
-		  
-		  
+		  query[j+1] = Integer.parseInt(secondLine[i+1]);
+		  query[j+2] = Integer.parseInt(secondLine[i+2]);
+		  query[j+3] = Integer.parseInt(secondLine[i+3]);
+		  Moving(c,query);
 	  }
   }
 public static void main(String[] args) {
@@ -374,7 +395,7 @@ public static void main(String[] args) {
     catch(Exception e) {
       Utilities.errExit("Error");
     }
-    
+
 
   }
 }
