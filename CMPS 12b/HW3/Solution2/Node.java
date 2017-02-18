@@ -57,6 +57,13 @@ class Node {
 	  return ass;
   }
 
+    public Node dummyKing(int x, int y){
+    Node ass = new Node();
+    ass.myPiece = new ChessPiece(this.getChessPiece());
+    ass.posSwitch(y,x);
+    return ass;
+  }
+
   // return the chesspiece stored in this node
   public ChessPiece getChessPiece() {
     return this.myPiece;
