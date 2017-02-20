@@ -65,7 +65,7 @@ class ChessBoard {
   //no input
   //returns White king, otherwise null
   public Node findWhiteKing() {
-    System.out.println("finding White king");
+    //System.out.println("finding White king");
     Node piece = head.getNext();
     while(piece != null) {
       if(piece.getChessPiece() instanceof King && piece.getColor() == true) {
@@ -80,7 +80,7 @@ class ChessBoard {
   //no input
   //returns black king, otherwise null
   public Node findBlackKing() {
-    System.out.println("finding black king");
+    //System.out.println("finding black king");
     Node piece = head.getNext();
     while(piece != null) {
       if(piece.getChessPiece() instanceof King && piece.getColor() == false) {
@@ -192,7 +192,7 @@ class ChessBoard {
   //input: attack piece
   //return: attacked node
   public Node Attack(Node piece, Node helper){
-    System.out.println("at attack");
+    //System.out.println("at attack");
 	  while (helper != null){
 	   if(isDifferent(helper, piece) && piece.getChessPiece().isAttacking(helper.getRow(), helper.getCol())) {
 		   return helper;
@@ -217,13 +217,13 @@ class ChessBoard {
   //input: 2 nodes want to check
   //output: true is no blocking, false if piece is blocking
   public boolean canAttack(Node attack, Node dicked){//attack = atacking piece, dicked is attacked piece
-    System.out.println("at canAttack");
+    //System.out.println("at canAttack");
     if(attack.getColor() == dicked.getColor()) return false;//cant attack same color
 
-    System.out.println("at canAttack");
+   //System.out.println("at canAttack");
     int checkX = attack.getCol() - dicked.getCol();//get dist between dicked and attack
     int checkY = attack.getRow() - dicked.getRow();
-    System.out.println("attacking: ("+attack.getCol()+","+attack.getRow()+") attacked: ("+dicked.getCol()+","+dicked.getRow()+")");
+    //System.out.println("attacking: ("+attack.getCol()+","+attack.getRow()+") attacked: ("+dicked.getCol()+","+dicked.getRow()+")");
     int betweenX, betweenY;
     Node helper = head.getNext();
 
@@ -235,10 +235,10 @@ class ChessBoard {
       //do nothing
 	  
     else if (helper != null){
-		System.out.println(helper.getChessPiece()+"x: "+helper.getCol()+"y: "+helper.getRow());
+		//System.out.println(helper.getChessPiece()+"x: "+helper.getCol()+"y: "+helper.getRow());
 		betweenX = attack.getCol() - helper.getCol();//get dist between attack and possible block
 		betweenY = attack.getRow() - helper.getRow();
-		System.out.println("bx: "+betweenX+" by: "+betweenY+" cx: "+checkX+" cy: "+checkY);
+		//System.out.println("bx: "+betweenX+" by: "+betweenY+" cx: "+checkX+" cy: "+checkY);
 		if(Math.abs(betweenX) <= Math.abs(checkX) && Math.abs(betweenY) <= Math.abs(checkY)){//block is closer to attack than desired attack
 			if(sameSign(betweenX,checkX) && sameSign(betweenY,checkY)){//in same attacking path
 				return false;
@@ -254,81 +254,68 @@ class ChessBoard {
   //input chessboard and int[4] with moves
   //output true if move was valid false otherwise
   public static boolean Moving(ChessBoard c, int spaces[]){
-	  System.out.println("at moving");
-	  System.out.println("x: "+spaces[0]+" y: "+spaces[1]);
+	  //System.out.println("at moving");
+	  //System.out.println("x: "+spaces[0]+" y: "+spaces[1]);
 	  Node attack = c.findChessPiece(spaces[1], spaces[0]);
 	  Node dicked = c.findChessPiece(spaces[3], spaces[2]);
 	  Node penis = dicked;
 	  if (attack == null){//check piece at attacking space
-		  System.out.println("no piece at attack space");
-      c.writeToAnalysisFile("invalid: no piece at attack space");
+		  //System.out.println("no piece at attack space");
+      //c.writeToAnalysisFile("invalid: no piece at attack space");
 		  return false;
 	  }
-	  if (dicked != null){//piece at moving space
-		  if (attack.getChessPiece().isAttacking(spaces[3],spaces[2])){//if piece can move there
+    if (attack.getChessPiece().isAttacking(spaces[3],spaces[2])){//if piece can move there
+	     if (dicked != null){//piece at moving space
+		 
 			   if (c.canAttack(attack, dicked)){//if no block
-			  System.out.println("taking piece");
+			  //System.out.println("taking piece");
 			  attack.posSwitch(dicked.getRow(), dicked.getCol());
-        c.writeToAnalysisFile("valid: taking piece ");
+        //c.writeToAnalysisFile("valid: taking piece ");
 			  c.delete(dicked);
-			  convertFromListToMatrixAndPrint(1);
+			  //convertFromListToMatrixAndPrint(1);
 		  }
 		  else{//blocked
-				System.out.println("position blocked");
-        c.writeToAnalysisFile("invalid: position blocked ");
+				//System.out.println("position blocked");
+        //c.writeToAnalysisFile("invalid: position blocked ");
 				return false;
 		  }
 		  }
-		 else{
-			 System.out.println("piece cant move there invalid");
-       c.writeToAnalysisFile("invalid: piece cant move there");
-			 return false;
-		 }
-	  }
+		 
+
 	  else {//trying to move to empty space
 		  dicked = attack.dummy();
 		  dicked.posSwitch(spaces[3],spaces[2]);
 		  //System.out.println("penis");
 		  if (c.canAttack(attack, dicked)){//if no block
 		  attack.posSwitch(spaces[3], spaces[2]);
-      c.writeToAnalysisFile("Valid: moving to empty space");
+      //c.writeToAnalysisFile("Valid: moving to empty space");
 		  }
 		  else{//blocked
-				System.out.println("position blocked");
-        c.writeToAnalysisFile("invalid position blocked");
+				//System.out.println("position blocked");
+        //c.writeToAnalysisFile("invalid position blocked");
 				return false;
 		  }
 	  }
 	  //convertFromListToMatrixAndPrint(1);
 	  return true;
   }
+       //System.out.println("piece cant move there invalid");
+       //c.writeToAnalysisFile("invalid: piece cant move there");
+       return false;
+  }
 
   
-  //creates list of dummy kings surrounding real one and adds to top of list
-  //input: real king
-  //output: # of kings inserted
+  //moves moves king to position and checks if attacked
+  //input: king and moveto spaces[x],[y]
+  //output: true if attacked, false otherwise
   
-  public int Kings(ChessBoard c, Node king){
-    System.out.println("at kings");
-    int row=0, col=0, count = 0;
-	  int attackRow[] = {-1, -1, 0, 1, 0, 1, 1, -1}; // possible attack row positions
-    int attackCol[] = {0, -1, -1, -1, 1, 1, 0, 1}; // possible attack col positions
-    convertFromListToMatrixAndPrint(10);
-        for(int i = 0; i < 8; i++) {
-          row = king.getRow() + attackRow[i];
-          col = king.getCol() + attackCol[i];
-          if(inBounds(row,col) && findChessPiece(row,col) == null) {//piece is in bounds and no piece already there
-            c.insert(king.dummyKing(row,col));
-            System.out.println("putting king at: "+col+","+row);
-            System.out.println(findChessPiece(row,col));
-              count++;
-          }
-        }
-        System.out.println("piece at: "+col+","+row);
-    
-    Utilities.printList(head);
-    convertFromListToMatrixAndPrint(12);
-    return count;
+  public boolean Kings(ChessBoard c, Node king, int[] move){
+    boolean outCome;
+    int[] goBack = {king.getRow(), king.getCol()};
+    king.posSwitch(move[1], move[0]);
+    outCome = c.checkAttack(king);
+    king.posSwitch(goBack[0], goBack[1]);
+    return outCome;
   }
   
   
@@ -337,27 +324,46 @@ class ChessBoard {
   //input: number
   //output: true for yes false for out of bound
   public static boolean inBounds(int checkx, int checky){
-	  if (checkx > 0 && checkx < board_size+1){//x in bounds
-      if (checky > 0 && checky < board_size+1){//y in bounds
+	  if (checkx > 0 && checkx <= board_size){//x in bounds
+      if (checky > 0 && checky <= board_size){//y in bounds
         return true;//sall good
       }
 	  }
 	  return false;
   }
   
-  
-  public boolean checkMate(ChessBoard c){
-    return true;
-	  
+  //takes in king to check, generates possible movements and checks if attacked at them, counts for origional king placement
+  //input: chessboard and king to get checked
+  //output: true if checkmated false if otherwise
+  public boolean checkMate(ChessBoard c, Node king){
+    int[] shift = new int[2];
+    boolean did = false;
+    int row, col, moves = 0, checks = 0;
+    int attackRow[] = {0, -1, -1, 0, 1, 0, 1, 1, -1}; // possible attack row positions
+    int attackCol[] = {0, 0, -1, -1, -1, 1, 1, 0, 1}; // possible attack col positions
+     for(int i = 0; i < 9; i++) {
+          row = king.getRow() + attackRow[i];
+          col = king.getCol() + attackCol[i];
+          if(inBounds(row,col) && findChessPiece(row,col) == null) {//piece is in bounds and no piece already there
+            did = true; //zero case
+            moves++;//can make valid move
+            shift[0] = col;
+            shift[1] = row;
+            if(Kings(c, king, shift)) checks++;//is attacked at that move
+          }
+        }
+        System.out.println("moves: "+moves+" checks: "+checks);
+     if (checks == moves && did) return true;//if all valid moves get attacked then in check
+     return false;
   }
   
   
   //checks origional board to see if any piece is attacking king 
   //input: chessboard and king piece
   //output: true if piece is atacking king
-  public boolean checkcheck(Node king){
-    System.out.println("at checkcheck");
-    System.out.println("x: "+king.getCol()+" y: "+king.getRow());
+  public boolean checkAttack(Node king){
+    //System.out.println("at checkcheck");
+    //System.out.println("x: "+king.getCol()+" y: "+king.getRow());
 	  Node attacking = head.getNext();
     Node gettingA = new Node();
     while(attacking != null){//go each node in list
@@ -443,10 +449,7 @@ class ChessBoard {
             }
             else {//on line after board info
               Utilities.printList(head);
-              c.Kings(c, c.findBlackKing());
-              //performOperations(c,args,lineCtr-1);
-			       //parseLine(c,args);
-			  //System.out.println(args);
+              performOperations(c,args,lineCtr-1);
             }
             lineCtr++; // move to the getNext() line
         }
@@ -473,42 +476,58 @@ class ChessBoard {
     int i = 0;
     Node helper = new Node();
     Node compare = new Node();
-    boolean whiteCheck;
-    boolean blackCheck;
+    boolean whiteCheck, blackCheck, whiteMate, blackMate;
 
-    c.writeToAnalysisFile("\n\n\n results for: "+(board_no/2+1)+"\n");
     try {
       // Check for validity here
       if(c.checkValidity() == false) {
         writer.write("Invalid board\n");
         return;
       }
+      System.out.println("at begining: ");
+      convertFromListToMatrixAndPrint(board_no);
+      //check for checkMate
+      whiteMate = c.checkMate(c, c.findWhiteKing());
+      System.out.println("after whitemate: ");
+      convertFromListToMatrixAndPrint(board_no);
+
+      blackMate = c.checkMate(c,c.findBlackKing());
+      System.out.println("after blackmate: ");
+      convertFromListToMatrixAndPrint(board_no);
+
       //check for check
-      whiteCheck = c.checkcheck(c.findWhiteKing());
-      blackCheck = c.checkcheck(c.findBlackKing());
+      whiteCheck = c.checkAttack(c.findWhiteKing());
+      blackCheck = c.checkAttack(c.findBlackKing());
 
       //do moves
       int[] query = new int[4];
       for (i = 0; i < input.length; i++){
         query[i%4] = Integer.parseInt(input[i]);
         if(( (i+1) % 4) == 0){
-           Moving(c,query);
+           if(Moving(c,query)) c.writeToAnalysisFile("Valid ");
+           else{
+            c.writeToAnalysisFile("Invalid ");
+            break;
+           }
          }
       }
       c.writeToAnalysisFile("\n");
+      if (whiteMate) c.writeToAnalysisFile("White checkmated ");
+      if (blackMate) c.writeToAnalysisFile("black checkmated ");
+      if(whiteCheck) c.writeToAnalysisFile("White in check ");
+      if(blackCheck) c.writeToAnalysisFile("Black in check ");
+if(!blackCheck && !whiteCheck) c.writeToAnalysisFile("All kings safe");
 
-      if(whiteCheck) c.writeToAnalysisFile("White king in check ");
-      if(blackCheck) c.writeToAnalysisFile("black king in check ");
-      if(!blackCheck && !whiteCheck) c.writeToAnalysisFile("all kings safe");
-      c.writeToAnalysisFile("\n");
-
-      //helper = findChessPiece(query[i++][i++]);
-      //compare = findChessPiece(query[i++][i++]);
-      //if()
-      // Find the chesspiece given in query location
-      //writer.write(c.findChessPiece(query) + " ");
-      // See if anyone attacks anyone else
-      //c.isOneAttackingOther();
+      /*
+      else if (blackMate) c.writeToAnalysisFile("black checkmated ");
+      else {
+        if(whiteCheck) c.writeToAnalysisFile("White in check ");
+        if(blackCheck) c.writeToAnalysisFile("Black in check ");
+        if(!blackCheck && !whiteCheck) c.writeToAnalysisFile("All kings safe");
+      }
+      */
+      
+      c.writeToAnalysisFile("\n\n");
       convertFromListToMatrixAndPrint(board_no);
     }
     catch(Exception e) {
@@ -521,6 +540,7 @@ public static void main(String[] args) {
     try{
       writer = new BufferedWriter(new FileWriter("analysis.txt")); // open the file to write
       readFromInputFile(); // read from input file and perform operations
+      System.out.println("shit done");
       writer.close(); // close the writer
    }
     catch(Exception e) {

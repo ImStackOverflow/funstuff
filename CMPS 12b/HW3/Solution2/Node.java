@@ -57,10 +57,9 @@ class Node {
 	  return ass;
   }
 
-    public Node dummyKing(int x, int y){
+    public Node dummyKing(int y, int x){
     Node ass = new Node();
-    ass.myPiece = new ChessPiece(this.getChessPiece());
-    ass.posSwitch(y,x);
+    ass.myPiece = new King (y,x,this.getColor());
     return ass;
   }
 
@@ -89,6 +88,7 @@ class Node {
     return this.myPiece.getCol();
   }
   
+  //in y,x form
   public void posSwitch(int row, int col){
 	  this.myPiece.posSwitch(row,col);
   }
