@@ -2,40 +2,40 @@ Valid
 All kings safe
 
 Valid Invalid 
-black checkmated White in check Black in check 
+Black checkmated 
 
 Valid Valid 
-White in check Black in check 
+Black in check White in check 
 
 Valid Valid 
 All kings safe
 
 Valid Valid 
-black checkmated Black in check 
+Black checkmated 
 
 Valid Valid Valid 
 All kings safe
 
 Valid 
-black checkmated Black in check 
+Black checkmated 
 
 Invalid 
 Black in check 
 
 Valid Invalid 
-White checkmated White in check Black in check 
+White checkmated 
 
 Valid Valid Valid 
-White checkmated All kings safe
+All kings safe
 
 Valid Valid Valid Valid 
-White checkmated black checkmated White in check Black in check 
+White checkmated 
 
 Valid Valid 
 All kings safe
 
 Valid Invalid 
-black checkmated Black in check 
+Black checkmated 
 
 Invalid 
 All kings safe
@@ -53,7 +53,7 @@ Invalid
 Black in check 
 
 Valid Valid Valid Valid Valid 
-White checkmated All kings safe
+All kings safe
 
 Valid Invalid 
 All kings safe
@@ -62,7 +62,7 @@ Valid Valid Valid
 Black in check 
 
 Valid Valid Valid Valid 
-black checkmated All kings safe
+All kings safe
 
 Invalid 
 All kings safe
@@ -71,5 +71,5 @@ Valid
 All kings safe
 
 Valid 
-White checkmated White in check Black in check 
+White checkmated 
 

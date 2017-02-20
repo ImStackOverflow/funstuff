@@ -339,9 +339,12 @@ class ChessBoard {
     int[] shift = new int[2];
     boolean did = false;
     int row, col, moves = 0, checks = 0;
-    int attackRow[] = {0, -1, -1, 0, 1, 0, 1, 1, -1}; // possible attack row positions
-    int attackCol[] = {0, 0, -1, -1, -1, 1, 1, 0, 1}; // possible attack col positions
-     for(int i = 0; i < 9; i++) {
+    int attackRow[] = {-1, -1, 0, 1, 0, 1, 1, -1}; // possible attack row positions
+    int attackCol[] = {0, -1, -1, -1, 1, 1, 0, 1}; // possible attack col positions
+    //check if king is currently in check
+    moves = 1;
+    if(checkAttack(king)) checks ++;
+     for(int i = 0; i < 8; i++) {
           row = king.getRow() + attackRow[i];
           col = king.getCol() + attackCol[i];
           if(inBounds(row,col) && findChessPiece(row,col) == null) {//piece is in bounds and no piece already there
@@ -371,6 +374,7 @@ class ChessBoard {
       while (gettingA != null){
         if(gettingA == king){//if attacked piece is king
           if (canAttack(attacking, king)){//check if can attack
+            System.out.println("attacking: ("+attacking.getCol()+","+attacking.getRow()+") king: ("+king.getCol()+","+king.getRow()+")");
             return true;
             }
             gettingA = null;//otherwise blocked, move onto next node
@@ -487,13 +491,15 @@ class ChessBoard {
       System.out.println("at begining: ");
       convertFromListToMatrixAndPrint(board_no);
       //check for checkMate
-      whiteMate = c.checkMate(c, c.findWhiteKing());
       System.out.println("after whitemate: ");
-      convertFromListToMatrixAndPrint(board_no);
-
-      blackMate = c.checkMate(c,c.findBlackKing());
+      whiteMate = c.checkMate(c, c.findWhiteKing());
+      
+      //convertFromListToMatrixAndPrint(board_no);
+      
       System.out.println("after blackmate: ");
-      convertFromListToMatrixAndPrint(board_no);
+      blackMate = c.checkMate(c, c.findBlackKing());
+      
+      //convertFromListToMatrixAndPrint(board_no);
 
       //check for check
       whiteCheck = c.checkAttack(c.findWhiteKing());
@@ -513,19 +519,20 @@ class ChessBoard {
       }
       c.writeToAnalysisFile("\n");
       if (whiteMate) c.writeToAnalysisFile("White checkmated ");
-      if (blackMate) c.writeToAnalysisFile("black checkmated ");
-      if(whiteCheck) c.writeToAnalysisFile("White in check ");
-      if(blackCheck) c.writeToAnalysisFile("Black in check ");
-if(!blackCheck && !whiteCheck) c.writeToAnalysisFile("All kings safe");
-
-      /*
-      else if (blackMate) c.writeToAnalysisFile("black checkmated ");
+      //if (blackMate && blackCheck) c.writeToAnalysisFile("black checkmated ");
+      //if(whiteCheck) c.writeToAnalysisFile("White in check ");
+      //if(blackCheck) c.writeToAnalysisFile("Black in check ");      
+      else if (blackMate) c.writeToAnalysisFile("Black checkmated ");
+      
+      
       else {
-        if(whiteCheck) c.writeToAnalysisFile("White in check ");
         if(blackCheck) c.writeToAnalysisFile("Black in check ");
+        if(whiteCheck) c.writeToAnalysisFile("White in check ");
+        
         if(!blackCheck && !whiteCheck) c.writeToAnalysisFile("All kings safe");
       }
-      */
+      
+      
       
       c.writeToAnalysisFile("\n\n");
       convertFromListToMatrixAndPrint(board_no);
