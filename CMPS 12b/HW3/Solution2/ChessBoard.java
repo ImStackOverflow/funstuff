@@ -348,11 +348,15 @@ class ChessBoard {
           row = king.getRow() + attackRow[i];
           col = king.getCol() + attackCol[i];
           if(inBounds(row,col) && findChessPiece(row,col) == null) {//piece is in bounds and no piece already there
-            did = true; //zero case
+            
             moves++;//can make valid move
             shift[0] = col;
             shift[1] = row;
-            if(Kings(c, king, shift)) checks++;//is attacked at that move
+            if(Kings(c, king, shift)) {
+              did = true; //zero case
+              checks++;//is attacked at that move
+            }
+            
           }
         }
         System.out.println("moves: "+moves+" checks: "+checks);
