@@ -10,3 +10,7 @@ DictionaryClient: DictionaryClient.o Dictionary.o IntegerLinkedList.o
 
 clean:
 	rm DictionaryClient.o Dictionary.o IntegerLinkedList.o DictionaryClient
+
+check:
+	valgrind --leak-check=full ./charType charType.c output
+
