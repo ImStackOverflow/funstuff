@@ -29,17 +29,17 @@ void fiend(int data, LinkedList d, FILE* out){
 	}
 }
 
-void doShit(char decision, int data, LinkedList S, FILE* out){
-	switch (decision){
+void doShit(const char *ass, LinkedList S, FILE* out){
+	switch (*ass){
 		case 'i':
-			theEye(data, S, out);
+			theEye(atoi(ass), S, out);
 			break;
 			
 		case 'd':
-			dick(data, S, out);
+			dick(atoi(ass), S, out);
 			break;
 		case 'f':
-			fiend(data, S, out);
+			fiend(atoi(ass), S, out);
 			break;
 		case 'p':
 			penis(S,out);
