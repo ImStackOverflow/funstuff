@@ -19,7 +19,7 @@ int main(int argc, char *argv[]){
 		doShit(str, list, out);
 		//puts(str);
 	}
-	
+	freeLinkedList(&list);
 	//printf("str 1 = %c str 2 = %c", str[0], str[1]);
 	return 0;
 }

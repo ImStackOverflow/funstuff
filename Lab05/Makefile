@@ -7,10 +7,11 @@ DEPS = DictionaryClient.h IntegerLinkedList.h Dictionary.h
 
 DictionaryClient: DictionaryClient.o Dictionary.o IntegerLinkedList.o
 	gcc -o DictionaryClient DictionaryClient.c Dictionary.c IntegerLinkedList.c
+	touch output
+	./DictionaryClient input output
 
 clean:
-	rm DictionaryClient.o Dictionary.o IntegerLinkedList.o DictionaryClient
-
+	rm DictionaryClient.o IntegerLinkedList.o Dictionary.o DictionaryClient output
 check:
-	valgrind --leak-check=full ./charType charType.c output
+	valgrind --leak-check=full ./DictionaryClient penis myvagina
 
