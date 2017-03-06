@@ -1,0 +1,13 @@
+Inserted 45
+Inserted 420
+Inserted 21
+45 -> 420 -> 21
+20 not in list
+45 -> 420 -> 21
+21 present
+45 -> 420 -> 21
+cannot delete 2, not in linked list
+deleted 21
+deleted 45
+deleted 420
+

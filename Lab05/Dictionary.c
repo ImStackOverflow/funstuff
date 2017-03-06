@@ -5,7 +5,7 @@
 
 void theEye(int data, LinkedList thisDick, FILE* out){
 	insert(data, thisDick);
-	fprintf(out,"Inserted %d", data);
+	fprintf(out,"Inserted %d\n", data);
 }
 
 void penis(LinkedList pien, FILE* out){
@@ -15,35 +15,40 @@ void penis(LinkedList pien, FILE* out){
 void dick(int data, LinkedList d, FILE* out){
 	if (find(data, d) != NULL){	
 		delete(data, d);
-		fprintf(out, "deleted %d", data);
+		fprintf(out, "deleted %d\n", data);
 	}
 	else {
-		fprintf(out, "cannot delete %d, not in linked list", data);
+		fprintf(out, "cannot delete %d, not in linked list\n", data);
 	}
 }
 
 void fiend(int data, LinkedList d, FILE* out){
 	if (find(data, d) != NULL){
-		fprintf(out, "%d present", data);
+		fprintf(out, "%d present\n", data);
 	}
 	else {
-		fprintf(out, "%d not in list", data);
+		fprintf(out, "%d not in list\n", data);
 	}
 }
 
 void doShit(const char *ass, LinkedList S, FILE* out){
+	//printf("at doShit\n");
 	switch (*ass){
 		case 'i':
-			theEye(atoi(ass), S, out);
+			//printf("going into theeye, data: %d\n", atoi(ass+1));
+			theEye(atoi(ass+1), S, out);
 			break;
 			
 		case 'd':
-			dick(atoi(ass), S, out);
+			//printf("going into dick\n");
+			dick(atoi(ass+1), S, out);
 			break;
 		case 'f':
-			fiend(atoi(ass), S, out);
+			//printf("going into fiend\n");
+			fiend(atoi(ass+1), S, out);
 			break;
 		case 'p':
+		//printf("penis\n");
 			penis(S,out);
 			break;
 	}

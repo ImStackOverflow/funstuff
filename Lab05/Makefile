@@ -7,3 +7,6 @@ DEPS = DictionaryClient.h IntegerLinkedList.h Dictionary.h
 
 DictionaryClient: DictionaryClient.o Dictionary.o IntegerLinkedList.o
 	gcc -o DictionaryClient DictionaryClient.c Dictionary.c IntegerLinkedList.c
+
+clean:
+	rm DictionaryClient.o Dictionary.o IntegerLinkedList.o DictionaryClient

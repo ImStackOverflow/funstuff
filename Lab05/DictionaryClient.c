@@ -14,9 +14,12 @@ int main(int argc, char *argv[]){
 	
 	LinkedList list = newLinkedList();
 	char str[16];
-	fgets(str, 16, in);
-	doShit(str, list, out);
-	puts(str);
-	printf("str 1 = %c str 2 = %c", str[0], str[1]);
+
+	while (fgets(str, 16, in)){
+		doShit(str, list, out);
+		//puts(str);
+	}
+	
+	//printf("str 1 = %c str 2 = %c", str[0], str[1]);
 	return 0;
 }

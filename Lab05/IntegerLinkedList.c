@@ -85,10 +85,23 @@ fprintf(out, "%d", N->item);
 fprintf(out, "\n"); 
 }
 
-void insert(int number, LinkedList S){
-	Node shit = newNode(number);
-	shit->next = S->top;
-	S->top = shit;
+void insert(int num, LinkedList S)
+{
+	Node N = newNode(num);
+	Node currentNode;
+	if(S->top == NULL)
+	{
+		S->top = N;
+	}
+	else
+	{
+		currentNode = S->top; 
+		while(currentNode->next != NULL)
+		{
+			currentNode = currentNode->next; 
+		}
+		currentNode->next = N; 
+	}
 	S->numItems++;
 }
 
