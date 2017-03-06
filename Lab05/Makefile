@@ -1,9 +1,9 @@
 CC=gcc
 CFLAGS=-I.
-DEPS = IntegerLinkedList.h Dictionary.h
+DEPS = DictionaryClient.h IntegerLinkedList.h Dictionary.h
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 DictionaryClient: DictionaryClient.o Dictionary.o IntegerLinkedList.o
-	gcc -o DictionaryClient DictionaryClient.c Dictionary.c IntegerLinkedList.c -I
+	gcc -o DictionaryClient DictionaryClient.c Dictionary.c IntegerLinkedList.c

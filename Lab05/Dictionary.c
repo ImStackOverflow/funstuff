@@ -1,4 +1,6 @@
 #include "Dictionary.h"
+#include <stdlib.h>
+#include <string.h>
 #include "IntegerLinkedList.h"
 
 void theEye(int data, LinkedList thisDick, FILE* out){
