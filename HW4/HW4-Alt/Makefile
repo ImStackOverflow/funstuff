@@ -27,4 +27,4 @@ $(JARFILE): $(CLASSES)
 	$(JAVAC) $<
 
 clean:
-	rm 
+	rm -f *.class $(JARFILE) output.txt
