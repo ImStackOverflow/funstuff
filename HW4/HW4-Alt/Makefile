@@ -8,7 +8,7 @@
 #
 #------------------------------------------------------------------------------ 
 
-MAINCLASS  = priorities
+MAINCLASS  = Priority
 JAVAC      = javac 
 JAVASRC    = $(wildcard *.java)
 SOURCES    = $(JAVASRC) makefile README
@@ -27,4 +27,4 @@ $(JARFILE): $(CLASSES)
 	$(JAVAC) $<
 
 clean:
-	rm -f *.class $(JARFILE) analysis.txt
+	rm 
