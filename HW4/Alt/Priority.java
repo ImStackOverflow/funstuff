@@ -33,8 +33,7 @@ class Priority{
 	//return head value
 	public static int dequeue() {
 		if (head == tail){
-			writeToFile("nothing in the queue buddy");
-			System.exit(0);
+			return -666;
 		}
 		int balls = queue[head][0];
 		head = increase(head);
@@ -48,7 +47,8 @@ class Priority{
 
 	//analysis writer
 	public static void writeToFile(String lit){
-		out.print(lit);
+		if(lit.equals("-666 ")) out.print("null ");
+		else out.print(lit);
 	}
 
 	//prints current queue

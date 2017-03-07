@@ -31,6 +31,13 @@ class CheckHW4Alt {
         }
     }
 
+    private static boolean isNull(String s) {
+        if (s.equals("null")) {
+            return true;
+        }
+        return false;
+    }
+
 
     // Method to check if validity line is valid
     // Input: line
@@ -40,8 +47,10 @@ class CheckHW4Alt {
         line = line.trim();
         boolean valid = true;
         String[] parts = line.split(" ");
+        if (line.equals(""))
+            return true;
         for (int i=0;i<parts.length;i++) {
-            if (!isInt(parts[i]))
+            if (!(isInt(parts[i]) || isNull(parts[i])))
                 valid = false;
         } 
         return valid;
@@ -91,11 +100,17 @@ class CheckHW4Alt {
         File f_jar = new File("Priority.jar");
         if (!f_jar.exists()) 
             errExit("Note: No file names Priority.jar");
-        File f_dir = new File("../HW4-alt");
+        File f_dir = new File("../Alt");
         if (!f_dir.exists()) 
-            errExit("Note: Directory not named HW4-alt");
+            errExit("Note: Directory not named Alt");
+        File f_hw4 = new File("../../HW4");
+        if (!f_hw4.exists()) 
+            errExit("Note: directory Alt is not in a directory named HW4");
+        File f_output = new File("output.txt");
+        if (f_output.exists())
+            errExit("Delete output.txt and run again");
         try {
-            Process proc = Runtime.getRuntime().exec(new String[]{"java", "-jar", "Chessmoves.jar"});
+            Process proc = Runtime.getRuntime().exec(new String[]{"java", "-jar", "Priority.jar"});
             BufferedReader reader =
                 new BufferedReader(new InputStreamReader(proc.getInputStream()));
             while ((reader.readLine()) != null) {}
