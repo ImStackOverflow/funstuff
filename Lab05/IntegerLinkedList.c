@@ -85,10 +85,23 @@ fprintf(out, "%d", N->item);
 fprintf(out, "\n"); 
 }
 
-void insert(int number, LinkedList S){
-	Node shit = newNode(number);
-	shit->next = S->top;
-	S->top = shit;
+void insert(int num, LinkedList S)
+{
+	Node N = newNode(num);
+	Node currentNode;
+	if(S->top == NULL)
+	{
+		S->top = N;
+	}
+	else
+	{
+		currentNode = S->top; 
+		while(currentNode->next != NULL)
+		{
+			currentNode = currentNode->next; 
+		}
+		currentNode->next = N; 
+	}
 	S->numItems++;
 }
 
@@ -102,14 +115,25 @@ Node find(int number, LinkedList S){
 	
 }
 
-void delete(int n, LinkedList S){
-	Node penis = find(n,S);
-	if (penis) {
-		Node dick = S->top;
-		while (dick->next != penis){
-			dick = dick->next;
+void delete(int n, LinkedList S)
+{
+	Node N;
+	Node prev;
+	for(N=S->top; N!=NULL; N=N->next) 
+	{
+		if(N->item == n)
+		{
+			if(N == S->top)
+			{
+				S->top = N->next;
+			}
+			else
+			{
+				prev->next = N->next;
+			}
+			freeNode(&N);
+			break;
 		}
-		dick->next = penis->next;
-		freeNode(&penis);
+		prev = N;
 	}
 }

@@ -26,7 +26,7 @@ void printLinkedList(FILE* out, LinkedList S);
 // insert() 
 // insert number into linked list 
 // pre: none 
-void insert(int number, LinkedList S);  
+void insert(int num, LinkedList S);  
 // find() 
 // find pointer to node containing number (read next code snippet for details), return 
 //     null if none exists 

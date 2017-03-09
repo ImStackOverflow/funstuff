@@ -1,5 +1,7 @@
+#ifndef _Dictionary_H_include_
+#define _Dictionary_H_include_
+#include <stdio.h>
 #include "IntegerLinkedList.h"
-
 
 //creates new node with data and puts into linked list
 //input: data, linked list header
@@ -26,4 +28,5 @@ void fiend(int data, LinkedList d, FILE* out);
 //should really only use this function
 //input: character from file, data
 //output: none it just does shit
-void doShit(char decision, int data, LinkedList S, FILE* out);
+void doShit(const char *ass, LinkedList S, FILE* out);
+#endif
