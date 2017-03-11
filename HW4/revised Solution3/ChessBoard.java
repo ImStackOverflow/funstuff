@@ -14,7 +14,8 @@ import java.io.*;
 class ChessBoard {
 
   private static Node head; // linkedlist to store chesspieces
-  private static int board_size; // board_size
+  private static int board_size = 8; // board_size
+  private static int level;
   private static int board_no; // current board no, we are processing
   public static BufferedWriter writer; // write to write to file
   public static final int possibleRowMoves[] = {-1, -1, 0, 1, 0, 1, 1, -1}; // these are the possible row moves for a king
@@ -402,6 +403,70 @@ class ChessBoard {
     return isCheckmate;
   }
 
+
+  //true means checkmate
+  public boolean playTheGame(Node board, int level, boolean playerColor){
+    boolean isCheckmate = false;
+        // create a copy of the original list
+    Node list = ListOperations.listCopy(head);
+    // fetch the king node
+    Node kingNode = getKingNode(list, playerColor);
+
+    if (level == 0){
+      return determineRealCheckmate(board, playerColor);
+    }
+     // loop over all squares to find the pieces
+        for (int col=1; col <= board_size; col++)
+        {
+            for (int row=1; row <= board_size; row++)
+            {
+                Node nodeSrc = ListOperations.findChessPiece(list,row,col);
+                if (nodeSrc == null) // no piece at src square
+                    continue;
+
+                ChessPiece atSrc = nodeSrc.getChessPiece(); // get the chesspiece at the src square
+                if (atSrc.getColor() != playerColor) // either no piece at src square or if piece there is not of starting color, then continue to the next square
+                    continue;
+
+                for (int destCol=1; destCol <= board_size; destCol++)
+                {
+                    for (int destRow=1; destRow <= board_size; destRow++)
+                    {
+                        Node copy = ListOperations.listCopy(list);
+                        int[] nextTry = new int[4];
+                        nextTry[0] = col;
+                        nextTry[1] = row;
+                        nextTry[2] = destCol;
+                        nextTry[3] = destRow;
+    
+                        char pieceType = Utilities.returnChessPieceType(nodeSrc);
+                        boolean[] possible = makeMoves(copy, nextTry, false); // is this a valid move
+                        if (possible[0]){
+                          boolean possibilityOutcome = playTheGame(copy, level-1, !playerColor);
+                          if (possibilityOutcome){//go to the next level
+                            if (level == 1){
+                              return possibilityOutcome;
+                            }
+                            else {
+                              //playTheGame(copy, level-1, );
+                            }
+                            //return true;
+                          } 
+                        }
+                    }
+                    if (!isCheckmate)
+                        break;
+                }
+                if (!isCheckmate)
+                    break;
+            }
+            if (!isCheckmate)
+                break;
+        }
+    return false;
+  }
+
+
   // Method to write to the analysis.txt file
   // Input: String to write
   // Output: void, just write
@@ -430,29 +495,25 @@ class ChessBoard {
         BufferedReader reader = new BufferedReader(new FileReader("input.txt"));
         String line;
         while ((line = reader.readLine()) != null) {
-            String[] args = line.split(" "); // Reader assumes that the input format is as given in the instruction
+            String[] args = line.split(":"); // Reader assumes that the input format is as given in the instruction
             // If the line is 2i, then I know that it is a configuration of a ChessBoard
             // so create a new ChessBoard here, parse board size and insert
             // given chesspieces into the linked list
-            if(lineCtr % 2 == 0) {
+            //System.out.println("line is: "+line+" args[0]: "+args[0]);
+            level = Integer.parseInt(args[0]);
+            args = line.split(" ");
               c = new ChessBoard();
-              board_size = Integer.parseInt(args[0]);
+              
               for(int i = 1; i < args.length; i += 3) {
+
+                //System.out.print(args[i]+" ");
                 head = ListOperations.insert(head, new Node(args[i].charAt(0), Integer.parseInt(args[i+2]), Integer.parseInt(args[i+1])));
               }
-            }
-            else {
-                // as soon as you read the query perform the requested
-                // operations
-                query = new int[args.length];
-                for(int i = 0; i < args.length; i++) {
-                  query[i] = Integer.parseInt(args[i]);
-                }
-                board_no = lineCtr-1;
-                performOperations(c, query);
-            }
+              //Utilities.printList(head);
+              Utilities.convertFromListToMatrixAndPrint(head,lineCtr-1, board_size);
             lineCtr++; // move to the next line
-        }
+            }
+            
         reader.close();
     }
     catch (NumberFormatException e) {
