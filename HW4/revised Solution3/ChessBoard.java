@@ -460,9 +460,8 @@ class ChessBoard {
       for (int i = 0; i < 4; i++) {
         System.out.print(" "+nextTry[i]);
       }
+      return false;
     }
-    return false;
-  }
 
 
   // Method to write to the analysis.txt file
@@ -528,7 +527,7 @@ class ChessBoard {
   // identify strong and weak checkmates and perform moves
   // Input: ChessBoard and the query
   // Output: returns the count
-  public static void performOperations(ChessBoard c, int level {
+  public static void performOperations(ChessBoard c, int level) {
     try {
       // Check the validity of the board here. Just do it for completion
       if(ListOperations.checkValidity(head) == false) {
@@ -576,7 +575,7 @@ class ChessBoard {
         }
       }
       */
-      if (!c.playTheGame(head, level, true. level)){
+      if (!c.playTheGame(head, level, true, level)){
         System.out.println("No solution");
       }
       c.writeToAnalysisFile("\n");
