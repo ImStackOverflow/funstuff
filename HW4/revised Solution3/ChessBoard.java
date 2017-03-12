@@ -15,7 +15,6 @@ class ChessBoard {
 
   private static Node head; // linkedlist to store chesspieces
   private static int board_size = 8; // board_size
-  private static int level;
   private static int board_no; // current board no, we are processing
   public static BufferedWriter writer; // write to write to file
   public static final int possibleRowMoves[] = {-1, -1, 0, 1, 0, 1, 1, -1}; // these are the possible row moves for a king
@@ -403,18 +402,14 @@ class ChessBoard {
     return isCheckmate;
   }
 
-
   //true means checkmate
-  public boolean playTheGame(Node board, int level, boolean playerColor){
-    boolean isCheckmate = false;
-        // create a copy of the original list
-    Node list = ListOperations.listCopy(head);
-    // fetch the king node
-    Node kingNode = getKingNode(list, playerColor);
-
+  public boolean playTheGame(Node board, int level, boolean playerColor, int ogLevel){
+        
+    Node list = ListOperations.listCopy(head);// create a copy of the original list
     if (level == 0){
-      return determineRealCheckmate(board, playerColor);
-    }
+      return c.determineRealCheckmate(board, !playerColor);
+      }
+    
      // loop over all squares to find the pieces
         for (int col=1; col <= board_size; col++)
         {
@@ -442,27 +437,30 @@ class ChessBoard {
                         char pieceType = Utilities.returnChessPieceType(nodeSrc);
                         boolean[] possible = makeMoves(copy, nextTry, false); // is this a valid move
                         if (possible[0]){
-                          boolean possibilityOutcome = playTheGame(copy, level-1, !playerColor);
-                          if (possibilityOutcome){//go to the next level
-                            if (level == 1){
-                              return possibilityOutcome;
+                        boolean possibilityOutcome = c.playTheGame(copy, level-1, !playerColor, ogLevel);//go to the next level
+                        if (level == 1){
+                            if (possibilityOutcome) return true;
+                            else continue;
+                          }
+                          else {
+                            if (possibilityOutcome){
+                              continue;
                             }
-                            else {
-                              //playTheGame(copy, level-1, );
-                            }
-                            //return true;
-                          } 
+                            else return false;
+                          }
                         }
+                        else continue;
+                       
+                        }
+                      }
                     }
-                    if (!isCheckmate)
-                        break;
-                }
-                if (!isCheckmate)
-                    break;
-            }
-            if (!isCheckmate)
-                break;
-        }
+                  }
+    if (level == oglevel && possibilityOutcome)
+      System.out.print(Utilities.returnChessPieceType(nodeSrc));
+      for (int i = 0; i < 4; i++) {
+        System.out.print(" "+nextTry[i]);
+      }
+    }
     return false;
   }
 
@@ -487,8 +485,7 @@ class ChessBoard {
   // Output: void, jusr read and perform requested operations
   public static void readFromInputFile() {
 
-    int lineCtr = 0;
-    int[] query;
+    int lineCtr = 0, level;
     ChessBoard c = null;
 
     try {
@@ -505,12 +502,11 @@ class ChessBoard {
               c = new ChessBoard();
               
               for(int i = 1; i < args.length; i += 3) {
-
                 //System.out.print(args[i]+" ");
                 head = ListOperations.insert(head, new Node(args[i].charAt(0), Integer.parseInt(args[i+2]), Integer.parseInt(args[i+1])));
               }
               //Utilities.printList(head);
-              Utilities.convertFromListToMatrixAndPrint(head,lineCtr-1, board_size);
+              performOperations(c, level);
             lineCtr++; // move to the next line
             }
             
@@ -532,13 +528,14 @@ class ChessBoard {
   // identify strong and weak checkmates and perform moves
   // Input: ChessBoard and the query
   // Output: returns the count
-  public static void performOperations(ChessBoard c, int[] query) {
+  public static void performOperations(ChessBoard c, int level {
     try {
       // Check the validity of the board here. Just do it for completion
       if(ListOperations.checkValidity(head) == false) {
         c.writeToAnalysisFile("Invalid Board\nQuery not processed\n");
         return;
       }
+      /*
       // check the king checks and weak and strong checkmates
       boolean isWhiteKingUnderAttack = c.determineCheck(head, true);
       boolean isBlackKingUnderAttack = c.determineCheck(head, false);
@@ -577,6 +574,10 @@ class ChessBoard {
           if(isBlackKingUnderAttack)
             c.writeToAnalysisFile("Black in check ");
         }
+      }
+      */
+      if (!c.playTheGame(head, level, true. level)){
+        System.out.println("No solution");
       }
       c.writeToAnalysisFile("\n");
       // print the final board after performing all the moves

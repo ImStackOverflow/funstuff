@@ -1,0 +1,50 @@
+Valid 
+All kings safe
+Valid Invalid 
+Black checkmated 
+Valid Valid 
+Black in check White in check 
+Valid Valid 
+All kings safe
+Valid Valid 
+Black checkmated 
+Valid Valid Valid 
+All kings safe
+Valid 
+Black checkmated 
+Invalid 
+Black in check 
+Valid Invalid 
+White checkmated 
+Valid Valid Valid 
+All kings safe
+Valid Valid Valid Valid 
+White checkmated 
+Valid Valid 
+All kings safe
+Valid Invalid 
+Black checkmated 
+Invalid 
+All kings safe
+Valid Invalid 
+All kings safe
+Invalid 
+All kings safe
+Valid Valid Valid 
+All kings safe
+Invalid 
+Black in check 
+Valid Valid Valid Valid Valid 
+All kings safe
+Valid Invalid 
+All kings safe
+Valid Valid Valid 
+Black in check 
+Valid Valid Valid Valid 
+All kings safe
+Invalid 
+All kings safe
+Valid 
+All kings safe
+Valid 
+White checkmated 
