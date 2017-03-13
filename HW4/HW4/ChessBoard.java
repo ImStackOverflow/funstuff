@@ -613,7 +613,7 @@ class ChessBoard
         {
             if (level != 1)
             {
-                c.writeToAnalysisFile("couldnt figure out mate in more moves");
+                c.writeToAnalysisFile("No solution");
             }
             else
             {
@@ -643,7 +643,7 @@ class ChessBoard
     {
         try
         {
-            writer = new BufferedWriter(new FileWriter("analysis.txt")); // open the file to write
+            writer = new BufferedWriter(new FileWriter("solution.txt")); // open the file to write
             readFromInputFile(); // read from input file and perform operations
             writer.close(); // close the writer
         }
