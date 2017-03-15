@@ -336,6 +336,7 @@ class ChessBoard
     // Output: returns if there is a weak checkmate or not
     public boolean determineWeakCheckmate(Node head, boolean kingColor)
     {
+        
         Node list = ListOperations.listCopy(head);
         boolean checkmate = false;
         // 8 surrounding moves. So a total of 8 positions to check. Let
@@ -343,16 +344,22 @@ class ChessBoard
         int movePossibility[] = {1, 1, 1, 1, 1, 1, 1, 1};
         int attackCtr = 0;
         int spaceCtr = 0;
+        System.out.println("penis4"); 
 
         // get the king node, store the locations for accessibility
         Node king = getKingNode(list, kingColor);
+
         char type = Utilities.returnChessPieceType(king);
         int row = king.getRow();
         int col = king.getCol();
+        System.out.println("penis3"); 
 
         // proceed to verify the checkmate only if the given king is under check
+        
         if(!determineCheck(list, kingColor))
-        {
+                    {
+                        
+
             return false;
         }
 
@@ -408,9 +415,10 @@ class ChessBoard
         // if the given king is under weak chckmate, then we want to
         // place all possible pieces of same color that can block the checkmate
         // given that the move for the piece is valid
+        System.out.println("penis1"); 
         if(determineWeakCheckmate(list, kingColor))
         {
-
+            System.out.println("penis2"); 
             isCheckmate = true;   // assume checkmate is possible, since weak checkmate is possible
 
             // loop over all squares to find the pieces
@@ -460,10 +468,16 @@ class ChessBoard
 
     //true means checkmate
     public boolean playTheGame(Node board, int level, boolean playerColor, int ogLevel)
+
     {
-        Node list = ListOperations.listCopy(head);// create a copy of the original list
+
+        Node list = ListOperations.listCopy(board);// create a copy of the original list
         if (level == 0)
         {
+                System.out.println("at level: "+level);
+                Utilities.printList(board);
+                System.out.println(determineRealCheckmate(board, playerColor));
+                System.out.println("penis");    
             return determineRealCheckmate(board, playerColor);
         }
 
@@ -493,9 +507,17 @@ class ChessBoard
 
                         char pieceType = Utilities.returnChessPieceType(nodeSrc);
                         boolean[] possible = makeMoves(copy, nextTry, false); // is this a valid move
+                        System.out.println(possible[0]);
                         if (possible[0])
                         {
+                            System.out.println("1 ");
+                            Utilities.printList(copy);
+                            System.out.println("at level: "+level);
+                            System.out.println("board no is: "+board_no);
                             boolean possibilityOutcome = playTheGame(copy, level - 1, !playerColor, ogLevel); //go to the next level
+                            System.out.println("2 ");
+                            System.out.println("at level: "+level);
+
                             if (level == ogLevel )
                             {
                                 if (possibilityOutcome)
@@ -514,6 +536,7 @@ class ChessBoard
                                 if (possibilityOutcome) return true;
                                 else continue;
                             }
+
                             else
                             {
                                 if(possibilityOutcome)
@@ -581,6 +604,7 @@ class ChessBoard
                 }
                 //Utilities.printList(head);
                 System.out.println(" at board number: " + lineCtr);
+                board_no = lineCtr;
                 //Utilities.printList(head);
                 performOperations(c, level);
                 lineCtr++; // move to the next line
@@ -611,19 +635,20 @@ class ChessBoard
     {
         try
         {
-            if (level != 1)
+            /*if (level != 1)
             {
                 c.writeToAnalysisFile("No solution");
             }
             else
             {
-                if (!c.playTheGame(head, level, true, level))
+                if (!)
                 {
                     c.writeToAnalysisFile("No solution");
                 }
             }
             c.writeToAnalysisFile("\n");
-
+            */
+            c.playTheGame(head, level, true, level);
             System.out.println();
             for(int k = 0; k < 50; k++)
             {
