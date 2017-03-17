@@ -1,50 +1,40 @@
-Valid 
-All kings safe
-Valid Invalid 
-Black checkmated 
-Valid Valid 
-Black in check White in check 
-Valid Valid 
-All kings safe
-Valid Valid 
-Black checkmated 
-Valid Valid Valid 
-All kings safe
-Valid 
+Valid Valid Invalid 
 Black checkmated 
 Invalid 
-Black in check 
-Valid Invalid 
 White checkmated 
-Valid Valid Valid 
-All kings safe
-Valid Valid Valid Valid 
+Invalid 
 White checkmated 
-Valid Valid 
-All kings safe
-Valid Invalid 
-Black checkmated 
 Invalid 
-All kings safe
+White in check 
 Valid Invalid 
 All kings safe
-Invalid 
-All kings safe
-Valid Valid Valid 
+Valid Valid Invalid 
 All kings safe
 Invalid 
 Black in check 
-Valid Valid Valid Valid Valid 
+Invalid 
+Black checkmated 
+Valid Invalid 
+White in check 
+Valid 
+Black checkmated 
+Valid 
+White checkmated 
+Valid Valid Invalid 
+Black in check 
+Invalid 
+White checkmated 
+Invalid 
+Black in check 
+Valid Invalid 
 All kings safe
 Valid Invalid 
 All kings safe
-Valid Valid Valid 
-Black in check 
-Valid Valid Valid Valid 
-All kings safe
 Invalid 
-All kings safe
-Valid 
-All kings safe
-Valid 
+White in check 
+Invalid 
+Black in check 
+Invalid 
 White checkmated 
+Valid Invalid 
+All kings safe
