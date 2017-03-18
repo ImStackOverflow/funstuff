@@ -15,7 +15,7 @@ class Bard
         String[] shit = new String[200];
         Scanner in = new Scanner(new File("theGoodGood.txt"));
         //while (in.hasNext())
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 5; i++)
         {
             shit = Romeo.parseLine(in.nextLine());
             Romeo.putInMap(hash, shit);
@@ -24,168 +24,7 @@ class Bard
     }
 
 
-    //merge sorts an array given the value to sory by
-    //input arry to sort and value of array to sort by
-    //output sorted array
-    public int[][] mergesort(int[][] array, int sortVlaue)
-    {
-        /*
-        System.out.println("the array is: ");
-        for (int i = 0; i < array.length; i++)
-        {
-            System.out.print(array[i][1] + " ");
-        }
-        System.out.println(" ");
-        */
-        if(array.length == 1) return array;
 
-
-        //System.out.println("at mergesort array length is: " + array.length);
-        int[][] half1 = new int[(array.length / 2) ][3];
-        //System.out.println("the half1 length is " + half1.length);
-        for (int i = 0; i < array.length / 2; i++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                half1[i][j] = array[i][j];
-            }
-        }
-        int[][] half2 = new int[(array.length / 2) + array.length % 2][3];
-
-        for (int i = (array.length / 2), k = 0; i < array.length; i++, k++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                half2[k][j] = array[i][j];
-            }
-        }
-        half1 = mergesort(half1, sortVlaue);
-        half2 = mergesort(half2, sortVlaue);
-
-
-        return merge(half1, half2, sortVlaue);
-
-    }
-
-
-    //does the merging
-    //input: the 2 halves and which array value to sort by
-    //output: the merger of the 2 arrays
-    public int[][] merge(int[][] half1, int[][] half2, int sortVlaue)
-    {
-        System.out.println("merging");
-        System.out.println("the merge array input is: ");
-        for (int i = 0; i < half1.length; i++)
-        {
-            System.out.print(half1[i][0] + " ");
-        }
-        System.out.println(" ");
-        for (int i = 0; i < half2.length; i++)
-        {
-            System.out.print(half2[i][0] + " ");
-        }
-        System.out.println(" ");
-        //System.out.println("the half1 length is " + half1.length);
-        //System.out.println("the half2 length is " + half2.length);
-
-        int [][] merged = new int[half1.length + half2.length][3];
-        //System.out.println("the merged length is " + merged.length);
-        int a = 0, b = 0, c = 0;
-        while (a < half1.length && b < half2.length)
-        {
-
-            if(half1[a][sortVlaue] < half2[b][sortVlaue])
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    merged[c][i] = half1[a][i];
-                }
-                a++;
-            }
-            else
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    merged[c][i] = half2[b][i];
-                }
-                b++;
-            }
-            c++;
-            //System.out.println("a = "+a+" b = "+b+" c = "+c);
-        }
-        if (a < half1.length)
-        {
-            for (; a < half1.length; a++, c++)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    merged[c][i] = half1[a][i];
-                }
-            }
-        }
-        else
-        {
-            for (; b < half2.length; b++, c++)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    merged[c][i] = half2[b][i];
-                }
-            }
-        }
-        System.out.println("the merge array is: ");
-        for (int i = 0; i < merged.length; i++)
-        {
-            System.out.print(merged[i][0] + " ");
-        }
-        System.out.println(" ");
-        return merged;
-    }
-
-
-    //makes binary tree labeled with word length 
-    //input tree and data to imput
-    //output none
-    public TreeMap makeTree(int[][] data)
-    {
-    	TreeMap<Integer, int[][]> tree =  new TreeMap<Integer, int[][]>();
-        data = mergesort(data, 0); //sorts data based on length
-        for (int i = 0; i < data.length;)
-        {
-            int j = 1;
-            while(i+j < data.length && data[i][0] == data[i+j][0])
-            {
-                j++;
-            }
-            System.out.println("the range is: "+j+"and the start is: "+i);
-            int[][] whoop = partitionArray(data, i, j);
-            System.out.println("the data is: ");
-            for (int k = 0; k < whoop.length; k++) {
-            	System.out.print(whoop[k][0]);
-            }
-            System.out.println(" ");
-            tree.put(data[i][0], whoop);
-            i += j;
-        }
-        System.out.println("getting out of the tree");
-        return tree;
-    }
-
-    //stores section of input into seperate array defined by range and start indicie
-    //input data array, start location, and range 
-    //output 2d array of
-    public int[][] partitionArray(int data[][], int start, int range)
-    {
-        int[][] store = new int[range][2];
-        for (int k = 0; k < range; k++)
-        {
-            for (int l = 1; l < 3; l++)
-            {
-                store[k][l-1] = data[k + start][l];
-            }
-        }
-        return store;
-    }
 
     //stores array of strings into hash map
     //input hashmap and input string
@@ -211,7 +50,7 @@ class Bard
     //output: parsed string array or null
     public String[] parseLine(String input)
     {
-        String[] parsed = input.replaceAll("[^a-zA-Z -]", "").split("\\s|-");
+        String[] parsed = input.replaceAll("[^a-zA-Z - ']", "").split("\\s");
         return parsed;
     }
 
@@ -223,21 +62,76 @@ class Bard
     }
     */
 
+    public static void readFromInputFile()
+    {
+        try
+        {
+            BufferedReader reader = new BufferedReader(new FileReader("input.txt"));
+            String line;
+            while ((line = reader.readLine()) != null)
+            {
+                String[] args = line.split(":"); // Reader assumes that the input format is as given in the instruction
+                // If the line is 2i, then I know that it is a configuration of a ChessBoard
+                // so create a new ChessBoard here, parse board size and insert
+                // given chesspieces into the linked list
+                //System.out.println("line is: "+line+" args[0]: "+args[0]);
+                level = Integer.parseInt(args[0]);
+                args = line.split(" ");
+                c = new ChessBoard();
+
+                for(int i = 1; i < args.length; i += 3)
+                {
+                    //System.out.print(args[i]+" ");
+                    head = ListOperations.insert(head, new Node(args[i].charAt(0), Integer.parseInt(args[i + 2]), Integer.parseInt(args[i + 1])));
+                }
+                //Utilities.printList(head);
+                System.out.println(" at board number: " + lineCtr);
+                board_no = lineCtr;
+                //Utilities.printList(head);
+                performOperations(c, level);
+                lineCtr++; // move to the next line
+            }
+
+            reader.close();
+        }
+        catch (NumberFormatException e)
+        {
+            Utilities.errExit("All arguments must be integers"); // throw error incase parsing integer fails
+        }
+        catch (IndexOutOfBoundsException e)
+        {
+            Utilities.errExit("Array index is out of bounds"); // throw error when inserting elements into arrays fail
+        }
+        catch (Exception e)
+        {
+            Utilities.errExit("Exception occurred trying to read file"); // throw a generic exception if failure to read occurs
+        }
+    }
+
+
 
     public static void main(String args[]) throws IOException
     {
         HashAdo hash = new HashAdo();
-        
+        BinaryTree tree = new BinaryTree();
+
         try
         {
-            Tempest(hash);
+            Tempest(hash); //partition shakespeare text
             Scanner command = new Scanner(System.in);
             int[][] table = hash.getArray();
+            tree.makeTree(table);
+            int[] words = tree.getWords(6, 2);
+            //System.out.println("gimmie the length to probe: ");
+            //int in = command.nextInt();
+            System.out.println("the word of length 6 is: ");
+            for (int i = 0; i < words.length; i++)
+            {
+                System.out.println(words[i] + " ");
+                System.out.println("that equals: " + hash.getWord(words[i]));
+            }
 
-            TreeMap tree = Romeo.makeTree(table);
-            System.out.println("gimmie the length to probe: ");
-            int in = command.nextInt();
-            System.out.println("the data is: "+tree.get(in).getClass().getName());
+
         }
         catch (Exception e)
         {
