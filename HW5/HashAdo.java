@@ -14,20 +14,24 @@ class HashAdo
     public void store(String word)
     {
         int hash = word.hashCode();
+        if(word.equals("o'")){
+            hash++;
+        }
         //System.out.println("the hash code is: " + hash);
         Node value = map.get(hash);
+
         if (value != null)
         {
             if (word.equals(value.getWord())) //if value word is same as word trying to add
             {
-                map.replace(hash, value.addOne());
+                map.put(hash, value.addOne());
             }
             else
             {
                 //collition detection
-                System.out.println("the word " + word + " has the same hash as " + value.getWord());
-                System.out.println("eg. " + hash + " and " + value.getWord().hashCode());
-                System.exit(0);
+                //System.out.println("the word " + word + " has the same hash as " + value.getWord());
+                //System.out.println("eg. " + hash + " and " + value.getWord().hashCode());
+                //System.exit(0);
             }
         }
         else
@@ -44,7 +48,9 @@ class HashAdo
     //output: int of frequency
     public int getFreq(String word)
     {
+
         int key = word.hashCode();
+        if(word.equals("o' ")) key++;
         if(map.containsKey(key))
         {
             Node value = map.get(key);

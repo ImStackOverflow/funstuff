@@ -78,7 +78,7 @@ class BinaryTree
         while (a < half1.length && b < half2.length)
         {
 
-            if(half1[a][sortVlaue] < half2[b][sortVlaue])
+            if(half1[a][sortVlaue] <= half2[b][sortVlaue])
             {
                 for (int i = 0; i < half1[0].length; i++)
                 {
@@ -139,30 +139,31 @@ class BinaryTree
         for (int i = 0; i < data.length;)
         {
             int j = 1;
-            System.out.println("the freq for length " + data[i][0]);
+            //System.out.println("the freq for length " + data[i][0]);
             while(i + j < data.length && data[i][0] == data[i + j][0])
             {
-                System.out.println(data[i + j][1] + " ");
+                //System.out.println(data[i + j][1] + " ");
                 j++;
             }
-            System.out.println("the range is: " + j + "and the start is: " + i);
+            //System.out.println("the range is: " + j + "and the start is: " + i);
             int[][] whoop = partitionArray(data, i, j);
-            System.out.println("the data is: ");
+            /*System.out.println("the data is: ");
             for (int k = 0; k < whoop.length; k++)
             {
                 System.out.print(whoop[k][0]);
             }
             System.out.println(" ");
+            */
             tree.put(data[i][0], whoop);
             i += j;
         }
         data = tree.get(6);
-        System.out.println("the words of length 6 are: ");
-        for (int i = 0; i < data.length; i++)
+        //System.out.println("the words of length 6 are: ");
+        /*for (int i = 0; i < data.length; i++)
         {
             System.out.print(" " + data[i][0]);
-        }
-        System.out.println("getting out of the tree");
+        }*/
+        //System.out.println("getting out of the tree");
     }
 
     //stores section of input into seperate array defined by range and start indicie
@@ -183,20 +184,27 @@ class BinaryTree
     }
 
 
+
+    public boolean containsLength(int k)
+    {
+        return tree.containsKey(k);
+    }
+
     //returns k most frequent word hash values of l length
     //input number of words k of length l
     //output array of length k
     public int[] getWords(int l, int k)
     {
-        int[] words = new int[k];
-        if(tree.containsKey(l))
+        int[] words = new int[k];//array to store hash values
+        int[][] values = tree.get(l);//values from tree
+        if (values.length >= k)
         {
-            int[][] values = tree.get(l);
             for (int i = 0; i < k; i++)
             {
                 words[i] = values[i][1];
             }
         }
+
         return words;
     }
 }

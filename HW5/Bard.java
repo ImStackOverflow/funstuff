@@ -13,9 +13,8 @@ class Bard
     public static void Tempest(HashAdo hash) throws IOException
     {
         String[] shit = new String[200];
-        Scanner in = new Scanner(new File("theGoodGood.txt"));
-        //while (in.hasNext())
-        for (int i = 0; i < 5; i++)
+        Scanner in = new Scanner(new File("shakespeare.txt"));
+        while (in.hasNext())
         {
             shit = Romeo.parseLine(in.nextLine());
             Romeo.putInMap(hash, shit);
@@ -39,7 +38,8 @@ class Bard
             else
             {
                 //System.out.println("node stores " + input[i]);
-                hash.store(input[i]);
+                input[i].replaceAll(" ","");
+                hash.store(input[i].toLowerCase());
             }
         }
     }
@@ -62,81 +62,69 @@ class Bard
     }
     */
 
-    public static void readFromInputFile()
+    public static void doInput(HashAdo hash, BinaryTree tree)
     {
         try
         {
-            BufferedReader reader = new BufferedReader(new FileReader("input.txt"));
-            String line;
-            while ((line = reader.readLine()) != null)
+            PrintWriter out = new PrintWriter(new File("analysis.txt"));
+            Scanner input = new Scanner(new File("input.txt"));
+            while (input.hasNext())
             {
-                String[] args = line.split(":"); // Reader assumes that the input format is as given in the instruction
-                // If the line is 2i, then I know that it is a configuration of a ChessBoard
-                // so create a new ChessBoard here, parse board size and insert
-                // given chesspieces into the linked list
-                //System.out.println("line is: "+line+" args[0]: "+args[0]);
-                level = Integer.parseInt(args[0]);
-                args = line.split(" ");
-                c = new ChessBoard();
-
-                for(int i = 1; i < args.length; i += 3)
+                String[] line = input.nextLine().split(" ");
+                if(line[0].matches("\\d+"))//if number
                 {
-                    //System.out.print(args[i]+" ");
-                    head = ListOperations.insert(head, new Node(args[i].charAt(0), Integer.parseInt(args[i + 2]), Integer.parseInt(args[i + 1])));
-                }
-                //Utilities.printList(head);
-                System.out.println(" at board number: " + lineCtr);
-                board_no = lineCtr;
-                //Utilities.printList(head);
-                performOperations(c, level);
-                lineCtr++; // move to the next line
-            }
+                    if(tree.containsLength(Integer.parseInt(line[0])))
+                    {
+                        int[] words = tree.getWords(Integer.parseInt(line[0]), Integer.parseInt(line[1]));
+                        for (int i = 0; i < words.length; i++)
+                        {
+                            out.print(hash.getWord(words[i]) + " ");
+                        }
+                        out.println(" ");
 
-            reader.close();
+                    }
+                    else out.println("no words of that length exist");
+
+                }
+                else//otherwise word
+                {
+                    out.println(hash.getFreq(line[0]));
+                }
+            }
+            input.close();
+            out.close();
         }
+
         catch (NumberFormatException e)
         {
-            Utilities.errExit("All arguments must be integers"); // throw error incase parsing integer fails
+            System.out.println("All arguments must be integers"); // throw error incase parsing integer fails
         }
         catch (IndexOutOfBoundsException e)
         {
-            Utilities.errExit("Array index is out of bounds"); // throw error when inserting elements into arrays fail
+            System.out.println("Array index is out of bounds"); // throw error when inserting elements into arrays fail
         }
         catch (Exception e)
         {
-            Utilities.errExit("Exception occurred trying to read file"); // throw a generic exception if failure to read occurs
+            System.out.println("Exception occurred trying to read file"); // throw a generic exception if failure to read occurs
         }
     }
 
 
 
-    public static void main(String args[]) throws IOException
+    public static void main(String args[])
     {
         HashAdo hash = new HashAdo();
         BinaryTree tree = new BinaryTree();
-
         try
         {
-            Tempest(hash); //partition shakespeare text
-            Scanner command = new Scanner(System.in);
-            int[][] table = hash.getArray();
-            tree.makeTree(table);
-            int[] words = tree.getWords(6, 2);
-            //System.out.println("gimmie the length to probe: ");
-            //int in = command.nextInt();
-            System.out.println("the word of length 6 is: ");
-            for (int i = 0; i < words.length; i++)
-            {
-                System.out.println(words[i] + " ");
-                System.out.println("that equals: " + hash.getWord(words[i]));
-            }
-
-
+            Tempest(hash); //partition shakespeare text and make hash table
+            tree.makeTree(hash.getArray()); //make binary tree
+            Romeo.doInput(hash, tree); //do input operations
+            //System.out.println(hash.getWord(3481)+" "+hash.getFreq("o'"));
         }
         catch (Exception e)
         {
             System.out.println("there was an error it was " + e.getMessage());
         }
-
     }
 }
