@@ -635,26 +635,23 @@ class ChessBoard
     {
         try
         {
-            /*if (level != 1)
+            if (level != 1)
             {
                 c.writeToAnalysisFile("No solution");
             }
             else
             {
-                if (!)
-                {
-                    c.writeToAnalysisFile("No solution");
-                }
-            }
-            c.writeToAnalysisFile("\n");
-            */
-            c.playTheGame(head, level, true, level);
+                c.playTheGame(head, level, true, level);
             System.out.println();
             for(int k = 0; k < 50; k++)
             {
                 System.out.print('-');
             }
             System.out.println();
+            }
+            c.writeToAnalysisFile("\n");
+            
+            
         }
         catch(Exception e)
         {
