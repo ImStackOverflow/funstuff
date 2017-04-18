@@ -4,7 +4,7 @@
 
 #ifndef C101IntVec
 #define C101IntVec
-/* Multiple typedefs for the same type are an error in C. */
+/* Multiple typedefs for the same type are an error in C.
  * The above ifndef and define prevent multiple copies of code below.
  */
 
