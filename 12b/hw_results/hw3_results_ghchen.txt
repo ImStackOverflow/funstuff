@@ -1,0 +1,4 @@
+Grade: 18/20
+Notes: A full solution with weak checkmate, handles knights and bishops, jar misnamed (-2), HW3 in wrong directory (-1)
+
+Late by 0.0 hours

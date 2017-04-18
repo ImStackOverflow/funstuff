@@ -1,0 +1,7 @@
+For Lab05 I Gavin Chen submitted DictionaryClient.c IntegerLinkedList.c and Dictionary.c along with the corresponding harder files.
+
+I coppied IntegerLinkedList.c from the website and make Dictionary.c to interface with it, and DictionaryClient.c to interface with Dictionary. The client file simply created the list and parsed the input from the input file. The parsed string was then passed to a function in Dictionary.c that interpreted the first element in the parsed string, and used a switch case to determine what function to perform (insert, delete, etc). The data was then converted into an integer and passed to the according function. The string parsing function continued until the EOF, and terminated by cleaning up the linked list and freeing any memory allocation.
+
+The most challenging part of the lab was parsing the string and passing the data. The reaming functions were mostly given to us and was not to hard to implement.
+
+I included a Makefile that compiled DictionaryClient and linked it with the dependent files. It also runs the program and for files named input and output. The clean utility deletes all object files and the output file. I also included a check memory leak function as indicated. 

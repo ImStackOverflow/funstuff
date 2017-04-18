@@ -1,0 +1,10 @@
+r r 8 8 K 4 8
+Invalid
+K -
+Invalid
+- B 7 8 q 8 7
+B n 1 6 B 3 5
+- q 4 7 N 4 3
+K -
+n k 1 1 K 1 2
+Invalid

@@ -1,3 +1,0 @@
-Grade: 7/10
-Explanation:
-makefile issue, misname

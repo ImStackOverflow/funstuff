@@ -1,0 +1,4 @@
+Grade: 15/20
+Notes: All validity and find work, didn't identify attack correctly, Q attacks n test fails, R attacks B test fails, b attacks r test fails, N attacks B test fails, Q attacks K or b attacks n test fails, N and N attack each other test fails
+
+Late by 21 hours
