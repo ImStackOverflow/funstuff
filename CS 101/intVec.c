@@ -5,6 +5,8 @@
 
 //static const int intInitCap = 4;
 
+static void error(const char message[]);
+
 typedef struct IntVecNode{
 	int *data;
 	int sz;
@@ -14,7 +16,7 @@ typedef struct IntVecNode{
 int intTop(IntVec myVec){
 	if (myVec)
 	{
-		int *penis = myVec->data;
+	int *penis = myVec->data;
 	penis += myVec->sz;
 	return *penis;
 	}
@@ -23,9 +25,9 @@ int intTop(IntVec myVec){
 }
 
 int intData(IntVec myVec, int i){
-	if (myVec)
+	if (myVec && i >= 0 && i < myVec->sz)
 	{
-			int *penis = myVec->data;
+	int *penis = myVec->data;
 	penis += i;
 	return *penis;
 	}
@@ -81,7 +83,7 @@ void intVecPop(IntVec myVec){
 	else error(__func__);
 }
 
-void error(char message[]){
+static void error(const char message[]){
 	printf("there was an error in %s\n", message);
 	exit(1);
 }
