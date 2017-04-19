@@ -37,9 +37,11 @@ IntVec *create (int nodes){
 }
 
 void addVert(IntVec *penis, int v1, int v2, int weight){
+	
   if(penis){
     penis += v1;
     intVecPush(*penis, v2);
+	DPRINT(("in addVert added %d into %d\n", intTop(*penis), v1));
   }
   else{
     error(__func__);
@@ -65,7 +67,7 @@ void printShit(IntVec *shit, int m, int n){
   printf("n = %d\n m = %d\n", n, m);
   for(int i = 1; i <= n; i++){
     printf("%d      ", i);
-    printData(*shit);
+    printData(*(shit+i));
   }
 }
 
