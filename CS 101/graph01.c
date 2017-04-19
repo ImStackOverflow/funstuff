@@ -83,6 +83,8 @@ void doShit(FILE *in){
 	  args = sscanf(what, "%d %d %lf %c", &v1, &v2, &weight, &ass);
 	    m++;
 	switch (args){
+		case 0: //no input
+			break;
 		case 1://first line
 		  n = v1;
 		  DPRINT(("has %d vert\n", v1));
