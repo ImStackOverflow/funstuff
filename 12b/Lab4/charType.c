@@ -9,6 +9,7 @@ void extract_chars(char *s, char *a, char *d, char *p, char *w);
 int getit(char* see);
 
 int main(int argc, char* argv[]){
+	printf("in function %s/n", __func__);
 	FILE* in;
 	FILE* out;
 

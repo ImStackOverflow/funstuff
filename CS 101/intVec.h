@@ -8,7 +8,7 @@
  * The above ifndef and define prevent multiple copies of code below.
  */
 
-typedef struct IntVecNode * IntVec;
+typedef struct IntVecNode *IntVec;
 
 
 /** intInitCap: initial capacity after intMakeEmptyVec() */

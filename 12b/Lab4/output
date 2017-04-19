@@ -1,0 +1,742 @@
+The contents of line 1 is 
+13 alphabetic characters: includestdioh
+0 digit: 
+4 punctuation characters: #<.>
+1 whitespace chracter: 
+
+
+The contents of line 2 is 
+13 alphabetic characters: includectypeh
+0 digit: 
+4 punctuation characters: #<.>
+1 whitespace chracter: 
+
+
+The contents of line 3 is 
+14 alphabetic characters: includestdlibh
+0 digit: 
+4 punctuation characters: #<.>
+1 whitespace chracter: 
+
+
+The contents of line 4 is 
+14 alphabetic characters: includestringh
+0 digit: 
+4 punctuation characters: #<.>
+1 whitespace chracter: 
+
+
+The contents of line 5 is 
+0 alphabetic character: 
+0 digit: 
+0 punctuation character: 
+1 whitespace chracter: 
+
+
+The contents of line 6 is 
+11 alphabetic characters: definedebug
+1 digit: 1
+1 punctuation character: #
+3 whitespace chracters:   
+
+
+The contents of line 7 is 
+0 alphabetic character: 
+0 digit: 
+0 punctuation character: 
+1 whitespace chracter: 
+
+
+The contents of line 8 is 
+41 alphabetic characters: voidextractcharscharscharachardcharpcharw
+0 digit: 
+13 punctuation characters: _(*,*,*,*,*);
+11 whitespace chracters:           
+
+
+The contents of line 9 is 
+15 alphabetic characters: intgetitcharsee
+0 digit: 
+4 punctuation characters: (*);
+3 whitespace chracters:   
+
+
+The contents of line 10 is 
+0 alphabetic character: 
+0 digit: 
+0 punctuation character: 
+1 whitespace chracter: 
+
+
+The contents of line 11 is 
+22 alphabetic characters: intmainintargccharargv
+0 digit: 
+7 punctuation characters: (,*[]){
+5 whitespace chracters:     
+
+
+The contents of line 12 is 
+22 alphabetic characters: printfinfunctionsnfunc
+0 digit: 
+12 punctuation characters: ("%/",____);
+5 whitespace chracters: 	   
+
+
+The contents of line 13 is 
+6 alphabetic characters: FILEin
+0 digit: 
+2 punctuation characters: *;
+3 whitespace chracters: 	 
+
+
+The contents of line 14 is 
+7 alphabetic characters: FILEout
+0 digit: 
+2 punctuation characters: *;
+3 whitespace chracters: 	 
+
+
+The contents of line 15 is 
+0 alphabetic character: 
+0 digit: 
+0 punctuation character: 
+1 whitespace chracter: 
+
+
+The contents of line 16 is 
+26 alphabetic characters: outfopenargvwgetoutputfile
+1 digit: 2
+11 punctuation characters: =([],"");//
+8 whitespace chracters: 	      
+
+
+The contents of line 17 is 
+9 alphabetic characters: ifoutNULL
+0 digit: 
+5 punctuation characters: (==){
+4 whitespace chracters: 	  
+
+
+The contents of line 18 is 
+31 alphabetic characters: printfUnabletowritetofilesnargv
+1 digit: 2
+10 punctuation characters: ("%\",[]);
+8 whitespace chracters: 	      
+
+
+The contents of line 19 is 
+15 alphabetic characters: exitEXITFAILURE
+0 digit: 
+5 punctuation characters: (_);}
+3 whitespace chracters: 	 
+
+
+The contents of line 20 is 
+0 alphabetic character: 
+0 digit: 
+0 punctuation character: 
+1 whitespace chracter: 
+
+
+The contents of line 21 is 
+24 alphabetic characters: infopenargvrgetinputfile
+1 digit: 1
+11 punctuation characters: =([],"");//
+7 whitespace chracters: 	     
+
+
+The contents of line 22 is 
+8 alphabetic characters: ifinNULL
+0 digit: 
+5 punctuation characters: (==){
+4 whitespace chracters: 	  
+
+
+The contents of line 23 is 
+32 alphabetic characters: printfUnabletoreadfromfilesnargv
+1 digit: 1
+10 punctuation characters: ("%\",[]);
+8 whitespace chracters: 	      
+
+
+The contents of line 24 is 
+15 alphabetic characters: exitEXITFAILURE
+0 digit: 
+5 punctuation characters: (_);}
+3 whitespace chracters: 	 
+
+
+The contents of line 25 is 
+0 alphabetic character: 
+0 digit: 
+0 punctuation character: 
+1 whitespace chracter: 
+
+
+The contents of line 26 is 
+7 alphabetic characters: intsize
+3 digits: 100
+2 punctuation characters: =;
+5 whitespace chracters: 	   
+
+
+The contents of line 27 is 
+10 alphabetic characters: intknosize
+0 digit: 
+4 punctuation characters: *=&;
+5 whitespace chracters: 	   
+
+
+The contents of line 28 is 
+28 alphabetic characters: charlinecallocsizesizeofchar
+0 digit: 
+8 punctuation characters: *=(,());
+5 whitespace chracters: 	   
+
+
+The contents of line 29 is 
+4 alphabetic characters: intg
+1 digit: 0
+2 punctuation characters: =;
+5 whitespace chracters: 	   
+
+
+The contents of line 30 is 
+16 alphabetic characters: getlinelineknoin
+0 digit: 
+6 punctuation characters: (&,,);
+2 whitespace chracters: 	
+
+
+The contents of line 31 is 
+4 alphabetic characters: inti
+1 digit: 1
+2 punctuation characters: =;
+5 whitespace chracters: 	   
+
+
+The contents of line 32 is 
+4 alphabetic characters: intj
+1 digit: 0
+2 punctuation characters: =;
+5 whitespace chracters: 	   
+
+
+The contents of line 33 is 
+0 alphabetic character: 
+0 digit: 
+0 punctuation character: 
+1 whitespace chracter: 
+
+
+The contents of line 34 is 
+6 alphabetic characters: whileg
+1 digit: 1
+6 punctuation characters: (!=-){
+5 whitespace chracters: 	   
+
+
+The contents of line 35 is 
+32 alphabetic characters: fprintfoutThecontentsoflinedisni
+0 digit: 
+9 punctuation characters: (,"%\",);
+10 whitespace chracters: 	        
+
+
+The contents of line 36 is 
+25 alphabetic characters: characallocsizesizeofchar
+0 digit: 
+8 punctuation characters: *=(,());
+5 whitespace chracters: 	   
+
+
+The contents of line 37 is 
+25 alphabetic characters: chardcallocsizesizeofchar
+0 digit: 
+8 punctuation characters: *=(,());
+5 whitespace chracters: 	   
+
+
+The contents of line 38 is 
+25 alphabetic characters: charpcallocsizesizeofchar
+0 digit: 
+8 punctuation characters: *=(,());
+5 whitespace chracters: 	   
+
+
+The contents of line 39 is 
+25 alphabetic characters: charwcallocsizesizeofchar
+0 digit: 
+8 punctuation characters: *=(,());
+5 whitespace chracters: 	   
+
+
+The contents of line 40 is 
+20 alphabetic characters: extractcharslineadpw
+0 digit: 
+8 punctuation characters: _(,,,,);
+6 whitespace chracters: 	    
+
+
+The contents of line 41 is 
+7 alphabetic characters: jgetita
+0 digit: 
+4 punctuation characters: =();
+4 whitespace chracters: 	  
+
+
+The contents of line 42 is 
+38 alphabetic characters: ifjfprintfoutdalphabeticcharacterssnja
+1 digit: 1
+15 punctuation characters: (>)(,"%:%\",,);
+8 whitespace chracters: 	      
+
+
+The contents of line 43 is 
+38 alphabetic characters: elsefprintfoutdalphabeticcharactersnja
+0 digit: 
+12 punctuation characters: (,"%:%\",,);
+8 whitespace chracters: 	      
+
+
+The contents of line 44 is 
+0 alphabetic character: 
+0 digit: 
+0 punctuation character: 
+1 whitespace chracter: 
+
+
+The contents of line 45 is 
+7 alphabetic characters: jgetitd
+0 digit: 
+4 punctuation characters: =();
+4 whitespace chracters: 	  
+
+
+The contents of line 46 is 
+24 alphabetic characters: ifjfprintfoutddigitssnjd
+1 digit: 1
+15 punctuation characters: (>)(,"%:%\",,);
+7 whitespace chracters: 	     
+
+
+The contents of line 47 is 
+24 alphabetic characters: elsefprintfoutddigitsnjd
+0 digit: 
+12 punctuation characters: (,"%:%\",,);
+7 whitespace chracters: 	     
+
+
+The contents of line 48 is 
+0 alphabetic character: 
+0 digit: 
+0 punctuation character: 
+1 whitespace chracter: 
+
+
+The contents of line 49 is 
+7 alphabetic characters: jgetitp
+0 digit: 
+4 punctuation characters: =();
+4 whitespace chracters: 	  
+
+
+The contents of line 50 is 
+39 alphabetic characters: ifjfprintfoutdpunctuationcharacterssnjp
+1 digit: 1
+15 punctuation characters: (>)(,"%:%\",,);
+9 whitespace chracters: 	       
+
+
+The contents of line 51 is 
+39 alphabetic characters: elsefprintfoutdpunctuationcharactersnjp
+0 digit: 
+12 punctuation characters: (,"%:%\",,);
+9 whitespace chracters: 	       
+
+
+The contents of line 52 is 
+0 alphabetic character: 
+0 digit: 
+0 punctuation character: 
+1 whitespace chracter: 
+
+
+The contents of line 53 is 
+7 alphabetic characters: jgetitw
+0 digit: 
+4 punctuation characters: =();
+4 whitespace chracters: 	  
+
+
+The contents of line 54 is 
+39 alphabetic characters: ifjfprintfoutdwhitespacechracterssnnnjw
+1 digit: 1
+17 punctuation characters: (>)(,"%:%\\\",,);
+8 whitespace chracters: 	      
+
+
+The contents of line 55 is 
+39 alphabetic characters: elsefprintfoutdwhitespacechractersnnnjw
+0 digit: 
+14 punctuation characters: (,"%:%\\\",,);
+8 whitespace chracters: 	      
+
+
+The contents of line 56 is 
+0 alphabetic character: 
+0 digit: 
+0 punctuation character: 
+2 whitespace chracters: 	
+
+
+The contents of line 57 is 
+5 alphabetic characters: freea
+0 digit: 
+3 punctuation characters: ();
+2 whitespace chracters: 	
+
+
+The contents of line 58 is 
+5 alphabetic characters: freed
+0 digit: 
+3 punctuation characters: ();
+2 whitespace chracters: 	
+
+
+The contents of line 59 is 
+5 alphabetic characters: freep
+0 digit: 
+3 punctuation characters: ();
+2 whitespace chracters: 	
+
+
+The contents of line 60 is 
+5 alphabetic characters: freew
+0 digit: 
+3 punctuation characters: ();
+2 whitespace chracters: 	
+
+
+The contents of line 61 is 
+17 alphabetic characters: ggetlinelineknoin
+0 digit: 
+7 punctuation characters: =(&,,);
+4 whitespace chracters: 	  
+
+
+The contents of line 62 is 
+1 alphabetic character: i
+0 digit: 
+3 punctuation characters: ++;
+2 whitespace chracters: 	
+
+
+The contents of line 63 is 
+0 alphabetic character: 
+0 digit: 
+1 punctuation character: }
+2 whitespace chracters: 	
+
+
+The contents of line 64 is 
+8 alphabetic characters: freeline
+0 digit: 
+3 punctuation characters: ();
+2 whitespace chracters: 	
+
+
+The contents of line 65 is 
+8 alphabetic characters: fclosein
+0 digit: 
+3 punctuation characters: ();
+2 whitespace chracters: 	
+
+
+The contents of line 66 is 
+9 alphabetic characters: fcloseout
+0 digit: 
+3 punctuation characters: ();
+2 whitespace chracters: 	
+
+
+The contents of line 67 is 
+0 alphabetic character: 
+0 digit: 
+0 punctuation character: 
+1 whitespace chracter: 
+
+
+The contents of line 68 is 
+0 alphabetic character: 
+0 digit: 
+1 punctuation character: }
+1 whitespace chracter: 
+
+
+The contents of line 69 is 
+15 alphabetic characters: intgetitcharsee
+0 digit: 
+4 punctuation characters: (*){
+3 whitespace chracters:   
+
+
+The contents of line 70 is 
+4 alphabetic characters: inti
+1 digit: 0
+2 punctuation characters: =;
+5 whitespace chracters: 	   
+
+
+The contents of line 71 is 
+8 alphabetic characters: whilesee
+1 digit: 0
+9 punctuation characters: (*!='\'){
+2 whitespace chracters: 	
+
+
+The contents of line 72 is 
+1 alphabetic character: i
+0 digit: 
+3 punctuation characters: ++;
+3 whitespace chracters: 		
+
+
+The contents of line 73 is 
+3 alphabetic characters: see
+0 digit: 
+3 punctuation characters: ++;
+3 whitespace chracters: 		
+
+
+The contents of line 74 is 
+0 alphabetic character: 
+0 digit: 
+1 punctuation character: }
+2 whitespace chracters: 	
+
+
+The contents of line 75 is 
+7 alphabetic characters: returni
+0 digit: 
+1 punctuation character: ;
+3 whitespace chracters: 	 
+
+
+The contents of line 76 is 
+0 alphabetic character: 
+0 digit: 
+1 punctuation character: }
+1 whitespace chracter: 
+
+
+The contents of line 77 is 
+0 alphabetic character: 
+0 digit: 
+0 punctuation character: 
+1 whitespace chracter: 
+
+
+The contents of line 78 is 
+41 alphabetic characters: voidextractcharscharscharachardcharpcharw
+0 digit: 
+13 punctuation characters: _(*,*,*,*,*){
+11 whitespace chracters:           
+
+
+The contents of line 79 is 
+4 alphabetic characters: intk
+1 digit: 0
+2 punctuation characters: =;
+5 whitespace chracters: 	   
+
+
+The contents of line 80 is 
+4 alphabetic characters: inti
+1 digit: 0
+2 punctuation characters: =;
+5 whitespace chracters: 	   
+
+
+The contents of line 81 is 
+7 alphabetic characters: whilesn
+0 digit: 
+9 punctuation characters: (*!='\'){
+5 whitespace chracters: 	   
+
+
+The contents of line 82 is 
+2 alphabetic characters: ks
+0 digit: 
+3 punctuation characters: =*;
+5 whitespace chracters: 		  
+
+
+The contents of line 83 is 
+10 alphabetic characters: ifisalphak
+0 digit: 
+5 punctuation characters: (()){
+7 whitespace chracters: 		 			
+
+
+The contents of line 84 is 
+2 alphabetic characters: as
+0 digit: 
+4 punctuation characters: *=*;
+6 whitespace chracters: 			  
+
+
+The contents of line 85 is 
+1 alphabetic character: a
+0 digit: 
+3 punctuation characters: ++;
+4 whitespace chracters: 			
+
+
+The contents of line 86 is 
+0 alphabetic character: 
+0 digit: 
+1 punctuation character: }
+4 whitespace chracters: 		 
+
+
+The contents of line 87 is 
+14 alphabetic characters: elseifisdigitk
+0 digit: 
+5 punctuation characters: (()){
+6 whitespace chracters: 		   
+
+
+The contents of line 88 is 
+2 alphabetic characters: ds
+0 digit: 
+4 punctuation characters: *=*;
+6 whitespace chracters: 			  
+
+
+The contents of line 89 is 
+1 alphabetic character: d
+0 digit: 
+3 punctuation characters: ++;
+4 whitespace chracters: 			
+
+
+The contents of line 90 is 
+0 alphabetic character: 
+0 digit: 
+1 punctuation character: }
+3 whitespace chracters: 		
+
+
+The contents of line 91 is 
+14 alphabetic characters: elseifispunctk
+0 digit: 
+5 punctuation characters: (()){
+6 whitespace chracters: 		   
+
+
+The contents of line 92 is 
+2 alphabetic characters: ps
+0 digit: 
+4 punctuation characters: *=*;
+6 whitespace chracters: 			  
+
+
+The contents of line 93 is 
+1 alphabetic character: p
+0 digit: 
+3 punctuation characters: ++;
+4 whitespace chracters: 			
+
+
+The contents of line 94 is 
+0 alphabetic character: 
+0 digit: 
+1 punctuation character: }
+4 whitespace chracters: 		 
+
+
+The contents of line 95 is 
+14 alphabetic characters: elseifisspacek
+0 digit: 
+5 punctuation characters: (()){
+5 whitespace chracters: 		  
+
+
+The contents of line 96 is 
+2 alphabetic characters: ws
+0 digit: 
+4 punctuation characters: *=*;
+6 whitespace chracters: 			  
+
+
+The contents of line 97 is 
+1 alphabetic character: w
+0 digit: 
+3 punctuation characters: ++;
+4 whitespace chracters: 			
+
+
+The contents of line 98 is 
+0 alphabetic character: 
+0 digit: 
+1 punctuation character: }
+3 whitespace chracters: 		
+
+
+The contents of line 99 is 
+1 alphabetic character: s
+0 digit: 
+3 punctuation characters: ++;
+3 whitespace chracters: 		
+
+
+The contents of line 100 is 
+1 alphabetic character: i
+0 digit: 
+3 punctuation characters: ++;
+3 whitespace chracters: 		
+
+
+The contents of line 101 is 
+0 alphabetic character: 
+0 digit: 
+1 punctuation character: }
+2 whitespace chracters: 	
+
+
+The contents of line 102 is 
+1 alphabetic character: a
+1 digit: 0
+6 punctuation characters: *='\';
+4 whitespace chracters: 	  
+
+
+The contents of line 103 is 
+1 alphabetic character: d
+1 digit: 0
+6 punctuation characters: *='\';
+4 whitespace chracters: 	  
+
+
+The contents of line 104 is 
+1 alphabetic character: p
+1 digit: 0
+6 punctuation characters: *='\';
+4 whitespace chracters: 	  
+
+
+The contents of line 105 is 
+1 alphabetic character: w
+1 digit: 0
+6 punctuation characters: *='\';
+4 whitespace chracters: 	  
+
+
+The contents of line 106 is 
+0 alphabetic character: 
+0 digit: 
+1 punctuation character: }
+1 whitespace chracter: 
+
+

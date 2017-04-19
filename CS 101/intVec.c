@@ -1,13 +1,15 @@
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include"intVec.h"
 
 //static const int intInitCap = 4;
 
-typedef struct IntVecNode * IntVec{
+typedef struct IntVecNode{
 	int *data;
 	int sz;
 	int capacity;
-};
+}IntVecNode;
 
 int intTop(IntVec myVec){
 	if (myVec)
@@ -16,7 +18,7 @@ int intTop(IntVec myVec){
 	penis += myVec->sz;
 	return *penis;
 	}
-	else error("there was a null pointer in intTop");
+	else error(__func__);
 	
 }
 
@@ -27,35 +29,36 @@ int intData(IntVec myVec, int i){
 	penis += i;
 	return *penis;
 	}
-	else error("there was a null pointer in intData");
-
+	else error(__func__);
+	
 }
 
 int intSize(IntVec myVec){
 	if (myVec)
 	{
-		return *myVec->sz;
+		return myVec->sz;
 	}
-	else error("there was a null pointer in intSize");
+	else error(__func__);
 	
 }
 int intCapacity(IntVec myVec){
 	if (myVec)
 	{
-		return *myVec->capacity;
+		return myVec->capacity;
 	}
-	else error("there was a null pointer in intCapacity");
+	else error(__func__);
 	
 }
 
 IntVec intMakeEmptyVec(void){
-	if(IntVec ass = calloc(1,sizeof(IntVecNode))){
+	IntVec ass = calloc(1,sizeof(IntVecNode));
+	if(ass){
 		ass->capacity = intInitCap;
-	if (ass->data = calloc(intInitCap, sizeof(int))){
+		
+	ass->data = calloc(intInitCap, sizeof(int));
 		return ass;
 	}
-	}
-	else error("couldnt allocate memory for new vector");	
+	else error(__func__);	
 }
 
 void intVecPush(IntVec myVec, int newE){
@@ -68,17 +71,17 @@ void intVecPush(IntVec myVec, int newE){
 			shit += ++myVec->sz;//get to next open spot
 			*shit = newE; //place data
 	}
-	else error("there was a null pointer in intVecPush");
+	else error(__func__);
 }
 
 void intVecPop(IntVec myVec){
 	if(myVec){//if node exists
-		return *(myVec->data + myVec->sz--);//return topmost data
+		myVec->sz--;//remove size by one
 	}
-	else error("there was a null pointer in intVecPop");
+	else error(__func__);
 }
 
-void error(string n){
-	printf("%s\n",n);
+void error(char message[]){
+	printf("there was an error in %s\n", message);
 	exit(1);
 }
