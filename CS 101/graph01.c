@@ -111,6 +111,7 @@ void doShit(FILE *in){
 	  }
 	printShit(shit, m, n);
 	fclose(in);
+
 }
 
 void error(const char message[]){
