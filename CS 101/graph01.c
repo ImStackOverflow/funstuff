@@ -29,8 +29,8 @@ int main(int argc, char*argv[]){
 }
 
 IntVec *create (int nodes){
-  IntVec *shit = calloc(nodes+1, sizeof(IntVec));
-  for(int i = 1; i <= nodes; i++){
+  IntVec *shit = calloc(nodes, sizeof(IntVec));
+  for(int i = 0; i <= nodes; i++){
     shit[i] =  intMakeEmptyVec();
   }
   return shit;
@@ -85,14 +85,15 @@ void doShit(FILE *in){
 	while(fgets(what, 2000, in) != NULL){
 	  args = sscanf(what, "%d %d %lf %c", &v1, &v2, &weight, &ass);
 	    m++;
+		DPRINT(("scanf got %d args\n", args));
 	switch (args){
-		case 0: //no input
+		case -1: //no input
 			break;
 		case 1://first line
 		  n = v1;
 		  DPRINT(("has %d vert\n", v1));
 		  shit = create(v1);
-		  shit++; //incriment, [0] stores length of array
+
 			break;
 		case 2://2 vertecies
 		  DPRINT(("adding %d to %d data no weight\n", v2, v1));
