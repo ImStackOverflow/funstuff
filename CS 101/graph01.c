@@ -1,3 +1,10 @@
+/********************************************************
+Gavin Chen ghchen 1492980
+cs101 pa01
+4/20/17
+*********************************************************/
+
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -93,7 +100,6 @@ void doShit(FILE *in){
 		  n = v1;
 		  DPRINT(("has %d vert\n", v1));
 		  shit = create(v1);
-
 			break;
 		case 2://2 vertecies
 		  DPRINT(("adding %d to %d data no weight\n", v2, v1));

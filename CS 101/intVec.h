@@ -1,5 +1,12 @@
+/********************************************************
+Gavin Chen ghchen 1492980
+cs101 pa01
+4/20/17
+*********************************************************/
+
+
 /* intVec.h
- * (what is the overall purpose of this file? Replace question with your text)
+ * header file for intVec.c, only lists which functions from the c file that can be accessed by other programs
  */
 
 #ifndef C101IntVec
@@ -20,7 +27,7 @@ static const int intInitCap = 4;
  */
 
 /** intTop()
- * (what are the preconditions? Replace question with your text)
+ * preconditions: myVec exists and is initialized, returns 0 if no data is currently stored
  */
 int intTop(IntVec myVec);
 
