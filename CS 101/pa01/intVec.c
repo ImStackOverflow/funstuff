@@ -9,7 +9,7 @@ cs101 pa01
 #include <string.h>
 #include"intVec.h"
 
-//static const int intInitCap = 4;
+//static const int intInitCap = 2;
 
 static void error(const char message[]);
 

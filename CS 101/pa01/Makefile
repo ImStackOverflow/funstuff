@@ -2,7 +2,7 @@ TARGET = graph01
 SRCS = graph01.c intVec.c
 FLAGS = -std=c99 -o
 OBJS = ${SRC:.c = .o}
-INPUT =	
+INPUT = test4.in	
 
 $(TARGET): $(SRCS)
 	gcc $(FLAGS) $(TARGET) $(SRCS)

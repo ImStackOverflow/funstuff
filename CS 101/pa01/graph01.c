@@ -51,7 +51,8 @@ void addVert(IntVec *penis, int v1, int v2, int weight, int n){
   	}
     penis += v1;
     intVecPush(*penis, v2);
-	DPRINT(("in addVert added %d into %d\n", intTop(*penis), v1));
+	DPRINT(("in addVert  %d into %d\n", intTop(*penis), v1));
+	DPRINT(("size is %d capacity is %d\n", intSize(*penis), intCapacity(*penis)));
   }
   else{
     error(__func__);
@@ -63,13 +64,17 @@ void printData(IntVec shit){
     printf("null\n");
   }
   else{
+ DPRINT(("size is %d\n", intSize(shit)));
     printf("[");
     printf("%d", intTop(shit));
-    for(int j = 1; j < intSize(shit); j++){
+    int stop = intSize(shit);
+    for(int j = 1; j < stop; j++){
       intVecPop(shit);  
       printf(", %d", intTop(shit));
     }
+  DPRINT(("THE FUCK bro       "));
     printf("]\n");
+      DPRINT(("THE FUCK DUDE"));
 }
 }
 
@@ -79,19 +84,20 @@ void printShit(IntVec *shit, int m, int n){
     printf("%d      ", i);
     printData(*(shit+i));
   }
+  DPRINT(("THE FUCK"));
 }
 
 
 
 void doShit(FILE *in){
-  int v1, v2, args, n, m = -1;
+  int v1, v2, args, n, m = 0;
   double weight = 0;
   char what[2000], ass;
 	IntVec *shit;
 
 	while(fgets(what, 2000, in) != NULL){
 	  args = sscanf(what, "%d %d %lf %c", &v1, &v2, &weight, &ass);
-	    m++;
+
 		DPRINT(("scanf got %d args\n", args));
 	switch (args){
 		case -1: //no input
@@ -104,10 +110,12 @@ void doShit(FILE *in){
 		case 2://2 vertecies
 		  DPRINT(("adding %d to %d data no weight\n", v2, v1));
 		  addVert(shit, v1, v2, 0, n);
+		  m++;
 			break;
 		case 3://2 verticies with weight
 		  DPRINT(("adding %d to %d data weight %lf\n", v2, v1, weight));
 		  addVert(shit, v1, v2, weight, n);
+		  m++;
 			break;
 		default:
 			error("the input file");
@@ -116,6 +124,7 @@ void doShit(FILE *in){
 	}
 	  }
 	printShit(shit, m, n);
+	DPRINT(("reached the finishline"));
 	fclose(in);
 
 }
