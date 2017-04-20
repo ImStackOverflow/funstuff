@@ -28,8 +28,8 @@ int main(int argc, char*argv[]){
 	return(0);
 }
 
-IntVec create[] (int nodes){
-  IntVec shit[] = (IntVec*) calloc(nodes, sizeof(IntVec));
+IntVec *create(int nodes){
+  IntVec *shit = (IntVec*)calloc(nodes, sizeof(IntVec));
   for(int i = 0; i <= nodes; i++){
     shit[i] =  intMakeEmptyVec();
   }
