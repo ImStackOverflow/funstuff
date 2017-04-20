@@ -67,7 +67,7 @@ void printData(IntVec shit){
 }
 
 void printShit(IntVec *shit, int m, int n){
-  printf("n = %d\n m = %d\n", n, m);
+  printf("n = %d\nm = %d\n", n, m);
   for(int i = 1; i <= n; i++){
     printf("%d      ", i);
     printData(*(shit+i));
