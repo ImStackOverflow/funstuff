@@ -77,7 +77,7 @@ void printShit(IntVec *shit, int m, int n){
 
 
 void doShit(FILE *in){
-  int v1, v2, args, m = -1;
+  int v1, v2, args, n, m = -1;
   double weight = 0;
   char what[2000], ass;
 	IntVec *shit;
