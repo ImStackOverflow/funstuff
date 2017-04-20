@@ -53,7 +53,7 @@ int intCapacity(IntVec myVec){
 }
 
 IntVec intMakeEmptyVec(void){
-	IntVec ass = calloc(1,sizeof(IntVecNode));
+	IntVec ass = (IntVec) calloc(1,sizeof(IntVecNode));
 	if(ass){
 		ass->capacity = intInitCap;
 		
@@ -78,7 +78,9 @@ void intVecPush(IntVec myVec, int newE){
 
 void intVecPop(IntVec myVec){
 	if(myVec){//if node exists
+	if (myVec->sz > 0){
 		myVec->sz--;//remove size by one
+	}
 	}
 	else error(__func__);
 }
