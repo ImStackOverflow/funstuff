@@ -29,16 +29,19 @@ int main(int argc, char*argv[]){
 }
 
 IntVec *create (int nodes){
-  IntVec *shit = calloc(nodes, sizeof(IntVec));
-  for(int i = 0; i <= nodes; i++){
+  IntVec *shit = calloc(nodes+1, sizeof(IntVec));
+  for(int i = 1; i <= nodes; i++){
     shit[i] =  intMakeEmptyVec();
   }
   return shit;
 }
 
-void addVert(IntVec *penis, int v1, int v2, int weight){
+void addVert(IntVec *penis, int v1, int v2, int weight, int n){
 	
   if(penis){
+  	if(v1 > n || v2 > n){
+  		error("addVert the referenced vertex doesnt exist");
+  	}
     penis += v1;
     intVecPush(*penis, v2);
 	DPRINT(("in addVert added %d into %d\n", intTop(*penis), v1));
@@ -74,7 +77,7 @@ void printShit(IntVec *shit, int m, int n){
 
 
 void doShit(FILE *in){
-  int v1, v2, args, n, m = -1;
+  int v1, v2, args, m = -1;
   double weight = 0;
   char what[2000], ass;
 	IntVec *shit;
@@ -89,14 +92,15 @@ void doShit(FILE *in){
 		  n = v1;
 		  DPRINT(("has %d vert\n", v1));
 		  shit = create(v1);
+		  shit++; //incriment, [0] stores length of array
 			break;
 		case 2://2 vertecies
 		  DPRINT(("adding %d to %d data no weight\n", v2, v1));
-		  addVert(shit, v1, v2, 0);
+		  addVert(shit, v1, v2, 0, n);
 			break;
 		case 3://2 verticies with weight
 		  DPRINT(("adding %d to %d data weight %lf\n", v2, v1, weight));
-		  addVert(shit, v1, v2, weight);
+		  addVert(shit, v1, v2, weight, n);
 			break;
 		default:
 			error("the input file");
