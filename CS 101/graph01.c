@@ -10,7 +10,7 @@ cs101 pa01
 #include<string.h>
 #include "intVec.h"
 
-#define DEBUG 1
+//#define DEBUG 1
 
 #ifdef DEBUG
 #define DPRINT(x) printf x
@@ -37,7 +37,7 @@ int main(int argc, char*argv[]){
 
 IntVec *create(int nodes){
   IntVec *shit = (IntVec*)calloc(nodes, sizeof(IntVec));
-  for(int i = 0; i <= nodes; i++){
+  for(int i = 1; i <= nodes; i++){
     shit[i] =  intMakeEmptyVec();
   }
   return shit;
