@@ -68,9 +68,8 @@ void printData(IntVec shit){
     printf("[");
     printf("%d", intTop(shit));
     int stop = intSize(shit);
-    for(int j = 1; j < stop; j++){
-      intVecPop(shit);  
-      printf(", %d", intTop(shit));
+    for(int j = 0; j < stop-1; j++){  
+      printf(", %d", intData(shit, j));
     }
   DPRINT(("THE FUCK bro       "));
     printf("]\n");
