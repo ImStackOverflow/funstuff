@@ -86,8 +86,6 @@ void printShit(IntVec *shit, int m, int n){
   DPRINT(("THE FUCK"));
 }
 
-
-
 void doShit(FILE *in){
   int v1, v2, args, n, m = 0;
   double weight = 0;
