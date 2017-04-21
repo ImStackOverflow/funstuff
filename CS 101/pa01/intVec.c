@@ -30,6 +30,10 @@ int intTop(IntVec myVec){
 	
 }
 
+int *dataPtr(IntVec penis){
+	return penis->data;
+}
+
 int intData(IntVec myVec, int i){
 	if (myVec && i >= 0 && i < myVec->sz)
 	{

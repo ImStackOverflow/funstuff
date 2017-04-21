@@ -25,6 +25,7 @@ static const int intInitCap = 4;
 
 /* Access functions
  */
+int *dataPtr(IntVec penis);
 
 /** intTop()
  * preconditions: myVec exists and is initialized, returns 0 if no data is currently stored

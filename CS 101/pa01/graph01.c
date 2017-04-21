@@ -10,7 +10,7 @@ cs101 pa01
 #include<string.h>
 #include "intVec.h"
 
-//#define DEBUG 1
+#define DEBUG 1
 
 #ifdef DEBUG
 #define DPRINT(x) printf x
@@ -86,6 +86,16 @@ void printShit(IntVec *shit, int m, int n){
   DPRINT(("THE FUCK"));
 }
 
+void freeAll(IntVec* shit, int n){
+	IntVec penis;
+	for(int i = 0; i < n; i++){
+		DPRINT(("freeing %d",i));
+		penis = *(shit+i);
+		free(dataPtr(penis));
+		free(penis);
+	}
+}
+
 void doShit(FILE *in){
   int v1, v2, args, n, m = 0;
   double weight = 0;
@@ -123,6 +133,7 @@ void doShit(FILE *in){
 	printShit(shit, m, n);
 	DPRINT(("reached the finishline"));
 	fclose(in);
+	freeAll(shit, n);
 
 }
 
