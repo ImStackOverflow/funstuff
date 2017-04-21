@@ -10,7 +10,7 @@ cs101 pa01
 #include<string.h>
 #include "intVec.h"
 
-#define DEBUG 1
+//#define DEBUG 1
 
 #ifdef DEBUG
 #define DPRINT(x) printf x
@@ -133,7 +133,7 @@ void doShit(FILE *in){
 	printShit(shit, m, n);
 	DPRINT(("reached the finishline"));
 	fclose(in);
-	freeAll(shit, n);
+	//freeAll(shit, n);
 
 }
 
