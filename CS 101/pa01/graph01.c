@@ -71,7 +71,8 @@ void printData(IntVec shit){
     for(int j = 0; j < stop-1; j++){  
       printf(", %d", intData(shit, j));
     }
-  DPRINT(("THE FUCK bro       "));
+  fflush(stdout);
+	DPRINT(("THE FUCK bro       "));
     printf("]\n");
       DPRINT(("THE FUCK DUDE"));
 }
@@ -87,7 +88,7 @@ void printShit(IntVec *shit, int m, int n){
 }
 
 void freeAll(IntVec* shit, int n){
-	DPRINT(("in %s",__func__));
+	printf("in %s",__func__);
 	IntVec penis;
 	for(int i = 0; i < n; i++){
 		DPRINT(("freeing %d",i));
@@ -132,9 +133,11 @@ void doShit(FILE *in){
 	}
 	  }
 	printShit(shit, m, n);
-	DPRINT(("reached the finishline"));
+	fflush(stdout);
+	printf("reached the finishline");
 	fclose(in);
-	//freeAll(shit, n);
+	printf("reached the finshline");
+	freeAll(shit, n);
 
 }
 
