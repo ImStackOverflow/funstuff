@@ -76,7 +76,7 @@ void printData(IntVec shit){
       DPRINT(("THE FUCK DUDE"));
 }
 }
-
+	
 void printShit(IntVec *shit, int m, int n){
   printf("n = %d\nm = %d\n", n, m);
   for(int i = 1; i <= n; i++){
@@ -87,6 +87,7 @@ void printShit(IntVec *shit, int m, int n){
 }
 
 void freeAll(IntVec* shit, int n){
+	DPRINT(("in %s",__func__));
 	IntVec penis;
 	for(int i = 0; i < n; i++){
 		DPRINT(("freeing %d",i));
