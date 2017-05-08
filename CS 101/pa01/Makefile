@@ -1,5 +1,5 @@
-TARGET = graph01
-SRCS = graph01.c intVec.c
+TARGET = graph02
+SRCS = graph02.c intVec.c
 FLAGS = -std=c99 -o
 OBJS = ${SRC:.c = .o}
 INPUT = test4.in	
