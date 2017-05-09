@@ -8,7 +8,7 @@ cs101 pa01
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include "graph02.h"
+#include "loadGraph.h"
 
 //#define DEBUG 1
 

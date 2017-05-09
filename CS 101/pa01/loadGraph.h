@@ -3,7 +3,8 @@ Gavin Chen ghchen@ucsc.edu 1492980
 CS101 spring 2017
 pa02
 ************************************************************************/
-
+#ifndef loadGraph
+#define loadGraph
 
 //creates 2d adjacentcy matrix
 //input: graph
@@ -50,3 +51,5 @@ void addVert(IntVec *ass, int v1, int v2, int weight, int n);
 //input: message to output
 //output: nothing
 void error(const char message[]);
+
+#endif

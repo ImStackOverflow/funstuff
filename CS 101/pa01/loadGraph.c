@@ -2,7 +2,7 @@
 #include "intVec.h"
 #include <stdio.h>
 
-int[][] makeAdjMatrix(IntVec* og, int n){
+int** makeAdjMatrix(IntVec* og, int n){
 	if(og){//check that data exists
 		int **dick = calloc(n, sizeof(int*));//make empty 2d array
 		for(int i = 0; i < n; i++){
@@ -12,10 +12,10 @@ int[][] makeAdjMatrix(IntVec* og, int n){
 		int size;//size of current node data
 		IntVec current;//derefrence current node
 		for(int i = 0; i < n; i++){//for each node
-			current = *(og + i);
-			size = intSize(current);
+			current = *(og + i); //derefrence pointer
+			size = intSize(current); //store data size
 			for(int j = 0; j < size; j++){
-				dick[i][intData(current,j)] = 1;
+				dick[i][intData(current,j)] = 1; //set indicie to 1
 				}
 		}
 		return dick;
@@ -58,10 +58,10 @@ IntVec* transposeGraph(IntVec* og, int n){
 	return transposed;
 }
 
-IntVec *create(int nodes){
-IntVec *shit = (IntVec*)calloc(nodes, sizeof(IntVec));
+IntVec *create(int nodes){ 
+IntVec *shit = (IntVec*)calloc(nodes, sizeof(IntVec));//allocate pointers to pointers
 for(int i = 1; i <= nodes; i++){
-	shit[i] =  intMakeEmptyVec();
+	shit[i] =  intMakeEmptyVec(); //make empty vector list
 }
 return shit;
 }
@@ -70,20 +70,20 @@ void freeAll(IntVec* shit, int n){
 	IntVec penis;
 	for(int i = 0; i < n; i++){
 		penis = *(shit+i);
-		free(penis);
+		free(penis); //free each pointer
 	}
 }
 
 void printData(IntVec shit){
-if(intSize(shit) == 0){
+if(intSize(shit) == 0){ //check if node has data 
 	printf("null\n");
 }
-else{
+else{ //print data
 	printf("[");
 	printf("%d", intTop(shit));
 	int stop = intSize(shit);
 	int dick;
-	for(int j = 0; j < stop-1; j++){ 
+	for(int j = 0; j < stop-1; j++){ //print upto second to last data (last ones a 0)
 		dick = intData(shit, j);
 	printf(", %d", dick);
 	}
@@ -96,19 +96,17 @@ void printShit(IntVec *shit, int m, int n){
 printf("n = %d\nm = %d\n", n, m);
 for(int i = 1; i <= n; i++){
 	printf("%d      ", i);
-	printData(*(shit+i));
+	printData(*(shit+i));//print data for each node
 }
 }
 
 void addVert(IntVec *ass, int v1, int v2, int weight, int n){
-	
 if(ass){
-	if(v1 > n || v2 > n){
+	if(v1 > n || v2 > n){//bounds checking
 		error("addVert the referenced vertex doesnt exist");
 	}
-	
 	//IntVec* penis = ass + v1;
-	intVecPush(*(ass+v1), v2);
+	intVecPush(*(ass+v1), v2); //put v2 into v1
 }
 else{
 	error(__func__);
