@@ -8,7 +8,6 @@ cs101 pa01
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include "intVec.h"
 #include "graph02.h"
 
 //#define DEBUG 1
@@ -49,62 +48,6 @@ int main(int argc, char*argv[]){
 	return(0);
 }
 
-IntVec *create(int nodes){
-IntVec *shit = (IntVec*)calloc(nodes, sizeof(IntVec));
-for(int i = 1; i <= nodes; i++){
-	shit[i] =  intMakeEmptyVec();
-}
-return shit;
-}
-
-void addVert(IntVec *ass, int v1, int v2, int weight, int n){
-	
-if(ass){
-	if(v1 > n || v2 > n){
-		error("addVert the referenced vertex doesnt exist");
-	}
-	
-	//IntVec* penis = ass + v1;
-	intVecPush(*(ass+v1), v2);
-}
-else{
-	error(__func__);
-}
-}
-
-void printData(IntVec shit){
-if(intSize(shit) == 0){
-	printf("null\n");
-}
-else{
-	printf("[");
-	printf("%d", intTop(shit));
-	int stop = intSize(shit);
-	int dick;
-	for(int j = 0; j < stop-1; j++){ 
-		dick = intData(shit, j);
-	printf(", %d", dick);
-	}
-fflush(stdout);
-	printf("]\n");
-}
-}
-	
-void printShit(IntVec *shit, int m, int n){
-printf("n = %d\nm = %d\n", n, m);
-for(int i = 1; i <= n; i++){
-	printf("%d      ", i);
-	printData(*(shit+i));
-}
-}
-
-void freeAll(IntVec* shit, int n){
-	IntVec penis;
-	for(int i = 0; i < n; i++){
-		penis = *(shit+i);
-		free(penis);
-	}
-}
 
 void doShit(FILE *in, Flag flag){
 int v1, v2, args, n, m = 0;
@@ -144,14 +87,26 @@ char what[2000], ass;
 		
 	}
 	}
-	printShit(shit, m, n);
-	fflush(stdout);
 	fclose(in);
+	procede(shit, m, n);
+	
+}
+
+void procede(IntVec* shit, int m, int n){
+	printShit(shit, m, n);
+	if(n <= 20){
+		int adjMatrix[][] = makeAdjMatrix(shit, n);
+		printAdjMatrix(adjMatrix);
+		IntVec* penis;
+		for(int i = 0; i < 2; i++){
+			penis = transposeGraph(shit, n)
+			adjMatrix = makeAdjMatrix(penis, n);
+			printAdjMatrix(adjMatrix);
+		}
+		freeAll(penis, n);
+	}
+	else printf("more than 20 verticies, too long so I decided not to do shit");
 	freeAll(shit, n);
 
 }
 
-void error(const char message[]){
-	printf("there was an error in %s\n", message);
-	exit(1);
-}
