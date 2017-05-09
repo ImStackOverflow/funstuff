@@ -34,7 +34,7 @@ int main(int argc, char*argv[]){
 			flag = U;
 			in = fopen(argv[2], "r");
 		}
-		else error("flag has to be U retard");
+		else error("flag has to be -U retard");
 		
 	}
 	else{
