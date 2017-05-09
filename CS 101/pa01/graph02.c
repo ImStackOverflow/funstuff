@@ -34,7 +34,8 @@ int main(int argc, char*argv[]){
 			flag = U;
 			in = fopen(argv[2], "r");
 		}
-		else printf("dont name files begining with - retard");
+		else error("flag has to be U retard");
+		
 	}
 	else{
 		in = fopen(argv[1], "r");
@@ -63,10 +64,8 @@ if(ass){
 		error("addVert the referenced vertex doesnt exist");
 	}
 	
-	IntVec* penis = ass + v1;
-	intVecPush(*penis, v2);
-	DPRINT(("in addVert  %d into %d\n", intTop(*penis), v1));
-	DPRINT(("size is %d capacity is %d\n", intSize(*penis), intCapacity(*penis)));
+	//IntVec* penis = ass + v1;
+	intVecPush(*(ass+v1), v2);
 }
 else{
 	error(__func__);
@@ -78,17 +77,16 @@ if(intSize(shit) == 0){
 	printf("null\n");
 }
 else{
-DPRINT(("size is %d\n", intSize(shit)));
 	printf("[");
 	printf("%d", intTop(shit));
 	int stop = intSize(shit);
-	for(int j = 0; j < stop-1; j++){  
-	printf(", %d", intData(shit, j));
+	int dick;
+	for(int j = 0; j < stop-1; j++){ 
+		dick = intData(shit, j);
+	printf(", %d", dick);
 	}
 fflush(stdout);
-	DPRINT(("THE FUCK bro       "));
 	printf("]\n");
-	DPRINT(("THE FUCK DUDE"));
 }
 }
 	
@@ -98,16 +96,12 @@ for(int i = 1; i <= n; i++){
 	printf("%d      ", i);
 	printData(*(shit+i));
 }
-DPRINT(("THE FUCK"));
 }
 
 void freeAll(IntVec* shit, int n){
-	printf("in %s",__func__);
 	IntVec penis;
 	for(int i = 0; i < n; i++){
-		DPRINT(("freeing %d",i));
 		penis = *(shit+i);
-		free(dataPtr(penis));
 		free(penis);
 	}
 }
@@ -121,26 +115,23 @@ char what[2000], ass;
 	while(fgets(what, 2000, in) != NULL){
 	args = sscanf(what, "%d %d %lf %c", &v1, &v2, &weight, &ass);
 
-		DPRINT(("scanf got %d args\n", args));
 	switch (args){
 		case -1: //no input
 			break;
 		case 1://first line
 		n = v1;
-		DPRINT(("has %d vert\n", v1));
 		shit = create(v1);
 			break;
 		case 2://2 vertecies
-		DPRINT(("adding %d to %d data no weight\n", v2, v1));
 		addVert(shit, v1, v2, 0, n);
+		//printShit(shit, m, n);
 		if(flag == U){
-			
+			DPRINT(("doing bidirectional edge"));
 			addVert(shit, v2, v1, 0, n);
 		}
 		m++;
 			break;
 		case 3://2 verticies with weight
-		DPRINT(("adding %d to %d data weight %lf\n", v2, v1, weight));
 		addVert(shit, v1, v2, weight, n);
 		if(flag == U){
 			addVert(shit, v2, v1, weight, n);
@@ -155,9 +146,7 @@ char what[2000], ass;
 	}
 	printShit(shit, m, n);
 	fflush(stdout);
-	printf("reached the finishline");
 	fclose(in);
-	printf("reached the finshline");
 	freeAll(shit, n);
 
 }

@@ -30,15 +30,12 @@ int intTop(IntVec myVec){
 	
 }
 
-int *dataPtr(IntVec penis){
-	return penis->data;
-}
-
 int intData(IntVec myVec, int i){
 	if (myVec && i >= 0 && i < myVec->sz)
 	{
 	int *penis = myVec->data;
 	penis += i;
+	printf("THE FUCK IS THIS BULLSHIT %d", *penis); 
 	return *penis;
 	}
 	else error(__func__);

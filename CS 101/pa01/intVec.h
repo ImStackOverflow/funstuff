@@ -23,9 +23,7 @@ typedef struct IntVecNode *IntVec;
 /** intInitCap: initial capacity after intMakeEmptyVec() */
 static const int intInitCap = 4;
 
-/* Access functions
- */
-int *dataPtr(IntVec penis);
+/* Access functions*/
 
 /** intTop()
  * preconditions: myVec exists and is initialized, returns 0 if no data is currently stored
