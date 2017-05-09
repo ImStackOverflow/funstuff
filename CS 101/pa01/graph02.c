@@ -49,7 +49,7 @@ int main(int argc, char*argv[]){
 }
 
 
-void doShit(FILE *in, Flag flag){
+void doShit(FILE *in, Flag flag){// parse file and create origional intVec array
 int v1, v2, args, n, m = 0;
 double weight = 0;
 char what[2000], ass;
@@ -88,7 +88,7 @@ char what[2000], ass;
 	}
 	}
 	fclose(in);
-	procede(shit, m, n);
+	procede(shit, m, n);//print all the shit out and stuff
 	
 }
 
