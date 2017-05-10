@@ -23,10 +23,16 @@ typedef enum {U, none} Flag;
 
 
 void procede(IntVec* shit, int m, int n){
+<<<<<<< HEAD
 
 	printShit(shit, m, n);
 	//DPRINT(("penis"));
 		
+=======
+	//printShit(shit, m, n);
+	DPRINT(("penis"));
+
+>>>>>>> 9bdb0a0861385619eec834f4702f25be5356775e
 	if(n <= 20){
 		int** adjMatrix = makeAdjMatrix(shit, n);
 		printf("\nadjacency matrix of origional list:\n\n");

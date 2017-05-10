@@ -89,7 +89,7 @@ else{ //print data
 		dick = intData(shit, j);
 	printf(", %d", dick);
 	}
-fflush(stdout);
+//fflush(stdout);
 	printf("]\n");
 }
 }
