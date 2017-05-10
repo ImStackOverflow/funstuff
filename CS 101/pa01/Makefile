@@ -1,5 +1,5 @@
 TARGET = graph02
-SRCS = graph02.c intVec.c
+SRCS = graph02.c intVec.c loadGraph.c
 FLAGS = -std=c99 -o
 DEBUG = -g
 OBJS = ${SRC:.c = .o}

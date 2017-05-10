@@ -7,7 +7,7 @@ cs101 pa01
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include"intVec.h"
+#include "intVec.h"
 
 //static const int intInitCap = 2;
 
@@ -37,7 +37,6 @@ int intData(IntVec myVec, int i){
 	}
 	int *penis = myVec->data;
 	penis += i;
-	printf("THE FUCK IS THIS BULLSHIT %d", *penis); 
 	return *penis;
 }
 

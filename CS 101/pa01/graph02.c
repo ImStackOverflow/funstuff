@@ -5,12 +5,12 @@ cs101 pa01
 *********************************************************/
 
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "loadGraph.h"
 
-//#define DEBUG 1
+#define DEBUG 1
 
 #ifdef DEBUG
 #define DPRINT(x) printf x
@@ -24,6 +24,9 @@ typedef enum {U, none} Flag;
 
 void procede(IntVec* shit, int m, int n){
 	printShit(shit, m, n);
+	DPRINT(("penis"));
+
+	n = 30;
 	if(n <= 20){
 		int** adjMatrix = makeAdjMatrix(shit, n);
 		printAdjMatrix(adjMatrix, n);

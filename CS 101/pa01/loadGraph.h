@@ -6,7 +6,7 @@ pa02
 #ifndef loadGraph
 #define loadGraph
 #include "intVec.h"
-#include <stdio.h>
+
 
 //creates 2d adjacentcy matrix
 //input: graph

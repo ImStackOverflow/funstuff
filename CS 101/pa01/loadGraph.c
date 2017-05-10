@@ -1,9 +1,13 @@
 #include "loadGraph.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 
 int** makeAdjMatrix(IntVec* og, int n){
-	if(og){//check that data exists
-		int **dick = calloc(n, sizeof(int*));//make empty 2d array
+	if(!og){//check that data exists
+		error(__func__);
+	}
+	int **dick = calloc(n, sizeof(int*));//make empty 2d array
 		for(int i = 0; i < n; i++){
 			dick[i] = calloc(n, sizeof(int));
 		}
@@ -18,9 +22,6 @@ int** makeAdjMatrix(IntVec* og, int n){
 				}
 		}
 		return dick;
-	}
-	else error(__func__);
-	return 1;
 }
 
 void printAdjMatrix(int** matrix, int n){
