@@ -26,8 +26,7 @@ void procede(IntVec* shit, int m, int n){
 	printShit(shit, m, n);
 	DPRINT(("penis"));
 
-	n = 30;
-	if(n <= 20){
+	if(n == 20){
 		int** adjMatrix = makeAdjMatrix(shit, n);
 		printAdjMatrix(adjMatrix, n);
 		IntVec* penis;
@@ -38,9 +37,8 @@ void procede(IntVec* shit, int m, int n){
 		}
 		freeAll(penis, n);
 	}
-	else printf("more than 20 verticies, too long so I decided not to do shit");
-	printf("shit\n");
-	freeAll(shit, n);
+	else printf("more than 20 verticies, too long so I decided not to do shit\n %d\n",n);
+	//freeAll(shit, n);
 
 }
 
