@@ -38,7 +38,7 @@ void procede(IntVec* shit, int m, int n){
 		freeAll(penis, n);
 	}
 	else printf("more than 20 verticies, too long so I decided not to do shit\n %d\n",n);
-	//freeAll(shit, n);
+	freeAll(shit, n);
 
 }
 
