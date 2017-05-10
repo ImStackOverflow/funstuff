@@ -17,3 +17,8 @@ check:
 debug:
 	gcc $(DEBUG) $(SRCS) -o  $(TARGET)
 	gdb $(TARGET)
+git:
+	git add -A
+	git commit -m "fuck me fucke me fuck me"
+	git pull
+	git push
