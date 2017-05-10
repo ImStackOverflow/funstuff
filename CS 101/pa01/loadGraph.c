@@ -15,10 +15,10 @@ int** makeAdjMatrix(IntVec* og, int n){
 		int size;//size of current node data
 		IntVec current;//derefrence current node
 		for(int i = 0; i < n; i++){//for each node
-			current = *(og + i); //derefrence pointer
+			current = *(og + i + 1); //derefrence pointer
 			size = intSize(current); //store data size
 			for(int j = 0; j < size; j++){
-				dick[i][intData(current,j)] = 1; //set indicie to 1
+				dick[i][intData(current,j)-1] = 1; //set indicie to 1
 				}
 		}
 		return dick;
@@ -26,8 +26,9 @@ int** makeAdjMatrix(IntVec* og, int n){
 
 void printAdjMatrix(int** matrix, int n){
 		//print top header
+	printf("   ");
 	for(int i = 1; i <= n; i++){
-		printf("%d  ", i);
+		printf("%d ", i);
 	}
 	printf("\n");
 	for(int i = 1; i <= n; i++){
@@ -39,8 +40,9 @@ void printAdjMatrix(int** matrix, int n){
 	for(int i = 1; i <= n; i++){
 		printf("%d: ", i);
 		for(int j = 0; j < n; j++){
-			printf("%d ", matrix[i][j]);
+			printf("%d ", matrix[i-1][j]);
 		}
+		printf("\n");
 	}
 }
 
@@ -48,8 +50,8 @@ IntVec* transposeGraph(IntVec* og, int n){
 	IntVec* transposed = create(n);
 	IntVec penis;
 	int size;
-	for(int i = 0; i < n; i++){//itterate through IntVec array
-		penis = *(og + i); //derefrence pointer
+	for(int i = 1; i <= n; i++){//itterate through IntVec array
+		penis = *(og + i); //derefrence pointer (starts at 1)
 		size = intSize(penis); //get size of data
 		for(int j = 0; j < size; j++){
 			addVert(transposed, intData(penis, j), i, 0, n);//add vertex to data of data
@@ -80,10 +82,10 @@ if(intSize(shit) == 0){ //check if node has data
 }
 else{ //print data
 	printf("[");
-	printf("%d", intTop(shit));
+	printf("%d", intData(shit, 0));
 	int stop = intSize(shit);
 	int dick;
-	for(int j = 0; j < stop-1; j++){ //print upto second to last data (last ones a 0)
+	for(int j = 1; j < stop; j++){ //print upto second to last data (last ones a 0)
 		dick = intData(shit, j);
 	printf(", %d", dick);
 	}

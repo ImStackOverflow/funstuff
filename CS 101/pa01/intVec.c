@@ -15,7 +15,7 @@ static void error(const char message[]);
 
 typedef struct IntVecNode{
 	int *data;
-	int sz;
+	int sz;//size always 1 greater than number of numbers (b/c of array manipulation shit)
 	int capacity;
 }IntVecNode;
 
@@ -62,6 +62,7 @@ IntVec intMakeEmptyVec(void){
 		error(__func__);	
 	}
 	ass->capacity = intInitCap;
+	ass->sz = 0;
 	ass->data = calloc(intInitCap, sizeof(int));
 	return ass;
 }
@@ -75,7 +76,7 @@ void intVecPush(IntVec myVec, int newE){
 			myVec->data = realloc(myVec->data, myVec->capacity * sizeof(int));//reallocate memory for data
 		}
 		int *shit = myVec->data; //get address of data array
-			shit += ++myVec->sz;//get to next open spot
+			shit += myVec->sz++;//push in then up size
 			*shit = newE; //place data
 }
 
