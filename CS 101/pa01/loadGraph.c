@@ -69,8 +69,8 @@ return shit;
 void freeAll(IntVec* shit, int n){
 	IntVec penis;
 	for(int i = 0; i < n; i++){
-		penis = *(shit+i);
-		free(penis); //free each pointer
+		//penis = *(shit+i);
+		free(shit+i); //free each pointer
 	}
 }
 
