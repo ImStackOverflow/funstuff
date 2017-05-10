@@ -23,29 +23,23 @@ typedef enum {U, none} Flag;
 
 
 void procede(IntVec* shit, int m, int n){
-<<<<<<< HEAD
 
 	printShit(shit, m, n);
 	//DPRINT(("penis"));
-		
-=======
-	//printShit(shit, m, n);
-	DPRINT(("penis"));
-
->>>>>>> 9bdb0a0861385619eec834f4702f25be5356775e
-	if(n <= 20){
-		int** adjMatrix = makeAdjMatrix(shit, n);
-		printf("\nadjacency matrix of origional list:\n\n");
-		printAdjMatrix(adjMatrix, n);
-		for(int i = 0; i < 2; i++){
-			shit = transposeGraph(shit, n);
-			//printShit(shit, m, n);
-			printf("\n\n%d transposed adjacency matrix:\n\n",i+1);
+	int** adjMatrix = makeAdjMatrix(shit, n);
+	printf("\nadjacency matrix of origional list:\n\n");
+	printAdjMatrix(adjMatrix, n);
+	for(int i = 0; i < 2; i++){
+		shit = transposeGraph(shit, n);
+		printf("\n\n%d transposed adjacency matrix:\n\n",i+1);
+		printShit(shit, m, n);
+		if(n <= 20){
 			adjMatrix = makeAdjMatrix(shit, n);
 			printAdjMatrix(adjMatrix, n);
 		}
+		else printf("more than 20 verticies, too long so I decided not to do print the matrix\n %d\n",n);
 	}
-	else printf("more than 20 verticies, too long so I decided not to do shit\n %d\n",n);
+	
 	freeAll(shit, n);
 
 }
