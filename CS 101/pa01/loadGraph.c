@@ -1,6 +1,5 @@
 #include "loadGraph.h"
-#include "intVec.h"
-#include <stdio.h>
+
 
 int** makeAdjMatrix(IntVec* og, int n){
 	if(og){//check that data exists
@@ -24,7 +23,7 @@ int** makeAdjMatrix(IntVec* og, int n){
 	return 1;
 }
 
-void printAdjMatrix(int[][] matrix, int n){
+void printAdjMatrix(int** matrix, int n){
 		//print top header
 	for(int i = 1; i <= n; i++){
 		printf("%d  ", i);

@@ -18,8 +18,6 @@ cs101 pa01
 typedef struct IntVecNode *IntVec;
 
 
-
-
 /** intInitCap: initial capacity after intMakeEmptyVec() */
 static const int intInitCap = 4;
 

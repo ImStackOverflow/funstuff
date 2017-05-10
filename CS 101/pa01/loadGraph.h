@@ -5,11 +5,13 @@ pa02
 ************************************************************************/
 #ifndef loadGraph
 #define loadGraph
+#include "intVec.h"
+#include <stdio.h>
 
 //creates 2d adjacentcy matrix
 //input: graph
 //output: 2d int array, 1 = path, 0 = what the fuck u think it means
-int[][] makeAdjMatrix(IntVec* og, int n);
+int** makeAdjMatrix(IntVec* og, int n);
 
 
 //makes transposed graph given input graph
@@ -21,7 +23,7 @@ IntVec* transposeGraph(IntVec* og, int n);
 //prints adj matrix 
 //input: adj matrix
 //output: nothang
-void printAdjMatrix(int[][] matrix);
+void printAdjMatrix(int** matrix, int n);
 
 
 //creates intvec array of length nodes

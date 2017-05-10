@@ -17,35 +17,27 @@ cs101 pa01
 #else
 #define DPRINT(x) do{} while(0)
 #endif
-	
-int main(int argc, char*argv[]){
-	if (argc < 2){
-		printf("the correct usage is ./graph01 -<options> <inputfile>\n");
-		exit(0);
-	}
-	
-	//DPRINT(("arg 1 is %s, char 1 is %c\n", argv[1], argv[1][1]));
-	//check for flags
-	Flag flag = null;
-	FILE *in;
-	if(argv[1][0] == '-'){
-		if(argv[1][1] == 'U'){
-			flag = U;
-			in = fopen(argv[2], "r");
+
+
+typedef enum {U, none} Flag;
+
+
+void procede(IntVec* shit, int m, int n){
+	printShit(shit, m, n);
+	if(n <= 20){
+		int** adjMatrix = makeAdjMatrix(shit, n);
+		printAdjMatrix(adjMatrix, n);
+		IntVec* penis;
+		for(int i = 0; i < 2; i++){
+			penis = transposeGraph(shit, n);
+			adjMatrix = makeAdjMatrix(penis, n);
+			printAdjMatrix(adjMatrix, n);
 		}
-		else error("flag has to be -U retard");
-		
+		freeAll(penis, n);
 	}
-	else{
-		in = fopen(argv[1], "r");
-	}
-	
-	//process
-	if(in){
-		doShit(in, flag);
-	}
-	else printf("file %s doesnt exist\n", argv[1]);
-	return(0);
+	else printf("more than 20 verticies, too long so I decided not to do shit");
+	freeAll(shit, n);
+
 }
 
 
@@ -91,22 +83,35 @@ char what[2000], ass;
 	procede(shit, m, n);//print all the shit out and stuff
 	
 }
-
-void procede(IntVec* shit, int m, int n){
-	printShit(shit, m, n);
-	if(n <= 20){
-		int adjMatrix[][] = makeAdjMatrix(shit, n);
-		printAdjMatrix(adjMatrix);
-		IntVec* penis;
-		for(int i = 0; i < 2; i++){
-			penis = transposeGraph(shit, n)
-			adjMatrix = makeAdjMatrix(penis, n);
-			printAdjMatrix(adjMatrix);
-		}
-		freeAll(penis, n);
+	
+int main(int argc, char*argv[]){
+	if (argc < 2){
+		printf("the correct usage is ./graph01 -<options> <inputfile>\n");
+		exit(0);
 	}
-	else printf("more than 20 verticies, too long so I decided not to do shit");
-	freeAll(shit, n);
-
+	
+	//DPRINT(("arg 1 is %s, char 1 is %c\n", argv[1], argv[1][1]));
+	//check for flags
+	Flag flag = none;
+	FILE *in;
+	if(argv[1][0] == '-'){
+		if(argv[1][1] == 'U'){
+			flag = U;
+			in = fopen(argv[2], "r");
+		}
+		else error("flag has to be -U retard");
+		
+	}
+	else{
+		in = fopen(argv[1], "r");
+	}
+	
+	//process
+	if(in){
+		doShit(in, flag);
+	}
+	else printf("file %s doesnt exist\n", argv[1]);
+	return(0);
 }
+
 

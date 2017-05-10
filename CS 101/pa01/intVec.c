@@ -20,67 +20,64 @@ typedef struct IntVecNode{
 }IntVecNode;
 
 int intTop(IntVec myVec){
-	if (myVec)
+	if (!myVec)
 	{
+		error(__func__);
+	}
 	int *penis = myVec->data;
 	penis += myVec->sz;
 	return *penis;
-	}
-	else error(__func__);
 	
 }
 
 int intData(IntVec myVec, int i){
-	if (myVec && i >= 0 && i < myVec->sz)
+	if (!(myVec && i >= 0 && i < myVec->sz))
 	{
+		error(__func__);
+	}
 	int *penis = myVec->data;
 	penis += i;
 	printf("THE FUCK IS THIS BULLSHIT %d", *penis); 
 	return *penis;
-	}
-	else error(__func__);
-	
 }
 
 int intSize(IntVec myVec){
-	if (myVec)
+	if (!myVec)
 	{
-		return myVec->sz;
+		error(__func__);
+		
 	}
-	else error(__func__);
-	
+	return myVec->sz;
 }
 int intCapacity(IntVec myVec){
 	if (myVec)
 	{
-		return myVec->capacity;
+		error(__func__);
 	}
-	else error(__func__);
-	
+	return myVec->capacity;
 }
 
 IntVec intMakeEmptyVec(void){
 	IntVec ass = (IntVec) calloc(1,sizeof(IntVecNode));
-	if(ass){
-		ass->capacity = intInitCap;
-		
-	ass->data = calloc(intInitCap, sizeof(int));
-		return ass;
+	if(!ass){
+		error(__func__);	
 	}
-	else error(__func__);	
+	ass->capacity = intInitCap;
+	ass->data = calloc(intInitCap, sizeof(int));
+	return ass;
 }
 
 void intVecPush(IntVec myVec, int newE){
-	if(myVec){//if node exists
-		if(myVec->sz == myVec->capacity){ //if no more space left in data array
+	if(!myVec){//if node doesnt exist
+		error(__func__);
+	}
+	if(myVec->sz == myVec->capacity){ //if no more space left in data array
 			myVec->capacity *= 2; //double capacity
 			myVec->data = realloc(myVec->data, myVec->capacity * sizeof(int));//reallocate memory for data
 		}
 		int *shit = myVec->data; //get address of data array
 			shit += ++myVec->sz;//get to next open spot
 			*shit = newE; //place data
-	}
-	else error(__func__);
 }
 
 void intVecPop(IntVec myVec){
