@@ -23,10 +23,10 @@ typedef enum {U, none} Flag;
 
 
 void procede(IntVec* shit, int m, int n){
-	printShit(shit, m, n);
+	//printShit(shit, m, n);
 	DPRINT(("penis"));
 
-	if(n == 20){
+	if(n <= 20){
 		int** adjMatrix = makeAdjMatrix(shit, n);
 		printAdjMatrix(adjMatrix, n);
 		IntVec* penis;
