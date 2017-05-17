@@ -38,6 +38,8 @@ void procede(IntVec* shit, int m, int n){
 	printInfo(G);
 	DFSsweep(G);
 	printInfo(G);
+	shit = transposeGraph(shit, n);
+	G = hugePenis(shit, G);
 	//DPRINT(("penis"));
 	/*int** adjMatrix = makeAdjMatrix(shit, n);
 	printf("\nadjacency matrix of origional list:\n\n");

@@ -25,6 +25,11 @@ void printInfo(Graph dick);
 
 
 
+//swaps adj list of given graph
+//input: new adj list, graph to change
+//output: modified graph
+Graph hugePenis(IntVec* chode, Graph foreSkin);
+
 
 //first stage of dfs, calls DFSsweep for all undiscovered verticies
 //input: graph data
@@ -36,6 +41,6 @@ void DFSsweep(Graph G);
 //second stage of DFS, goes down each node to discover all edges
 //input: graph, vertex
 //output: none
-//void DFStrace(Graph G, int vertex , int time);
+int DFStrace(Graph G, int vertex , int time);
 
 #endif

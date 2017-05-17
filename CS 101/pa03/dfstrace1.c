@@ -51,6 +51,12 @@ Graph makeGraph(IntVec* poop, int vert){
 	return penis;
 }
 
+Graph hugePenis(IntVec* chode, Graph foreSkin){
+	if(!foreSkin || !chode) error(__func__);
+	foreSkin->graph = chode;
+	return foreSkin;
+}
+
 void printDis(IntVec shit){
 	int dick = intSize(shit);
 	for(int i = 0; i < dick; i++){
@@ -91,7 +97,7 @@ void printInfo(Graph G){
 			printf("%5d %5c %5d %5d %5d\n", i+1, color, info[1], info[2], parent);
 	}
 	printf("the stack shit looks like: ");
-	printDis(G->stack);
+	//printDis(G->stack);
 }	
 
 
