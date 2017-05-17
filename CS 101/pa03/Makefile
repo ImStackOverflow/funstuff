@@ -4,7 +4,7 @@ SRCS = scc03.c intVec.c loadGraph.c dfstrace1.c
 FLAGS = -std=c99 -o
 DEBUG = -g
 OBJS = ${SRC:.c = .o}
-HEADER = loadGraph.h intVec.h  
+HEADER = loadGraph.h intVec.h dfstrace1.h 
 INPUT = test4.in
 INPUTS = test1.in test2.in test3.in test5.in	
 

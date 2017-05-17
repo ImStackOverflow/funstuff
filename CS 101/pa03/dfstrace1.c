@@ -21,7 +21,6 @@ typedef enum {WHITE, GRAY, BLACK} Vcolor;//vertex color
 typedef enum {mW, mG, mB, dT, fT, P} Choice;
 
 
-
 //makes 2D array to hold data about verticies,
 //[i][0] = color (initialized to white), [i][1] = dTime, [i][2] = fTime
 //input: number of verticies
@@ -52,6 +51,14 @@ Graph makeGraph(IntVec* poop, int vert){
 	return penis;
 }
 
+void printDis(IntVec shit){
+	int dick = intSize(shit);
+	for(int i = 0; i < dick; i++){
+		intVecPop(shit);
+		printf("%d   ", intTop(shit));
+	}
+	printf("\n");
+}
 
 
 //prints shit
@@ -63,25 +70,31 @@ void printInfo(Graph G){
 	char color;//for printing
 	Vcolor GeriatricFuck;//also for printing 
 	for(int i = 0; i < G->n; i++){
-	info = G->info[i];//dereference pointer to data array
-	GeriatricFuck = G->info[i][1];
-	switch(GeriatricFuck){ //choose printing color leter 
-		case WHITE:
-			color = 'W';
-			break;
-		case GRAY:
-			color = 'G';
-			break;
-		case BLACK:
-			color = 'B';
-			break;
-		default:
-			color = 'E';
-			break;
-}
-		printf("%d       %c       %d       %d      %d\n", i+1, color, info[0], info[2], parent);
-}
-}
+		parent = 1;
+		info = G->info[i];//dereference pointer to data array
+		GeriatricFuck = info[0];
+		switch(GeriatricFuck){ //choose printing color leter 
+			case WHITE:
+				color = 'W';
+				break;
+			case GRAY:
+				color = 'G';
+				break;
+			case BLACK:
+				color = 'B';
+				break;
+			default:
+				color = 'E';
+				break;
+		}
+		if(!info[3]) parent = -1;
+			printf("%5d %5c %5d %5d %5d\n", i+1, color, info[1], info[2], parent);
+	}
+	printf("the stack shit looks like: ");
+	printDis(G->stack);
+}	
+
+
 
 
 //sets all color data for nodes to white
@@ -94,23 +107,15 @@ void makeWhite(Graph G){
 }
 
 
-void DFSsweep(Graph G){
-	int time = 0;
-	Vcolor color = WHITE;
-	makeWhite(G);//set all nodes to white
-	for(int i = 0; i < G->n; i++){
-		if (G->info[i][0] == color){ //if node is white (undiscovered)
-		DFStrace(G, i, time);
-		}
-	}
-}
 
 
 
-//manipulates data array, sets color or time varriable
-//input: 1D data array, choice, time
+//manipulates data array, sets color, time varriable, or predecesor for certain vertex
+//input: 1D data array, choice, data(time or predecesor)
 //output: none
-void fuckit(int* info, Choice choice, int time){
+void fuckit(Graph G, int vertex, Choice choice, int data){
+	vertex--;//convert so passed vertex matches with data indicie 
+	int* info = G->info[vertex];	
 	Vcolor color;
 	switch(choice) {
 		case mW://set node color to white
@@ -126,33 +131,57 @@ void fuckit(int* info, Choice choice, int time){
 			info[0] = color;
 			break;
 		case dT://store disc time
-			info[1] = time;
+			info[1] = data;
 			break;
 		case fT://store finishing time
-			info[2] = time;
+			info[2] = data;
+			break;
+		case P://store predecesor
+			info[3] = data;
 			break;
 	}
 }
 
 
 	
-void DFStrace(Graph G, int vertex, int time){
+int DFStrace(Graph G, int vertex, int time){
 	time++;
 	//set to gray and define discovery time
-	Choice choice = mG;
-	fuckit(G->info[vertex], choice, time);
-	choice = dT;
-	fuckit(G->info[vertex], choice, time);
-	IntVec node = G->graph[vertex];
-	int adj, edge = intSize(node)
-	for(int i = 0; i < edge; i++){
-		
-		
+	fuckit(G, vertex, mG, 0);//make gray
+	fuckit(G, vertex, dT, time);
+
+
+	IntVec node = G->graph[vertex];//get vertex (starts at 1)
+	int adjV, end = intSize(node);//number of elements
+	Vcolor white = WHITE;
+	for(int i = 0; i < end; i++){
+		adjV = intData(node, i);//get adjacent vertex
+		if(G->info[adjV-1][0] == white){//if vertex is undicovered
+			fuckit(G, adjV, P, vertex);//add vertex as parent to adj vertex
+			time = DFStrace(G, adjV, time);//go discover
+		}
+	}
+	//gone through all adjacent verticies
+	fuckit(G, vertex, mB, 0);//make vertex black
+	time++; //making black is a move
+	fuckit(G, vertex, fT, time);
+	intVecPush(G->stack, vertex);//add to finishing time stack
+	return time;
 }
 
 
 
 
+void DFSsweep(Graph G){
+	int time = 0;
+	Vcolor color = WHITE;
+	makeWhite(G);//set all nodes to white
+	for(int i = 0; i < G->n; i++){
+		if (G->info[i][0] == color){ //if node is white (undiscovered)
+		time = DFStrace(G, i+1, time);
+		}
+	}
+}
 
 
 

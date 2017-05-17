@@ -25,6 +25,8 @@ typedef enum {U, none} Flag;
 void test(IntVec* butthole, int n){
 	Graph G = makeGraph(butthole, n);	
 	printInfo(G);
+	DFSsweep(G);
+	printInfo(G);
 }
 
 
@@ -32,8 +34,12 @@ void test(IntVec* butthole, int n){
 void procede(IntVec* shit, int m, int n){
 
 	printShit(shit, m, n);
+	Graph G = makeGraph(shit, n);	
+	printInfo(G);
+	DFSsweep(G);
+	printInfo(G);
 	//DPRINT(("penis"));
-	int** adjMatrix = makeAdjMatrix(shit, n);
+	/*int** adjMatrix = makeAdjMatrix(shit, n);
 	printf("\nadjacency matrix of origional list:\n\n");
 	printAdjMatrix(adjMatrix, n);
 	for(int i = 0; i < 2; i++){
@@ -46,7 +52,7 @@ void procede(IntVec* shit, int m, int n){
 		}
 		else printf("more than 20 verticies, too long so I decided not to do print the matrix\n %d\n",n);
 	}
-	
+	*/
 	freeAll(shit, n);
 
 }
@@ -91,8 +97,8 @@ char what[2000], ass;
 	}
 	}
 	fclose(in);
-	//procede(shit, m, n);//print all the shit out and stuff
-	test(shit,n);
+	procede(shit, m, n);//print all the shit out and stuff
+	//test(shit,n);
 	
 }
 	

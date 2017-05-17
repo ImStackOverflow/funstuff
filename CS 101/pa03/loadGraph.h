@@ -54,4 +54,10 @@ void addVert(IntVec *ass, int v1, int v2, int weight, int n);
 //output: nothing
 void error(const char message[]);
 
+
+//prints contents of one single IntVec, essentially prints array
+//input: intVec that has data array
+//output: none
+void printData(IntVec shit);
+
 #endif

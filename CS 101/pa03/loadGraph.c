@@ -61,11 +61,11 @@ IntVec* transposeGraph(IntVec* og, int n){
 }
 
 IntVec *create(int nodes){ 
-IntVec *shit = (IntVec*)calloc(nodes, sizeof(IntVec));//allocate pointers to pointers
-for(int i = 1; i <= nodes; i++){
-	shit[i] =  intMakeEmptyVec(); //make empty vector list
-}
-return shit;
+	IntVec *shit = (IntVec*)calloc(nodes+1, sizeof(IntVec));//allocate pointers to pointers
+	for(int i = 1; i <= nodes; i++){
+		shit[i] =  intMakeEmptyVec(); //make empty vector list
+	}
+	return shit;
 }
 
 void freeAll(IntVec* shit, int n){

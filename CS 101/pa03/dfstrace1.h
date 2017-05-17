@@ -36,6 +36,6 @@ void DFSsweep(Graph G);
 //second stage of DFS, goes down each node to discover all edges
 //input: graph, vertex
 //output: none
-void DFStrace(Graph G, int vertex , int time);
+//void DFStrace(Graph G, int vertex , int time);
 
 #endif
