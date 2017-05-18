@@ -17,7 +17,7 @@ int** makeAdjMatrix(IntVec* og, int n);
 //makes transposed graph given input graph
 //input: origional graph, number of nodes
 //output: pointer array of intVecs with transposed data
-IntVec* transposeGraph(IntVec* og, int n);
+IntVec* transposeGraph(IntVec* og, int n, IntVec fuckme);
 
 
 //prints adj matrix 

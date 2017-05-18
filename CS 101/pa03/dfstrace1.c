@@ -23,7 +23,7 @@ typedef enum {mW, mG, mB, dT, fT, P} Choice;
 
 //makes 2D array to hold data about verticies,
 //[i][0] = color (initialized to white), [i][1] = dTime, [i][2] = fTime
-//input: number of verticies
+//input: number of verticies 
 //output: 2D array pointer
 int** makeArray(int n){
 	int** dick = calloc(n,sizeof(int*));
@@ -41,7 +41,7 @@ int** makeArray(int n){
 //initializes graph
 Graph makeGraph(IntVec* poop, int vert){
 	Graph penis = (Graph) malloc(sizeof(Penis));
-	if(!penis){
+	if(!penis || !poop){
 		error(__func__);	
 	}
 	penis->graph = poop;
@@ -51,17 +51,39 @@ Graph makeGraph(IntVec* poop, int vert){
 	return penis;
 }
 
-Graph hugePenis(IntVec* chode, Graph foreSkin){
-	if(!foreSkin || !chode) error(__func__);
-	foreSkin->graph = chode;
-	return foreSkin;
+
+
+//makes transposed Graph data type, keeps finishing stack
+//input: graph to make transpose of
+//output: transposed graph with finishing time stack
+Graph hugePenis(Graph foreSkin){
+	if(!foreSkin) error(__func__);
+
+
+	/*the error is here*/
+	printf("this is the error I mentioned in my readme, it only happens for large inputs\n");
+	printf("the finishing stack before calloc is (line 61 dfstrace1.c): ");
+	printDis(foreSkin);
+	calloc(1,1);
+	printf("the finishing stack after calloc is (line 64 dfstrace1.c): ");
+	printDis(foreSkin);
+
+
+
+	IntVec* transposed = transposeGraph(foreSkin->graph, foreSkin->n, foreSkin->stack);
+	Graph vag = makeGraph(transposed , foreSkin->n);//make graph with transposed adj list
+	int dick = intSize(foreSkin->stack);
+	for(int i = 0; i < dick; i++){
+		intVecPush(vag->stack, intData(foreSkin->stack, i));//copy finishing time stack
+	}
+	return vag;
 }
 
-void printDis(IntVec shit){
+void printDis(Graph G){
+	IntVec shit = G->stack;
 	int dick = intSize(shit);
 	for(int i = 0; i < dick; i++){
-		intVecPop(shit);
-		printf("%d   ", intTop(shit));
+		printf("%d   ", intData(shit,i));
 	}
 	printf("\n");
 }
@@ -96,8 +118,8 @@ void printInfo(Graph G){
 		if(!info[3]) parent = -1;
 			printf("%5d %5c %5d %5d %5d\n", i+1, color, info[1], info[2], parent);
 	}
-	printf("the stack shit looks like: ");
-	//printDis(G->stack);
+	printf("\nthe stack shit looks like: ");
+	printDis(G);
 }	
 
 
@@ -190,6 +212,78 @@ void DFSsweep(Graph G){
 }
 
 
+int DFStrace2(Graph G, int vertex, int time, int parent){
+	time++;
+	fuckit(G, vertex, P, parent);
+	//set to gray and define discovery time
+	fuckit(G, vertex, mG, 0);//make gray
+	fuckit(G, vertex, dT, time);
+
+
+	IntVec node = G->graph[vertex];//get vertex (starts at 1)
+	int adjV, end = intSize(node);//number of elements
+	for(int i = 0; i < end; i++){
+		adjV = intData(node, i);//get adjacent vertex
+		if(G->info[adjV-1][0] == WHITE){//if vertex is undicovered
+			fuckit(G, adjV, P, parent);//add top vertex as root to adj vertex
+			time = DFStrace2(G, adjV, time, parent);//go discover
+		}
+	}
+	//gone through all adjacent verticies
+	fuckit(G, vertex, mB, 0);//make vertex black
+	time++; //making black is a move
+	fuckit(G, vertex, fT, time);
+
+	return time;
+}
+
+
+Graph DFSPhase2(Graph G){
+	Graph imTrans = hugePenis(G);//make transposed graph
+	int time = 0;
+	makeWhite(imTrans);//set all nodes to white
+	int pein, dick = intSize(imTrans->stack);
+	for(int i = 0; i < dick; i++){
+		intVecPop(imTrans->stack);
+		pein = intTop(imTrans->stack);
+		if (imTrans->info[pein-1][0] == WHITE){ //if node is white (undiscovered)
+		time = DFStrace2(imTrans, pein, time, pein);
+		}
+	}
+	return imTrans;
+}
+
+
+void printInfo2(Graph scrotum){
+	printf("Vertex  Color2  dTime2  fTime2  Parent2 dfstRoot2\n");
+	printf("--------------------------------------------------\n");	
+	int parent = 1;
+	int* info;//data array
+	char color;//for printing
+	Vcolor GeriatricFuck;//also for printing 
+	for(int i = 0; i < scrotum->n; i++){
+		parent = 1;
+		info = scrotum->info[i];//dereference pointer to data array
+		GeriatricFuck = info[0];
+		switch(GeriatricFuck){ //choose printing color leter 
+			case WHITE:
+				color = 'W';
+				break;
+			case GRAY:
+				color = 'G';
+				break;
+			case BLACK:
+				color = 'B';
+				break;
+			default:
+				color = 'E';
+				break;
+		}
+		if(info[3] == i+1) parent = -1;//if parent/root is itself then its a root
+			printf("%6d %6c %6d %6d %6d %6d\n", i+1, color, info[1], info[2], parent, info[3]);
+	}
+}	
+	
 
 
 

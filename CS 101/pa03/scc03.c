@@ -22,24 +22,18 @@ cs101 pa01
 
 typedef enum {U, none} Flag;
 
-void test(IntVec* butthole, int n){
-	Graph G = makeGraph(butthole, n);	
-	printInfo(G);
-	DFSsweep(G);
-	printInfo(G);
-}
-
-
-
 void procede(IntVec* shit, int m, int n){
 
 	printShit(shit, m, n);
 	Graph G = makeGraph(shit, n);	
 	printInfo(G);
+	printf("\n\n---------dfs phase 1-----------\n\n");
 	DFSsweep(G);
 	printInfo(G);
-	shit = transposeGraph(shit, n);
-	G = hugePenis(shit, G);
+	printf("\n\n---------dfs phase 2-----------\n\n");
+	Graph SCC = DFSPhase2(G);
+	printf("\n");
+	printInfo2(SCC);
 	//DPRINT(("penis"));
 	/*int** adjMatrix = makeAdjMatrix(shit, n);
 	printf("\nadjacency matrix of origional list:\n\n");
@@ -100,7 +94,6 @@ char what[2000], ass;
 	}
 	fclose(in);
 	procede(shit, m, n);//print all the shit out and stuff
-	//test(shit,n);
 	
 }
 	

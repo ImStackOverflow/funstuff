@@ -46,7 +46,7 @@ void printAdjMatrix(int** matrix, int n){
 	}
 }
 
-IntVec* transposeGraph(IntVec* og, int n){
+IntVec* transposeGraph(IntVec* og, int n, IntVec fukme){
 	IntVec* transposed = create(n);
 	IntVec penis;
 	int size;
@@ -61,11 +61,12 @@ IntVec* transposeGraph(IntVec* og, int n){
 }
 
 IntVec *create(int nodes){ 
-	IntVec *shit = (IntVec*)calloc(nodes+1, sizeof(IntVec));//allocate pointers to pointers
+	IntVec *clit = (IntVec*) calloc(nodes+1, sizeof(IntVec));//allocate pointers to pointers
+	if(!clit) error(__func__);
 	for(int i = 1; i <= nodes; i++){
-		shit[i] =  intMakeEmptyVec(); //make empty vector list
+		clit[i] =  intMakeEmptyVec(); //make empty vector list
 	}
-	return shit;
+	return clit;
 }
 
 void freeAll(IntVec* shit, int n){
