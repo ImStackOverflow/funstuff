@@ -18,7 +18,7 @@ preconditions: the priority queue is initialized and exists
 input: the priority queue
 output: 1 if the queue is empty 0 otherwise
 */
-int isEmptyPQ(MinPQ pq); (what are the preconditions, if any? Replace this question with your comments.)
+int isEmptyPQ(MinPQ pq);
 
 /** getMin
 preconditions: the priority queue is initialized and exists

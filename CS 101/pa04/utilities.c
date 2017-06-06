@@ -1,7 +1,7 @@
 #include <stdlib.h>
-#include "utilities.c"
+#include "utilities.h"
 
-static void error(const char message[], char function[]){
+void error(char message[], const char function[]){
 	printf("%s in %s\n", message, function);
 	exit(1);
 }

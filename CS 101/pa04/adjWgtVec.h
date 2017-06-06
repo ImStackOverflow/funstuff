@@ -4,7 +4,7 @@
 
 #ifndef C101AdjWgtVec
 #define C101AdjWgtVec
-/* Multiple typedefs for the same type are an error in C. */
+/* Multiple typedefs for the same type are an error in C.
  * The above ifndef and define prevent multiple copies of code below.
  */
 

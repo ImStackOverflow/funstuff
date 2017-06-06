@@ -82,22 +82,12 @@ void intVecPush(IntVec myVec, int newE){
 	if(!myVec){//if node doesnt exist
 		error(__func__);
 	}
-	printf("==================\n");
-	printf("in if statement, size is %d, capacity is %d\n", myVec->sz, myVec->capacity);
 	if(myVec->sz == myVec->capacity){ //if no more space left in data array
 			myVec->capacity *= 2; //double capacity
 			myVec->data = realloc(myVec->data, myVec->capacity * sizeof(int));//reallocate memory for data
-			printf("in the if statement\n");
 		}
 
 	myVec->data[myVec->sz++] = newE;	
-/*
-	int *shit = myVec->data; //get address of data array
-	shit += myVec->sz++;//push in then up size
-	*shit = newE; //place data
-*/
-	printf("+++++++++++++++++++\n");
-	//exit(1);
 }
 
 void intVecPop(IntVec myVec){

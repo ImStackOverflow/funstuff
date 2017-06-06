@@ -1,6 +1,7 @@
 #include "minPQ.h"
 #include "utilities.h"
 #include "math.h"
+#include <stdlib.h>
 
 
 struct MinPQNode{
@@ -10,8 +11,8 @@ int minVertex;
 float infinity;
 int* status;
 int* parent;
-float* fringeWgt;
-}
+double* fringeWgt;
+};
 
 //returns 1 (true) if empty 0 otherwise
 int isEmptyPQ(MinPQ pq){
@@ -42,19 +43,19 @@ int getMin(MinPQ pq){
 int getStatus(MinPQ pq, int id){
 	if(!pq) error("uninitialized priority queue", __func__);
 	if(id >= pq->numVerticies || id < 0) error("passed in out of bounds vertex", __func__);
-	return *((pq->status[id]);
+	return pq->status[id];
 }
 
 int getParent(MinPQ pq, int id){
 	if(!pq) error("uninitialized priority queue", __func__);
 	if(id >= pq->numVerticies || id < 0) error("passed in out of bounds vertex", __func__);
-	return *((pq->parent[id]);
+	return pq->parent[id];
 }
 
 double getPriority(MinPQ pq, int id){
 	if(!pq) error("uninitialized priority queue", __func__);
 	if(id >= pq->numVerticies || id < 0) error("passed in out of bounds vertex", __func__);
-	return *((pq->parent[id]);
+	return pq->parent[id];
 }
 
 
@@ -88,7 +89,8 @@ void decreaseKey(MinPQ pq, int id, double priority, int par){
 }
 
 MinPQ createPQ(int n, int status[], double priority[], int parent[]){
-	if(!MinPQNode newNode = malloc(sizeof(MinPQNode))){
+	MinPQ newNode = malloc(sizeof(struct MinPQNode));
+	if(!newNode){
 		error("couldnt allocate memory", __func__);
 	}
 	newNode->numVerticies = n;
@@ -98,7 +100,7 @@ MinPQ createPQ(int n, int status[], double priority[], int parent[]){
 	newNode->status = status;
 	newNode->parent = parent;
 	newNode->fringeWgt = priority;
-	return *newNode;
+	return newNode;
 }
 
 
