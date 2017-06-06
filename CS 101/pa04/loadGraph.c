@@ -1,123 +1,60 @@
 #include "loadGraph.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include "utilities.h"
 
-
-int** makeAdjMatrix(IntVec* og, int n){
-	if(!og){//check that data exists
-		error(__func__);
-	}
-	int **dick = calloc(n, sizeof(int*));//make empty 2d array
-		for(int i = 0; i < n; i++){
-			dick[i] = calloc(n, sizeof(int));
-		}
-	
-		int size;//size of current node data
-		IntVec current;//derefrence current node
-		for(int i = 0; i < n; i++){//for each node
-			current = *(og + i + 1); //derefrence pointer
-			size = intSize(current); //store data size
-			for(int j = 0; j < size; j++){
-				dick[i][intData(current,j)-1] = 1; //set indicie to 1
-				}
-		}
-		return dick;
-}
-
-void printAdjMatrix(int** matrix, int n){
-		//print top header
-	printf("   ");
-	for(int i = 1; i <= n; i++){
-		printf("%d ", i);
-	}
-	printf("\n");
-	for(int i = 1; i <= n; i++){
-		printf("----");
-	}
-	printf("\n");
-	
-	//print matrix
-	for(int i = 1; i <= n; i++){
-		printf("%d: ", i);
-		for(int j = 0; j < n; j++){
-			printf("%d ", matrix[i-1][j]);
-		}
-		printf("\n");
-	}
-}
-
-IntVec* transposeGraph(IntVec* og, int n, IntVec fukme){
-	IntVec* transposed = create(n);
-	IntVec penis;
-	int size;
-	for(int i = 1; i <= n; i++){//itterate through IntVec array
-		penis = *(og + i); //derefrence pointer (starts at 1)
-		size = intSize(penis); //get size of data
-		for(int j = 0; j < size; j++){
-			addVert(transposed, intData(penis, j), i, 0, n);//add vertex to data of data
-		}
-	}
-	return transposed;
-}
-
-IntVec *create(int nodes){ 
-	IntVec *clit = (IntVec*) calloc(nodes+1, sizeof(IntVec));//allocate pointers to pointers
-	if(!clit) error(__func__);
+AdjWgtVec *create(int nodes){
+	IntVec *clit = (AdjWgtVec*) calloc(nodes+1, sizeof(AdjWgtVec));//allocate pointers to pointers
+	if(!clit) error("couldn't allocate memory", __func__);
 	for(int i = 1; i <= nodes; i++){
-		clit[i] =  intMakeEmptyVec(); //make empty vector list
+		clit[i] =  adjWgtMakeEmptyVec(); //make empty vector list
 	}
 	return clit;
 }
 
-void freeAll(IntVec* shit, int n){
-	IntVec penis;
-	for(int i = 0; i < n; i++){
-		penis = *(shit+i);
-		free(penis); //free each pointer
+
+void addVert(AdjWgtVec *ass, int v1, int v2, int weight, int n){
+	if(!ass) error("passed in uninitialized array", __func__);
+	if(v1 > n || v2 > n) error("addVert the referenced vertex doesnt exist", __func__);
+		AdjWgt booty;
+		booty.to = v2;
+		booty.wgt = weight;
+		adjWgtVecPush(*ass[v1], booty);
 	}
 }
 
-void printData(IntVec shit){
-if(intSize(shit) == 0){ //check if node has data 
-	printf("null\n");
-}
-else{ //print data
-	printf("[");
-	printf("%d", intData(shit, 0));
-	int stop = intSize(shit);
-	int dick;
-	for(int j = 1; j < stop; j++){ //print upto second to last data (last ones a 0)
-		dick = intData(shit, j);
-	printf(", %d", dick);
+
+AdjWgtVec* parseFile(FILE *in, Flag flag){
+	nt v1, v2, args, n, m = 0;
+	double weight = 0;
+	char what[2000], ass;
+	AdjWgtVec *shit;
+
+	while(fgets(what, 2000, in) != NULL){
+	args = sscanf(what, "%d %d %lf %c", &v1, &v2, &weight, &ass);
+
+	switch (args){
+		case -1: //no input
+			break;
+			
+		case 1://first line
+		n = v1;
+		shit = create(v1);
+			break;
+			
+		case 3://2 verticies with weight
+		addVert(shit, v1, v2, weight, n);
+		if(flag == Prims){
+			addVert(shit, v2, v1, weight, n);
+		}
+		m++;
+			break;
+			
+		default:
+			error("the input file has formating errors fix it", __func__);
+			break;
+		
 	}
-//fflush(stdout);
-	printf("]\n");
-}
-}
+	}
+	fclose(in);
+	procede(shit, m, n);//print all the shit out and stuff
 	
-void printShit(IntVec *shit, int m, int n){
-printf("n = %d\nm = %d\n", n, m);
-for(int i = 1; i <= n; i++){
-	printf("%d      ", i);
-	printData(*(shit+i));//print data for each node
-}
-}
-
-void addVert(IntVec *ass, int v1, int v2, int weight, int n){
-if(ass){
-	if(v1 > n || v2 > n){//bounds checking
-		error("addVert the referenced vertex doesnt exist");
-	}
-	//IntVec* penis = ass + v1;
-	intVecPush(*(ass+v1), v2); //put v2 into v1
-}
-else{
-	error(__func__);
-}
-}
-
-
-void error(const char message[]){
-	printf("there was an error in %s\n", message);
-	exit(1);
 }

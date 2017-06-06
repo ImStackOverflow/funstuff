@@ -20,7 +20,7 @@ cs101 pa01
 #endif
 
 
-typedef enum {U, none} Flag;
+typedef enum {Prims, Dyke} Flag;
 
 void procede(IntVec* shit, int m, int n){
 
@@ -55,56 +55,13 @@ void procede(IntVec* shit, int m, int n){
 
 
 void doShit(FILE *in, Flag flag){// parse file and create origional intVec array
-int v1, v2, args, n, m = 0;
-double weight = 0;
-char what[2000], ass;
-	IntVec *shit;
-
-	while(fgets(what, 2000, in) != NULL){
-	args = sscanf(what, "%d %d %lf %c", &v1, &v2, &weight, &ass);
-
-	switch (args){
-		case -1: //no input
-			break;
-		case 1://first line
-		n = v1;
-		shit = create(v1);
-			break;
-		case 2://2 vertecies
-		addVert(shit, v1, v2, 0, n);
-		//printShit(shit, m, n);
-		if(flag == U){
-			DPRINT(("doing bidirectional edge"));
-			addVert(shit, v2, v1, 0, n);
-		}
-		m++;
-			break;
-		case 3://2 verticies with weight
-		addVert(shit, v1, v2, weight, n);
-		if(flag == U){
-			addVert(shit, v2, v1, weight, n);
-		}
-		m++;
-			break;
-		default:
-			error("the input file");
-			break;
-		
-	}
-	}
-	fclose(in);
-	procede(shit, m, n);//print all the shit out and stuff
-	
-}
+i
 	
 int main(int argc, char*argv[]){
 	if (argc < 2){
 		printf("the correct usage is ./scc03 -<options> <inputfile>\n");
 		exit(0);
 	}
-	
-	//DPRINT(("arg 1 is %s, char 1 is %c\n", argv[1], argv[1][1]));
-	//check for flags
 	Flag flag = none;
 	FILE *in;
 	if(argv[1][0] == '-'){
