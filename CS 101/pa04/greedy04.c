@@ -9,7 +9,6 @@ cs101 pa01
 #include <stdlib.h>
 #include <string.h>
 #include "loadGraph.h"
-#include "dfstrace1.h"
 
 #define DEBUG 1
 
@@ -20,42 +19,6 @@ cs101 pa01
 #endif
 
 
-typedef enum {Prims, Dyke} Flag;
-
-void procede(IntVec* shit, int m, int n){
-
-	printShit(shit, m, n);
-	Graph G = makeGraph(shit, n);	
-	printInfo(G);
-	printf("\n\n---------dfs phase 1-----------\n\n");
-	DFSsweep(G);
-	printInfo(G);
-	printf("\n\n---------dfs phase 2-----------\n\n");
-	Graph SCC = DFSPhase2(G);
-	printf("\n");
-	printInfo2(SCC);
-	//DPRINT(("penis"));
-	/*int** adjMatrix = makeAdjMatrix(shit, n);
-	printf("\nadjacency matrix of origional list:\n\n");
-	printAdjMatrix(adjMatrix, n);
-	for(int i = 0; i < 2; i++){
-		shit = transposeGraph(shit, n);
-		printf("\n\n%d transposed adjacency matrix:\n\n",i+1);
-		printShit(shit, m, n);
-		if(n <= 20){
-			adjMatrix = makeAdjMatrix(shit, n);
-			printAdjMatrix(adjMatrix, n);
-		}
-		else printf("more than 20 verticies, too long so I decided not to do print the matrix\n %d\n",n);
-	}
-	*/
-	freeAll(shit, n);
-
-}
-
-
-void doShit(FILE *in, Flag flag){// parse file and create origional intVec array
-i
 	
 int main(int argc, char*argv[]){
 	if (argc < 2){

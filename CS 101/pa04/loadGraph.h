@@ -5,8 +5,11 @@ pa02
 ************************************************************************/
 #ifndef loadGraph
 #define loadGraph
-#include "intVec.h"
+#include "minPQ.h"
+#include "adjWgtVec.h"
 
+
+typedef enum {Prims, Dyke} Flag;
 
 //creates adjintvec array of length nodes
 //input: length of array

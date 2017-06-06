@@ -18,7 +18,6 @@ void addVert(AdjWgtVec *ass, int v1, int v2, int weight, int n){
 		booty.to = v2;
 		booty.wgt = weight;
 		adjWgtVecPush(*ass[v1], booty);
-	}
 }
 
 
@@ -42,7 +41,7 @@ AdjWgtVec* parseFile(FILE *in, Flag flag){
 			
 		case 3://2 verticies with weight
 		addVert(shit, v1, v2, weight, n);
-		if(flag == Prims){
+		if(flag == Prims){//make undirected
 			addVert(shit, v2, v1, weight, n);
 		}
 		m++;
