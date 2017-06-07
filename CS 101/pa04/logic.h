@@ -3,9 +3,10 @@
 
 #include "minPQ.h"
 #include "adjWgtVec.h"
+#include "loadGraph.h"
 
 
-
-void updateFringe(data poof, int v);
+//algorithim for primms or djikstras shit
+void algorithm(data poof, int start, Flag flag);
 
 #endif

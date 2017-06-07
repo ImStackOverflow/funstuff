@@ -10,6 +10,7 @@ cs101 pa01
 #include <string.h>
 #include "loadGraph.h"
 #include "utilities.h"
+#include "logic.h"
 
 #define DEBUG 1
 
@@ -23,8 +24,11 @@ void process(FILE *in, Flag flag, int start){
 	int* n = malloc(sizeof(int));
 	data woah = parseFile(in, flag);
 	printAdjVec(woah->vect, woah->n, woah->m);
+	DPRINT(("PQ before the algorithm\n++++++++++++++++++++++++++\n"));
 	printPQ(woah->PQ, woah->n);
-	
+	DPRINT(("PQ after the algorithm\n++++++++++++++++++++++++++\n"));
+	algorithm(woah, start, flag);
+	printPQ(woah->PQ, woah->n);
 
 
 
