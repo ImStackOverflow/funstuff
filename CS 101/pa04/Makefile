@@ -1,11 +1,11 @@
 PA = pa04
 TARGET = greedy04
-SRCS = greedy04.c adjWgtVec.c loadGraph.c utilities.c minPQ.c
+SRCS = greedy04.c adjWgtVec.c loadGraph.c utilities.c minPQ.c logic.c
 FLAGS = -std=c99
 DEBUG = -g
 OBJS = ${SRC:.c = .o}
-HEADER = adjWgtVec.h loadGraph.h utilities.h minPQ.h
-INPUT = test2.in
+HEADER = adjWgtVec.h loadGraph.h utilities.h minPQ.h logic.h
+INPUT = -p 2 test1.in
 INPUTS = test1.in test2.in test3.in test5.in	
 
 $(TARGET): $(SRCS)

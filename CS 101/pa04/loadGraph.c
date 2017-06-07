@@ -35,6 +35,7 @@ data create(int nodes){//create data pointer
 	butt->vect = vectorz(nodes);//populate adj vecotr array
 	butt->PQ = queue(nodes);//populate minPQ 
 	butt->n = nodes;//set n
+	butt->m = 0; //inintialize m
 	return butt;
 }
 
@@ -52,7 +53,7 @@ void addVert(AdjWgtVec *ass, int v1, int v2, double weight, int n){
 
 
 data parseFile(FILE *in, Flag flag){
-	int v1, v2, args, n, m = 0;
+	int v1, v2, args, n;
 	double weight = 0;
 	char what[2000], ass;
 	data shit;

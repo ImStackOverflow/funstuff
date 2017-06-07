@@ -1,21 +1,8 @@
 #include "logic.h"
 
 
-void algorithm(data poof, int start, Flag flag){
-	if(!poof) error("uninitialized data", __func__);
-	insertPQ(poof->PQ, start, 0, -1);//set the start node to weight 0 and parent -1
-	int vertex;
-	while(!isEmptyPQ(poof->PQ)){
-		vertex = getMin(poof->PQ);
-		delMin(poof->PQ);
-		if (flag != Dyke) updateFringePrimm(poof, vertex);
-		else error("havent done dykes yet", __func__);
-	}
-}
-
-
 void updateFringePrimm(data poof, int v){
-	int size =  adjWgtSize(poof->vect[v]);
+	int size = adjWgtSize(poof->vect[v]);
 	double wgt;
 	AdjWgt poop;
 	for(int i = 0; i < size; i++){
@@ -32,5 +19,19 @@ void updateFringePrimm(data poof, int v){
 			//then update its weight in the pq
 			decreaseKey(poof->PQ, poop.to, wgt, v);
 		}
-	
+	}
+}
+
+
+
+void algorithm(data poof, int start, Flag flag){
+	if(!poof) error("uninitialized data", __func__);
+	insertPQ(poof->PQ, start, 0, -1);//set the start node to weight 0 and parent -1
+	int vertex;
+	while(!isEmptyPQ(poof->PQ)){
+		vertex = getMin(poof->PQ);
+		delMin(poof->PQ);
+		if (flag != Dyke) updateFringePrimm(poof, vertex);
+		else error("havent done dykes yet", __func__);
+	}
 }

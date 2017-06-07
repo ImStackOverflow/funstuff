@@ -24,7 +24,7 @@ int isEmptyPQ(MinPQ pq){
 void findMin(MinPQ pq){
 	float weight;
 	weight = pq->infinity;
-	for(int vertex = 1; vertex <= numVerticies; vertex++){//go through all verticies
+	for(int vertex = 1; vertex <= pq->numVerticies; vertex++){//go through all verticies
 		if(pq->status[vertex] == FRINGE){//if is a fringe verticie
 			if(pq->fringeWgt[vertex] < weight){//if found new min vertex
 				pq->minVertex = vertex;//set new minimum vertex
