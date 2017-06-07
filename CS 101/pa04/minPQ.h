@@ -80,7 +80,7 @@ void decreaseKey(MinPQ pq, int id, double priority, int par);
 /** createPQ 
 preconditions: status, priority, and parent arrays are allocated propery
 input: number of verticies, status array, priority array, parent array all of size n+1
-output: pointer to priority queue
+output: pointer to priority queue, sets all elements in status array to unseen
 */
 MinPQ createPQ(int n, int status[], double priority[], int parent[]);
 

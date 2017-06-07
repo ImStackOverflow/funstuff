@@ -12,16 +12,16 @@
 //output: none, just prints message and exits function
 void error(char message[], const char function[]);
 
-//prints data verticies and edges
+//prints data verticies and edges of adjacency array
 //input: array of intVec's, number of edges, number of nodes (respectivly)
 //output: none, just prints
-void printShit(AdjWgtVec *shit, int n);
+void printAdjVec(AdjWgtVec *shit, int n, int m);
 
-//prints out info about verticies
+//prints out info about verticies from PQ
 //outputs fringe weight, parent, and status of each vertex
 //input: MinPQ pointer with data
 //output: none
 //it prints all the data coresponding to each verticie 
-void printInfo(MinPQ dick, int n);
+void printPQ(MinPQ dick, int n);
 
 #endif

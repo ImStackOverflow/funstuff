@@ -98,6 +98,9 @@ MinPQ createPQ(int n, int status[], double priority[], int parent[]){
 	newNode->minVertex = -1;
 	newNode->infinity = -INFINITY;
 	newNode->status = status;
+	for(int i = 0; i <= n; i++){
+		newNode->status[i] = UNSEEN;
+	}
 	newNode->parent = parent;
 	newNode->fringeWgt = priority;
 	return newNode;

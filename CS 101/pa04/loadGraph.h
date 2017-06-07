@@ -18,15 +18,16 @@ typedef struct graph{
 	AdjWgtVec* vect;
 	MinPQ PQ;
 	int n;
+	int m;
 } graph;
 
 typedef graph* data;
 	
 	
 
-//creates adjintvec array of length nodes
-//input: length of array
-//output: pointer array of adjintVec's
+//creates struct with properly allocated adjvec array and empty PQ
+//input: number of nodes
+//output: pointer to allocated struct
 data create(int nodes);
 
 
@@ -42,9 +43,9 @@ void freeAll(AdjWgtVec* shit, int n);
 //output: nothing, just adds in data
 void addVert(AdjWgtVec *ass, int v1, int v2, double weight, int n);
 
-//parses input file, returns populated array for graph
+//parses input file and populates adjVec array, makes empty PQ
 //input: input file, flag for d or p
-//output: array of adjvec 
-data parseFile(FILE *in, Flag flag, int* n);
+//output: pointer to graph struct
+data parseFile(FILE *in, Flag flag);
 
 #endif

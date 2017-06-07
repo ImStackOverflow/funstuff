@@ -1,5 +1,7 @@
 #include "loadGraph.h"
 
+
+//create adjVector array
 AdjWgtVec *vectorz(int nodes){
 	AdjWgtVec *clit = (AdjWgtVec*) calloc(nodes+1, sizeof(AdjWgtVec));//allocate pointers to pointers
 	if(!clit) error("couldn't allocate memory", __func__);
@@ -9,25 +11,36 @@ AdjWgtVec *vectorz(int nodes){
 	return clit;
 }
 
+
+//create minPQ
 MinPQ queue(int nodes){
-	MinPQ poopie = (MinPQ) malloc(sizeof(MinPQ));
+	MinPQ poopie = (MinPQ) malloc(sizeof(MinPQ));//allocate minPQ
 	if (!poopie) error("couldnt allocate memory", __func__);
-	int *status = (int*)calloc(n,sizeof(int))
-	double *priority = (double*)calloc(n,sizeof(double))
-	int *parent = (int*)calloc(n,sizeof(int))
+	
+	//allocate data arrays
+	int *status = (int*)calloc(nodes+1,sizeof(int));
+	double *priority = (double*)calloc(nodes+1,sizeof(double));
+	int *parent = (int*)calloc(nodes+1,sizeof(int));
 	if(!status || !priority || !parent) error("couldnt allocate memory", __func__);
+	
 	poopie = createPQ(nodes, status, priority, parent);
 	return poopie;
 }
-data create(int nodes){
+
+
+//create struct
+data create(int nodes){//create data pointer
 	data butt = (data) malloc(sizeof(graph));
 	if (!butt) error("couldnt allocate memory", __func__);
-	butt->vect = vectorz(nodes);
-	butt->PQ = queue(nodes);
-	butt->n = nodes;
+	butt->vect = vectorz(nodes);//populate adj vecotr array
+	butt->PQ = queue(nodes);//populate minPQ 
+	butt->n = nodes;//set n
 	return butt;
 }
-void addAdj(AdjWgtVec *ass, int v1, int v2, double weight, int n){
+
+
+//addvertex to adj array
+void addVert(AdjWgtVec *ass, int v1, int v2, double weight, int n){
 	if(!ass) error("passed in uninitialized array", __func__);
 	if(v1 > n || v2 > n) error("addVert the referenced vertex doesnt exist", __func__);
 		AdjWgt booty;
@@ -36,9 +49,6 @@ void addAdj(AdjWgtVec *ass, int v1, int v2, double weight, int n){
 		adjWgtVecPush(*(ass+v1), booty);
 }
 
-void addVert(data butt, int v1, int v2, double wgt){
-	addAdj(butt->vect, v1, v2, wgt);//add vertex to adj vector
-	insertPQ
 
 
 data parseFile(FILE *in, Flag flag){
@@ -59,11 +69,11 @@ data parseFile(FILE *in, Flag flag){
 			break;
 			
 		case 3://2 verticies with weight
-		addVert(shit, v1, v2, weight);
+		addVert(shit->vect, v1, v2, weight, shit->n);
 		if(flag == Prims){//make undirected
-			addVert(shit, v2, v1, weight);
+			addVert(shit->vect, v2, v1, weight, shit->n);
 		}
-		m++;
+		shit->m++;
 			break;
 			
 		default:

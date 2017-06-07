@@ -21,8 +21,9 @@ cs101 pa01
 
 void process(FILE *in, Flag flag, int start){
 	int* n = malloc(sizeof(int));
-	AdjWgtVec* graph = parseFile(in, flag, n);
-	printShit(graph, *n);
+	data woah = parseFile(in, flag);
+	printAdjVec(woah->vect, woah->n, woah->m);
+	printPQ(woah->PQ, woah->n);
 	
 
 

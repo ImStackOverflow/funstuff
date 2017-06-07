@@ -24,45 +24,45 @@ else{ //print data
 }
 }
 	
-void printShit(AdjWgtVec *shit, int n){
-printf("n = %d\n", n);
+void printAdjVec(AdjWgtVec *shit, int n, int m){
+printf("n = %d\n m = %d\n", n, m);
 for(int i = 1; i <= n; i++){
 	printf("%d      ", i);
 	printData(*(shit+i));//print data for each node
 }
 }
 
-void printInfo(MinPQ dick, int n){
+void printPQ(MinPQ dick, int n){
 	//header
 	for (int i = 0; i < n; i++)
 	{
-		printf("---------");
+		printf("----------------");
 	}
-	printf("\n");
+	printf("\n           ");
 
-	for (int i = 0; i < n; i++)
+	for (int i = 1; i <= n; i++)
 	{
-		printf("%5d", i);
+		printf("%8d", i);
 	}
 	printf("\n");
 	
 	for (int i = 0; i < n; i++)
 	{
-		printf("---------");
+		printf("----------------");
 	}
-	printf("\n fringeWgt");
+	printf("\n fringeWgt:  ");
 
 	//fringe weight
 	for (int i = 0; i < n; i++){
-		printf("%5f", getPriority(dick,i));
+		printf("%8.3f", getPriority(dick,i));
 	}
-	printf("\n parent");
+	printf("\n parent:  ");
 
 	//parent
 	for (int i = 0; i < n; i++){
-		printf("%5d", getParent(dick, i));
+		printf("%8d", getParent(dick, i));
 	}
-	printf("\n status");
+	printf("\n status:  ");
 
 	//status
 	for (int i = 0; i < n; i++){
@@ -83,13 +83,13 @@ void printInfo(MinPQ dick, int n){
 			default:
 				break;
 		}
-		printf("%5s", penis);
+		printf("%8s", penis);
 	}
-
-
+	
+	printf("\n");
 	for (int i = 0; i < n; i++)
 	{
-		printf("---------");
+		printf("----------------");
 	}
 	printf("\n");
 }
