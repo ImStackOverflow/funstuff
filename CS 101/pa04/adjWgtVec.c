@@ -42,7 +42,7 @@ AdjWgtVec adjWgtMakeEmptyVec(void){
 	ass->capacity = adjWgtInitCap;
 	ass->sz = 0;
 	ass->data = calloc(ass->capacity, sizeof(int));
-	ass->data = calloc(ass->capacity, sizeof(double));
+	ass->wgt = calloc(ass->capacity, sizeof(double));
 	return ass;
 }
 

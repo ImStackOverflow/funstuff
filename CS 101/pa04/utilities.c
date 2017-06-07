@@ -1,7 +1,4 @@
-#include <stdlib.h>
 #include "utilities.h"
-#include "minPQ.h"
-#include "adjWgtVec.h"
 
 void error(char message[], const char function[]){
 	printf("%s in %s\n", message, function);
@@ -10,7 +7,7 @@ void error(char message[], const char function[]){
 
 
 void printData(AdjWgtVec shit){
-if(intSize(shit) == 0){ //check if node has data 
+if(adjWgtSize(shit) == 0){ //check if node has data 
 	printf("null\n");
 }
 else{ //print data
@@ -27,50 +24,50 @@ else{ //print data
 }
 }
 	
-void printShit(AdjWgtVec *shit, int m, int n){
-printf("n = %d\nm = %d\n", n, m);
+void printShit(AdjWgtVec *shit, int n){
+printf("n = %d\n", n);
 for(int i = 1; i <= n; i++){
 	printf("%d      ", i);
-	printData(*shit[i]);//print data for each node
+	printData(*(shit+i));//print data for each node
 }
 }
 
-void printInfo(MinPQ dick){
+void printInfo(MinPQ dick, int n){
 	//header
-	for (int i = 0; i < dick->numVerticies; i++)
+	for (int i = 0; i < n; i++)
 	{
 		printf("---------");
 	}
 	printf("\n");
 
-	for (int i = 0; i < dick->numVerticies; i++)
+	for (int i = 0; i < n; i++)
 	{
 		printf("%5d", i);
 	}
 	printf("\n");
 	
-	for (int i = 0; i < dick->numVerticies; i++)
+	for (int i = 0; i < n; i++)
 	{
 		printf("---------");
 	}
 	printf("\n fringeWgt");
 
 	//fringe weight
-	for (int i = 0; i < dick->numVerticies; i++){
-		printf("%5d", dick->fringeWgt[i]);
+	for (int i = 0; i < n; i++){
+		printf("%5f", getPriority(dick,i));
 	}
 	printf("\n parent");
 
 	//parent
-	for (int i = 0; i < dick->numVerticies; i++){
-		printf("%5d", dick->parent[i]);
+	for (int i = 0; i < n; i++){
+		printf("%5d", getParent(dick, i));
 	}
 	printf("\n status");
 
 	//status
-	for (int i = 0; i < dick->numVerticies; i++){
+	for (int i = 0; i < n; i++){
 		char penis[10];
-		switch dick->status[i]{
+		switch (getStatus(dick,i)){
 			case 'u':
 				strcpy(penis, "unseen");
 				break;
@@ -90,7 +87,7 @@ void printInfo(MinPQ dick){
 	}
 
 
-	for (int i = 0; i < dick->numVerticies; i++)
+	for (int i = 0; i < n; i++)
 	{
 		printf("---------");
 	}
