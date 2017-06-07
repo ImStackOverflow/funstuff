@@ -12,7 +12,7 @@ cs101 pa01
 #include "utilities.h"
 #include "logic.h"
 
-#define DEBUG 1
+//#define DEBUG 1
 
 #ifdef DEBUG
 #define DPRINT(x) printf x
@@ -20,15 +20,21 @@ cs101 pa01
 #define DPRINT(x) do{} while(0)
 #endif
 
+
+/*****************
+ * actual main
+ * processes data and outputs result
+ * ****************/
 void process(FILE *in, Flag flag, int start){
-	int* n = malloc(sizeof(int));
-	data woah = parseFile(in, flag);
-	printAdjVec(woah->vect, woah->n, woah->m);
-	DPRINT(("PQ before the algorithm\n++++++++++++++++++++++++++\n"));
-	printPQ(woah->PQ, woah->n);
-	DPRINT(("PQ after the algorithm\n++++++++++++++++++++++++++\n"));
-	algorithm(woah, start, flag);
-	printPQ(woah->PQ, woah->n);
+	data woah = parseFile(in, flag);//set up adj array and minPQ
+	printAdjVec(woah->vect, woah->n, woah->m);//print raw input
+	
+	algorithm(woah, start, flag);//run the actual algorithim
+	
+	if(flag == Dyke) printf("\n\nRunning Djikrstras algorithim:  \n --------------------------");
+	else printf("\n\nRunning Prims algorithim:  \n --------------------------");
+	
+	printPQ(woah->PQ, woah->n);//print output of algorithim
 
 
 
@@ -40,9 +46,11 @@ int main(int argc, char*argv[]){
 		printf("the correct usage is ./greedy04 -<options> <start vertex> <inputfile>\n");
 		exit(0);
 	}
-	Flag flag;
+	Flag flag;//denotes options (dijikstras or prims)
 	FILE *in;
-	if(argv[1][0] != '-') error("specify algorithm retard", __func__);//check flag	
+	
+	//check flag
+	if(argv[1][0] != '-') error("specify algorithm retard", __func__);
 	if(argv[1][1] == 'D' || argv[1][1] == 'd') flag = Dyke;
 	else if(argv[1][1] == 'P' || argv[1][1] == 'p') flag = Prims;
 	else error("not a valid flag", __func__);
@@ -50,11 +58,12 @@ int main(int argc, char*argv[]){
 		
 	//process
 	if(!in){
+		//make sure input file exists
 		printf("file %s doesnt exist\n", argv[3]);
 		return(0);
 		
 	}
-	process(in, flag, atoi(argv[2]));
+	process(in, flag, atoi(argv[2]));//do everyting
 }
 
 

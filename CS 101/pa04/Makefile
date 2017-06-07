@@ -6,7 +6,7 @@ DEBUG = -g
 OBJS = ${SRC:.c = .o}
 HEADER = adjWgtVec.h loadGraph.h utilities.h minPQ.h logic.h
 INPUT = -p 2 test1.in
-INPUTS = test1.in test2.in test3.in test5.in	
+INPUTS = test1.in test2.in test3.in test4.in
 
 $(TARGET): $(SRCS)
 	gcc $(FLAGS) -o $(TARGET) $(SRCS)

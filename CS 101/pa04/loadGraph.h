@@ -12,16 +12,16 @@ pa02
 #include <stdio.h>
 
 
-typedef enum {Prims, Dyke} Flag;
+typedef enum {Prims, Dyke} Flag; //flag for prims or dijkirstras 
 
 typedef struct graph{
-	AdjWgtVec* vect;
-	MinPQ PQ;
-	int n;
-	int m;
+	AdjWgtVec* vect;//vector array
+	MinPQ PQ;//priority queue
+	int n; //number of verticies
+	int m; //number of edges
 } graph;
 
-typedef graph* data;
+typedef graph* data; //pointer to struct 
 	
 	
 
@@ -29,13 +29,6 @@ typedef graph* data;
 //input: number of nodes
 //output: pointer to allocated struct
 data create(int nodes);
-
-
-//free function, frees all intVec pointers
-//input: intVec pointer array
-//output: none
-void freeAll(AdjWgtVec* shit, int n);
-
 
 
 //adds edge to node, eg adds v2 into v1 data

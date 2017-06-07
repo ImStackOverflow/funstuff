@@ -1,5 +1,7 @@
 #include "utilities.h"
 
+
+//error function
 void error(char message[], const char function[]){
 	printf("%s in %s\n", message, function);
 	exit(1);
@@ -33,7 +35,7 @@ for(int i = 1; i <= n; i++){
 }
 
 void printPQ(MinPQ dick, int n){
-	//header
+	/******************* header ********************/
 	for (int i = 0; i < n; i++)
 	{
 		printf("----------------");
@@ -52,20 +54,20 @@ void printPQ(MinPQ dick, int n){
 	}
 	printf("\n fringeWgt:  ");
 
-	//fringe weight
-	for (int i = 0; i < n; i++){
+	/*******************fringe weight********************/
+	for (int i = 1; i <= n; i++){
 		printf("%8.3f", getPriority(dick,i));
 	}
 	printf("\n parent:  ");
 
-	//parent
-	for (int i = 0; i < n; i++){
+	/******************* parent ********************/
+	for (int i = 1; i <= n; i++){
 		printf("%8d", getParent(dick, i));
 	}
 	printf("\n status:  ");
 
-	//status
-	for (int i = 0; i < n; i++){
+	/******************* status ********************/
+	for (int i = 1; i <= n; i++){
 		char penis[10];
 		switch (getStatus(dick,i)){
 			case 'u':

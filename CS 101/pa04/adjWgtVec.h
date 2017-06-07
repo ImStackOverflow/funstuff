@@ -25,22 +25,30 @@ static const int adjWgtInitCap = 4;
  */
 
 /** adjWgtTop()
- * (what are the preconditions? Replace question with your text)
+ * prconditions: vector is created 
+ * input: vector want data of
+ * output: topmost data of vector, if empty vector return 0
  */
 AdjWgt adjWgtTop(AdjWgtVec myVec);
 
 /** adjWgtData()
  * precondition: 0 <= i < adjWgtSize(myVec).
+ * input: vector want data of and indicie of data
+ * output: data at indicie
  */
 AdjWgt adjWgtData(AdjWgtVec myVec, int i);
 
 /** adjWgtSize()
  * precondition: myVec has been constructed.
+ * input: vector want info of
+ * output: number of adjacent verticies
  */
 int adjWgtSize(AdjWgtVec myVec);
 
 /** adjWgtCapacity()
  * precondition: myVec has been constructed.
+ * input: vector want data of
+ * output: max size of array
  */
 int adjWgtCapacity(AdjWgtVec myVec);
 
