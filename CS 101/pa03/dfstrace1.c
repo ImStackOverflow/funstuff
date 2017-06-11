@@ -60,16 +60,6 @@ Graph hugePenis(Graph foreSkin){
 	if(!foreSkin) error(__func__);
 
 
-	/*the error is here*/
-	printf("this is the error I mentioned in my readme, it only happens for large inputs\n");
-	printf("the finishing stack before calloc is (line 61 dfstrace1.c): ");
-	printDis(foreSkin);
-	calloc(1,1);
-	printf("the finishing stack after calloc is (line 64 dfstrace1.c): ");
-	printDis(foreSkin);
-
-
-
 	IntVec* transposed = transposeGraph(foreSkin->graph, foreSkin->n, foreSkin->stack);
 	Graph vag = makeGraph(transposed , foreSkin->n);//make graph with transposed adj list
 	int dick = intSize(foreSkin->stack);

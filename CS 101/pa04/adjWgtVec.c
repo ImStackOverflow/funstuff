@@ -69,7 +69,7 @@ void adjWgtVecPush(AdjWgtVec myVec, AdjWgt newE){
 			myVec->wgt = realloc(myVec->wgt, myVec->capacity * sizeof(double));//memory for wgt
 		}
 	myVec->data[myVec->sz] = newE.to;//set vertex
-	myVec->wgt[myVec->sz++] = newE.wgt;.//set weight
+	myVec->wgt[myVec->sz++] = newE.wgt;//set weight
 }
 
 void adjWgtVecPop(AdjWgtVec myVec){

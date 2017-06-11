@@ -25,8 +25,8 @@ typedef enum {U, none} Flag;
 void procede(IntVec* shit, int m, int n){
 
 	printShit(shit, m, n);
-	Graph G = makeGraph(shit, n);	
-	printInfo(G);
+	Graph G = makeGraph(shit, n);
+
 	printf("\n\n---------dfs phase 1-----------\n\n");
 	DFSsweep(G);
 	printInfo(G);
