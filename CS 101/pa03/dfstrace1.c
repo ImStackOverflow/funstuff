@@ -62,8 +62,8 @@ Graph hugePenis(Graph foreSkin){
 
 	IntVec* transposed = transposeGraph(foreSkin->graph, foreSkin->n, foreSkin->stack);
 	Graph vag = makeGraph(transposed , foreSkin->n);//make graph with transposed adj list
-	int dick = intSize(foreSkin->stack);
-	for(int i = 0; i < dick; i++){
+	int dick = intSize(foreSkin->stack)-1;
+	for(int i = dick; i >= 0; i--){
 		intVecPush(vag->stack, intData(foreSkin->stack, i));//copy finishing time stack
 	}
 	return vag;
@@ -71,8 +71,8 @@ Graph hugePenis(Graph foreSkin){
 
 void printDis(Graph G){
 	IntVec shit = G->stack;
-	int dick = intSize(shit);
-	for(int i = 0; i < dick; i++){
+	int dick = intSize(shit)-1;
+	for(int i = dick; i >= 0; i--){
 		printf("%d   ", intData(shit,i));
 	}
 	printf("\n");
@@ -170,9 +170,9 @@ int DFStrace(Graph G, int vertex, int time){
 
 
 	IntVec node = G->graph[vertex];//get vertex (starts at 1)
-	int adjV, end = intSize(node);//number of elements
+	int adjV, end = intSize(node)-1;//number of elements
 	Vcolor white = WHITE;
-	for(int i = 0; i < end; i++){
+	for(int i = end; i >= 0; i--){
 		adjV = intData(node, i);//get adjacent vertex
 		if(G->info[adjV-1][0] == white){//if vertex is undicovered
 			fuckit(G, adjV, P, vertex);//add vertex as parent to adj vertex
@@ -211,8 +211,8 @@ int DFStrace2(Graph G, int vertex, int time, int parent){
 
 
 	IntVec node = G->graph[vertex];//get vertex (starts at 1)
-	int adjV, end = intSize(node);//number of elements
-	for(int i = 0; i < end; i++){
+	int adjV, end = intSize(node)-1;//number of elements
+	for(int i = end; i >= 0; i--){
 		adjV = intData(node, i);//get adjacent vertex
 		if(G->info[adjV-1][0] == WHITE){//if vertex is undicovered
 			fuckit(G, adjV, P, parent);//add top vertex as root to adj vertex
