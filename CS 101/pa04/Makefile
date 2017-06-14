@@ -1,15 +1,19 @@
 PA = pa04-final
 TARGET = greedy04
 SRCS = greedy04.c adjWgtVec.c loadGraph.c utilities.c minPQ.c logic.c
-FLAGS = -std=c99
+CFLAGS = -g -Wall -O0 -std=c99 -D_SVID_SOURCE
+CC = gcc
 DEBUG = -g
-OBJS = ${SRC:.c = .o}
-HEADER = adjWgtVec.h loadGraph.h utilities.h minPQ.h logic.h
+OBJS = $(SRCS:.c=.o)
+HEADER = adjWgtVec.h loadGraph.h utilities.h minPQ.h logic.h 
 INPUT = -p 2 test1.in
 INPUTS = test1.in test2.in test3.in test4.in
 
-$(TARGET): $(SRCS)
-	gcc $(FLAGS) -o $(TARGET) $(SRCS)
+$(TARGET): $(TARGET).o
+	$(CC) -o $(TARGET) $(FLAGS) $(OBJS)
+
+$(TARGET).o: $(SRCS)
+	$(CC) -c $(FLAGS) $(SRCS)
 
 clean:
 	rm $(TARGET) $(OBJS)

@@ -7,7 +7,7 @@ DEBUG = -g
 OBJS = $(SRCS:.c=.o)
 HEADER = loadGraph.h intVec.h dfstrace1.h 
 INPUT = test2.in
-INPUTS = test1.in test2.in test3.in test5.in	
+INPUTS = test1.in test2.in test3.in test5.in test4.in
 
 $(TARGET): $(TARGET).o
 	$(CC) -o $(TARGET) $(FLAGS) $(OBJS)
