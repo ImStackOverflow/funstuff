@@ -4,16 +4,17 @@ SRCS = scc03.c intVec.c loadGraph.c dfstrace1.c
 FLAGS = -std=c99 -g
 CC = gcc
 DEBUG = -g
-OBJS = ${SRC:.c = .o}
+OBJS = $(SRCS:.c=.o)
 HEADER = loadGraph.h intVec.h dfstrace1.h 
 INPUT = test2.in
 INPUTS = test1.in test2.in test3.in test5.in	
 
-$(TARGET).o: $(SRCS)
-	$(CC) -c $(TARGET) $(FLAGS) $(SRCS)
+$(TARGET): $(TARGET).o
+	$(CC) -o $(TARGET) $(FLAGS) $(OBJS)
 
-$(TARGET): ${SRC:.c = .o}
-	$(CC) -o $(TARGET) $(FLAGS) $(TARGET).o
+$(TARGET).o: $(SRCS)
+	$(CC) -c $(FLAGS) $(SRCS)
+
 clean:
 	rm $(TARGET) $(OBJS)
 
