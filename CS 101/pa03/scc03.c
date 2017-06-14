@@ -11,7 +11,7 @@ cs101 pa01
 #include "loadGraph.h"
 #include "dfstrace1.h"
 
-#define DEBUG 1
+//#define DEBUG 1
 
 #ifdef DEBUG
 #define DPRINT(x) printf x

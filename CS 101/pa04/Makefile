@@ -1,4 +1,4 @@
-PA = pa04
+PA = pa04-final
 TARGET = greedy04
 SRCS = greedy04.c adjWgtVec.c loadGraph.c utilities.c minPQ.c logic.c
 FLAGS = -std=c99

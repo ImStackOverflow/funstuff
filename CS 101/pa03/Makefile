@@ -1,16 +1,19 @@
-PA = pa03
+PA = pa03-final
 TARGET = scc03
 SRCS = scc03.c intVec.c loadGraph.c dfstrace1.c
 FLAGS = -std=c99 -g
+CC = gcc
 DEBUG = -g
 OBJS = ${SRC:.c = .o}
 HEADER = loadGraph.h intVec.h dfstrace1.h 
 INPUT = test2.in
 INPUTS = test1.in test2.in test3.in test5.in	
 
-$(TARGET): $(SRCS)
-	gcc $(FLAGS) -o $(TARGET) $(SRCS)
+$(TARGET).o: $(SRCS)
+	$(CC) -c $(TARGET) $(FLAGS) $(SRCS)
 
+$(TARGET): ${SRC:.c = .o}
+	$(CC) -o $(TARGET) $(FLAGS) $(TARGET).o
 clean:
 	rm $(TARGET) $(OBJS)
 
