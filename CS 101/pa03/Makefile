@@ -1,4 +1,4 @@
-PA = pa03-final
+PA = pa03-incomplete
 FLAGS = -std=c99 -g
 CC = gcc
 
@@ -24,4 +24,4 @@ git:
 	git push
 
 submit:
-	submit cmps101-avg.s17 $(PA) scc03.c intVec.c loadGraph.c dfstrace1.c loadGraph.h intVec.h dfstrace1.h test1.in test2.in test3.in test5.in test4.in README.txt Makefile
+	submit cmps101-avg.s17 $(PA) scc03.c intVec.c loadGraph.c dfstrace1.c loadGraph.h intVec.h dfstrace1.h test1.in test2.in test3.in test4.in README.txt Makefile

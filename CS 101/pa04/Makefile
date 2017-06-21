@@ -1,4 +1,4 @@
-PA = pa04-final
+PA = pa04-incomplete
 CFLAGS = -g -Wall -O0 -std=c99 -D_SVID_SOURCE
 CC = gcc
 INPUT = -p 2 test1.in

@@ -42,3 +42,5 @@ test1.in tests the creation of the adjVec and the transpose/print adj matrix fun
 test2.in tests scalability and ensures the realloc and other dynamic size functions work. 
 test3.in tests for a tree with 2 different SCC's and is a more in depth test of the algorithim.
 test4.in tests weighted edge input.
+
+done

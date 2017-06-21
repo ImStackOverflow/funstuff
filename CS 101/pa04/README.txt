@@ -32,3 +32,5 @@ test3.in
 test4.in
 
 To run the program first compile it using the makefile and the command make. It runs with the normal input arguments eg. ./greedy04 -<P/D> <start vertex> <input file>. Test2.in is the same as the graph provided in the Prims section in the book and shows the behaviour of prims algorithm. test1.in is the small sample input and shows the output format. Test3 tests djikstras algorithim, and test4 is a large input file to test scalability.
+
+done
