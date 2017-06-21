@@ -29,6 +29,16 @@ test4.in
 test5.in
 
 
-This program builds off of pa01 and 02. It parses an input file, creates the graph adt similar to pa01. So far only my DFS works. To run it, simply call make to compile the binary file, then run it as ./graph02 <flags> <input file>. The makefile also includes a clean utility that will delete the binary file. The DFS algorithim functions as described in the text, visiting all white nodes, and recursivly diving down connected componenets until all nodes are black. For this assignment I created a data struct called graph that held the adj list of the verticies, the info array, the finishing time stack, as well as the number of nodes in the graph. The info array was a 2D array with that stored info as [vertex][info]. It held the color, discovery time, finishing time, and predececor/root for each node in indicies 0, 1, 2, and 3 respectivly.
+This program builds off of pa01 and 02. It parses an input file, creates the graph adt similar to pa01.
+To run it, simply call make to compile the binary file, then run it as ./graph02 <flags> <input file>. 
+The makefile also includes a clean utility that will delete the binary file. 
+The DFS algorithim functions as described in the text, visiting all white nodes, and recursivly diving down connected componenets until all nodes are black while also adding them to the finishing time stack. 
+The program then calls DFS2 and visits all the nodes in the order specified by the finishing time stack (first in last out).
+For this assignment I created a data struct called graph that held the adj list of the verticies, the info array, the finishing time stack, as well as the number of nodes in the graph. 
+The info array was a 2D array with that stored info as [vertex][info]. 
+It held the color, discovery time, finishing time, and predececor/root for each node in indicies 0, 1, 2, and 3 respectivly.
 
-test1.in and test3.in tests the creation of the adjVec and the transpose/print adj matrix functions. test2.in tests scalability and ensures the realloc and other dynamic size functions work. test4.in tests weighted edge input. test5.in tests the null case.
+test1.in tests the creation of the adjVec and the transpose/print adj matrix functions, and also tests the dfs algorithim for a simple case. 
+test2.in tests scalability and ensures the realloc and other dynamic size functions work. 
+test3.in tests for a tree with 2 different SCC's and is a more in depth test of the algorithim.
+test4.in tests weighted edge input.
