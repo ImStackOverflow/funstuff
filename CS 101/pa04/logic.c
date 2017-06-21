@@ -35,14 +35,14 @@ void updateFringeDyke(data poof, int v){
 		//poop = adj vertex to v
 		if(getStatus(poof->PQ, poop.to) == UNSEEN){
 			//if the current adj vertex is unseen then add it into the queue
-			insertPQ(poof->PQ, poop.to, wgt,v);
+			insertPQ(poof->PQ, poop.to, poop.wgt,v);
 		}
 		//otherwise the current adj vertex is already in the queue
 		else if(getStatus(poof->PQ, poop.to) == FRINGE){
 			if(wgt + poop.wgt < getPriority(poof->PQ, poop.to)){
 			//if the new weight is lower then the previous weight for the adj vertex
 			//then update its weight in the pq
-				decreaseKey(poof->PQ, poop.to, wgt, v);
+				decreaseKey(poof->PQ, poop.to, wgt + poop.wgt, v);
 			}
 		}
 	}
