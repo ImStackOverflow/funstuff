@@ -52,7 +52,7 @@ void printPQ(MinPQ dick, int n){
 	{
 		printf("----------------");
 	}
-	printf("\n fringeWgt:  ");
+	printf("\n priority:  ");
 
 	/*******************fringe weight********************/
 	for (int i = 1; i <= n; i++){
