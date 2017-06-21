@@ -27,11 +27,10 @@ void updateFringePrimm(data poof, int v){
 void updateFringeDyke(data poof, int v){
 	int size = adjWgtSize(poof->vect[v]);
 	AdjWgt poop;
-	float wgt;
+	float wgt = getPriority(poof->PQ, v);
 	for(int i = 0; i < size; i++){
 		poop = adjWgtData(poof->vect[v], i);
 		//finge weight is cumulitive
-		wgt += poop.wgt;
 		//v = current vertex
 		//poop = adj vertex to v
 		if(getStatus(poof->PQ, poop.to) == UNSEEN){
@@ -40,7 +39,7 @@ void updateFringeDyke(data poof, int v){
 		}
 		//otherwise the current adj vertex is already in the queue
 		else if(getStatus(poof->PQ, poop.to) == FRINGE){
-			if(poop.wgt < getPriority(poof->PQ, poop.to)){
+			if(wgt + poop.wgt < getPriority(poof->PQ, poop.to)){
 			//if the new weight is lower then the previous weight for the adj vertex
 			//then update its weight in the pq
 				decreaseKey(poof->PQ, poop.to, wgt, v);

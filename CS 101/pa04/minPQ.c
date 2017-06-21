@@ -26,7 +26,7 @@ void findMin(MinPQ pq){
 	weight = pq->infinity;
 	for(int vertex = 1; vertex <= pq->numVerticies; vertex++){//go through all verticies
 		if(pq->status[vertex] == FRINGE){//if is a fringe verticie
-			if(pq->fringeWgt[vertex] < weight){//if found new min vertex
+			if(pq->fringeWgt[vertex] <= weight){//if found new min vertex
 				pq->minVertex = vertex;//set new minimum vertex
 				weight = pq->fringeWgt[vertex];//update weight
 			}
