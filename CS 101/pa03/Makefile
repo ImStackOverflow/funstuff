@@ -1,29 +1,22 @@
 PA = pa03-final
-TARGET = scc03
-SRCS = scc03.c intVec.c loadGraph.c dfstrace1.c
 FLAGS = -std=c99 -g
 CC = gcc
-DEBUG = -g
-OBJS = $(SRCS:.c=.o)
-HEADER = loadGraph.h intVec.h dfstrace1.h 
-INPUT = test2.in
-INPUTS = test1.in test2.in test3.in test5.in test4.in
 
-$(TARGET): $(TARGET).o
-	$(CC) -o $(TARGET) $(FLAGS) $(OBJS)
+scc03: scc03.o
+	$(CC) -o scc03 $(FLAGS) scc03.o intVec.o loadGraph.o dfstrace1.o
 
-$(TARGET).o: $(SRCS)
-	$(CC) -c $(FLAGS) $(SRCS)
+scc03.o: scc03.c intVec.c loadGraph.c dfstrace1.c
+	$(CC) -c $(FLAGS) scc03.c intVec.c loadGraph.c dfstrace1.c
 
 clean:
-	rm $(TARGET) $(OBJS)
+	rm scc03 scc03.o intVec.o loadGraph.o dfstrace1.o
 
 check:
-	valgrind --leak-check=yes $(TARGET) $(INPUT)
+	valgrind --leak-check=yes scc03 test2.in
 
 debug:
-	gcc $(DEBUG) $(SRCS) -o  $(TARGET)
-	gdb $(TARGET)
+	gcc -g scc03.c intVec.c loadGraph.c dfstrace1.c -o  scc03
+	gdb scc03
 git:
 	git add -A
 	git commit -m "fuck me fucke me fuck me"
@@ -31,4 +24,4 @@ git:
 	git push
 
 submit:
-	submit cmps101-avg.s17 $(PA) $(SRCS) $(HEADER) $(INPUTS) README.txt Makefile
+	submit cmps101-avg.s17 $(PA) scc03.c intVec.c loadGraph.c dfstrace1.c loadGraph.h intVec.h dfstrace1.h test1.in test2.in test3.in test5.in test4.in README.txt Makefile

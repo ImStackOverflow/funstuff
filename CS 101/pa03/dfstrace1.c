@@ -234,8 +234,8 @@ Graph DFSPhase2(Graph G){
 	makeWhite(imTrans);//set all nodes to white
 	int pein, dick = intSize(imTrans->stack);
 	for(int i = dick; i >= 0; i--){
-		intVecPop(imTrans->stack);
 		pein = intTop(imTrans->stack);
+		intVecPop(imTrans->stack);
 		if (imTrans->info[pein-1][0] == WHITE){ //if node is white (undiscovered)
 		time = DFStrace2(imTrans, pein, time, pein);
 		}
