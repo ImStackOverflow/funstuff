@@ -35,7 +35,7 @@ void updateFringeDyke(data poof, int v){
 		//poop = adj vertex to v
 		if(getStatus(poof->PQ, poop.to) == UNSEEN){
 			//if the current adj vertex is unseen then add it into the queue
-			insertPQ(poof->PQ, poop.to, poop.wgt,v);
+			insertPQ(poof->PQ, poop.to, 	poop.wgt,v);
 		}
 		//otherwise the current adj vertex is already in the queue
 		else if(getStatus(poof->PQ, poop.to) == FRINGE){
