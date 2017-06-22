@@ -20,7 +20,7 @@ else{ //print data
 	int stop = adjWgtSize(shit);
 	for(int j = 1; j < stop; j++){ //print upto second to last data (last ones a 0)
 		butt = adjWgtData(shit,j);
-		printf(", %d", butt.to);
+		printf(", %d, %d", butt.to, butt.wgt);
 	}
 	printf("]\n");
 }
