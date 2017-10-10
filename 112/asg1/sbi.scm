@@ -17,7 +17,7 @@
 (define *run-file*
     (let-values
         (((dirpath basepath root?)
-            (split-path (find-system	-path 'run-file))))
+            (split-path (find-system-path 'run-file))))
         (path->string basepath))
 )
 
