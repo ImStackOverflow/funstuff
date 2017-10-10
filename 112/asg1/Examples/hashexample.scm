@@ -34,6 +34,8 @@
 ;;
 ;; Print the hash table.
 ;;
+(display "at hash-for-each")
+(newline)
 (hash-for-each ht (lambda (key value) (show key value)))
 (newline)
 
@@ -42,11 +44,15 @@
 ;; the last argument #f causes hash-ref to return it
 ;; rather than crashing the program on failure to find.
 ;;
+(display "at var")
+(newline)
 (show "var" (hash-ref ht 'var #f))
 
 ;;
 ;; Set a vector element, print it, and the whole vector.
 ;;
+(display "at vector-set!")
+(newline)
 (vector-set! (hash-ref ht 'vec #f) 5 3.1415926535)
 (show "vec[5]" (vector-ref (hash-ref ht 'vec) 5))
 (show "vec" (hash-ref ht 'vec #f))
@@ -61,6 +67,8 @@
 ;; The function evalexpr outlines how to evaluate a list
 ;; recursively.
 ;;
+(display "at recursive")
+(newline)
 (define (evalexpr expr)
    (cond ((number? expr) expr)
          ((symbol? expr) (hash-ref ht expr #f))
@@ -72,6 +80,8 @@
 ;;
 ;; Now print out the value of several expressions.
 ;;
+(display "at for each")
+(newline)
 (for-each
     (lambda (expr) (show expr (evalexpr expr)))
     '( (* var 7)
