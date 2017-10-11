@@ -47,6 +47,8 @@
 ;; What category of object is this?
 ;;
 
+((lambda (x) (/ (log x) (log 10.0))) 2.0)
+
 (define (what-kind value)
     (cond ((real? value) 'real)
           ((vector? value) 'vector)
