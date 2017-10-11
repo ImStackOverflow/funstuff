@@ -54,6 +54,12 @@
 		(printf "~n")
 		(go-around (cdr line)))
 		
+
+(define (get-fucked line)
+		;(if (pair? line)
+		(display (line))		
+		;(display "done"))
+		(get-fucked (cdr line)))
 		
 		
 
@@ -67,7 +73,7 @@
 	;need to split list into components
 	;(display (list? (car (car program))))
 	;(display (string? (car program)))
-	(go-around program)
+    (map (lambda (line) (get-fucked line)) program)
     ;(map (lambda (line) (go-around line)) program)
 	
     (printf ")~n"))
