@@ -14,8 +14,6 @@
 
 (define *stderr* (current-error-port))
 
-
-
 (define *run-file*
     (let-values
         (((dirpath basepath root?)
@@ -23,7 +21,6 @@
         (path->string basepath))
 )
 
-;kills program and spits error message
 (define (die list)
     (for-each (lambda (item) (display item *stderr*)) list)
     (newline *stderr*)
@@ -34,10 +31,7 @@
     (die `("Usage: " ,*run-file* " filename"))
 )
 
-;takes input file (filename) and parses line by line
-;if file nonexistent then errors out
-;otherwise returns line from inputfile
-(define (readlist-from-inputfile filename) 
+(define (readlist-from-inputfile filename)
     (let ((inputfile (open-input-file filename)))
          (if (not (input-port? inputfile))
              (die `(,*run-file* ": " ,filename ": open failed"))
@@ -45,7 +39,6 @@
                   (close-input-port inputfile)
                          program))))
 
-						 
 (define (write-program-by-line filename program)
     (printf "==================================================~n")
     (printf "~a: ~s~n" *run-file* filename)
