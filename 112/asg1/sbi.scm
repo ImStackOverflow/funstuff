@@ -45,13 +45,31 @@
                   (close-input-port inputfile)
                          program))))
 
-						 
+
+;meat function						 
+(define (go-around line)
+		(if (null? line)
+		'()
+		(display (car line)))
+		(printf "~n")
+		(go-around (cdr line)))
+		
+		
+		
+
 (define (write-program-by-line filename program)
     (printf "==================================================~n")
     (printf "~a: ~s~n" *run-file* filename)
     (printf "==================================================~n")
     (printf "(~n")
-    (map (lambda (line) (printf "~s~n" line)) program)
+	;(display (car (cadr program)))	
+	;program is already a list of lists
+	;need to split list into components
+	;(display (list? (car (car program))))
+	;(display (string? (car program)))
+	(go-around program)
+    ;(map (lambda (line) (go-around line)) program)
+	
     (printf ")~n"))
 
 (define (main arglist)
