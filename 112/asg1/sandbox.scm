@@ -18,8 +18,10 @@
 		
 ;makes function table
 (define *function-table* (make-hash))
+(define (function-got-key key)
+		(hash-has-key? *function-table* key))
 (define (function-get key)
-        (hash-ref *function-table* key))
+		(hash-ref *function-table* key))
 (define (function-put! key value)
         (hash-set! *function-table* key value))
 
