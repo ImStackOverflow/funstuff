@@ -102,7 +102,7 @@
         (mod     ,(lambda (x y) (- x (* (div x y) y))))
         (quot    ,(lambda (x y) (truncate (/ x y))))
         (rem     ,(lambda (x y) (- x (* (quot x y) y))))
-        (+       ,(lambda (x y) (+ (car x) (cadr x))))
+        (+       ,(lambda (x y) (+ x y)))
         (^       ,expt)
         (ceil    ,ceiling)
         (exp     ,exp)
