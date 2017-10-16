@@ -192,16 +192,10 @@
 		(display " debuged \n"))
 
 (define (function_eval expr)
-	;(debug "cock")
-	;(display (list? expr))
-	;(display (car expr))
-	;(display (cadr expr))
-	;(display (caddr expr))
 	(cond
 		((string? expr);if string
           ;(debug "string")
-		  expr) 
-		  ;(cons expr (function_eval (cdr expr))))
+		  expr)
 		  
 		((number? expr);if number 
 		  ;(debug "number")
@@ -216,12 +210,10 @@
 		((list? expr) ;if list
 		;(debug "list")
 		(if (function-got-key (car expr)) ;the car is a function
-			(;(debug "got function")
-             (let((top (function-get (car expr))));let the top be the <func>
-		;		(display top)
+			;((debug "got function")
+             (let([top (function-get (car expr))]);let the top be the <func>
              	(cond
              	   ((procedure? top)
-					;(map (lambda (line)  (printf "bit is ~s~n" (line))) (cdr expr))
 					;(debug (cdr expr))
              	   	 (apply top (map (lambda (x) (function_eval x)) (cdr expr))))
 		;			 (display "penis"))
@@ -234,8 +226,6 @@
              	   	  (die "Fatal: Not in function table."))
                 )
              )
-		;	 (display "butthole")
-			 )
 			 ;otherwise it must be an error
              (die (list "Fatal error:"
              	         (car expr) " not in function table\n"))
