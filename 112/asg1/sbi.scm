@@ -175,9 +175,9 @@
 		
 		((= (length shit) 2); label or statement, either append label or statment
 		;(cons ((car shit) (function_eval (cdr shit)))))
-		(debug (length (cadr shit)))
+		;(debug (length (cadr shit)))
 		(function_eval (cadr shit))
-		(debug "penis")
+		;(debug "penis")
 		
 		(display "\n"))
 		
