@@ -102,7 +102,7 @@
         (mod     ,(lambda (x y) (- x (* (div x y) y))))
         (quot    ,(lambda (x y) (truncate (/ x y))))
         (rem     ,(lambda (x y) (- x (* (quot x y) y))))
-        (+       ,(lambda (x y) (+ x y)))
+        (+       ,(lambda (x y) (+ (car x) (cadr x))))
         (^       ,expt)
         (ceil    ,ceiling)
         (exp     ,exp)
@@ -170,11 +170,15 @@
 		((= (length shit) 3) ;label and statement
 		;(cons ((car shit) function_eval (cddr shit)))) ;get line # and statement
 		(function_eval (caddr shit))
+		(debug (caddr shit))
 		(display "\n")) ;get line # and statement
 		
 		((= (length shit) 2); label or statement, either append label or statment
 		;(cons ((car shit) (function_eval (cdr shit)))))
+		(debug (length (cadr shit)))
 		(function_eval (cadr shit))
+		(debug "penis")
+		
 		(display "\n"))
 		
 		((= (length shit) 1); null line
@@ -185,7 +189,7 @@
 
 (define (debug x)
 		(display x)
-		(display "\n"))
+		(display " debuged \n"))
 
 (define (function_eval expr)
 	;(debug "cock")
@@ -200,25 +204,27 @@
 		  ;(cons expr (function_eval (cdr expr))))
 		  
 		((number? expr);if number 
-		  (debug "number")
+		  ;(debug "number")
 		  expr)
 		  ;(cons expr (function_eval (cdr expr))))
 			
 		((function-got-key expr) ;if key in func table
-			(debug "function")
+			;(debug "function")
 		  (function-get expr)) 
 		  ;(cons (function-get expr) (function_eval (cdr expr))))
 		  
 		((list? expr) ;if list
 		;(debug "list")
 		(if (function-got-key (car expr)) ;the car is a function
-			((debug "got function")
+			(;(debug "got function")
              (let((top (function-get (car expr))));let the top be the <func>
+		;		(display top)
              	(cond
              	   ((procedure? top)
 					;(map (lambda (line)  (printf "bit is ~s~n" (line))) (cdr expr))
 					;(debug (cdr expr))
-             	   	 (apply top (map (lambda (x) (debug x) (function_eval x)) (cdr expr))))
+             	   	 (apply top (map (lambda (x) (function_eval x)) (cdr expr))))
+		;			 (display "penis"))
 					 ;apply function-eval recursivly to rest of list
              	   ((vector? top)
              	   	(vector-ref top (cadr expr)))
@@ -228,6 +234,7 @@
              	   	  (die "Fatal: Not in function table."))
                 )
              )
+		;	 (display "butthole")
 			 )
 			 ;otherwise it must be an error
              (die (list "Fatal error:"
@@ -235,6 +242,7 @@
 		)
 		)
      )
+	;(debug "cunt")
 )	 
 
 ; Inserts all labels in program into label table
