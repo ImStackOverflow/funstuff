@@ -71,30 +71,27 @@
 			;puts varriable into symbol table
 			(die '("non-symbol returned in let-function")));error out if not array
 		)
-(define (print-func accumulate shit)
-		(cond 
-		((string? shit)
-			(append (accumulate)(shit)))
-		((list? shit)
-			(if (<= 2 (length shit))
-				;print varriable 
-				eval ))))
-	|#	
+		|#
 	
 (for-each
     (lambda (pair)
             (function-put! (car pair) (cadr pair)))
     `(
-		(dim    ,(lambda (x y) (varriable-put x (make-vector y))));creates an array of y dimension
-		(let    ,(lambda (var val) (let-function var val)));assigns varriables
-		(goto   ,(lambda (x) (label-get x)));returns label data from label-table*
-		(if     ,(lambda (relop exp1 exp2 label) (if-statement relop exp1 exp2 label)));if statement
+		(dim    ,(lambda (x y) (varriable-put x (make-vector y))))
+		;creates an array of y dimension
+		(let    ,(lambda (var val) (let-function var val)))
+		;assigns varriables
+		(goto   ,(lambda (x) (label-get x)))
+		;returns label data from label-table*
+		(if     ,(lambda (relop exp1 exp2 label) 
+				(if-statement relop exp1 exp2 label)));if statement
 		(print  ,(lambda x (display x) (display "\n")));print statement
-		(input , (lambda (x) (display x))) ;dont know how the fuck to do this left blank
-        (log10_2 0.301029995663981195213738894724493026768189881)
-        (sqrt_2  1.414213562373095048801688724209698078569671875)
-        (e       2.718281828459045235360287471352662497757247093)
-        (pi      3.141592653589793238462643383279502884197169399)
+		(input , (lambda (x) (display x))) 
+		;dont know how the fuck to do this left blank
+        (log10_2 0.301029995663981195)
+        (sqrt_2  1.414213562373095048)
+        (e       2.718281828459045235)
+        (pi      3.141592653589793238)
         (/     ,(lambda (x y) (+ (/ x y) 0.0)))
         (log10   ,(lambda (x) (/ (log x) (log 10.0))))
         (mod     ,(lambda (x y) (- x (* (div x y) y))))
@@ -142,47 +139,20 @@
                   (close-input-port inputfile)
                          program))))
 
-
-;meat function						 
-(define (go-around line)
-		(if (null? line)
-		'()
-		(display (car line)))
-		(printf "~n")
-		(go-around (cdr line)))
-		
-
-(define (get-fucked line)
-		;(if (pair? line)
-		(display (car line)))		
-		;(display "done"))
-		;(get-fucked (cdr line)))
-		
-;evaluate function
-;(define (test)
-;	(let ([x "(print "Hello, World!")"])
-
 (define (interpret_line shit)
-	;(debug "butt")
-	;(display shit)
-	;(display (length shit))
 	(cond 
 		((= (length shit) 3) ;label and statement
-		;(cons ((car shit) function_eval (cddr shit)))) ;get line # and statement
+		;(cons ((car shit) function_eval (cddr shit)))) 
+		;get line # and statement
 		(function_eval (caddr shit))
 		(debug (caddr shit)))
-		;(display "\n")) ;get line # and statement
 		
-		((= (length shit) 2); label or statement, either append label or statment
+		((= (length shit) 2)
+		;label or statement, either append label or statment
 		;(cons ((car shit) (function_eval (cdr shit)))))
-		;(debug (length (cadr shit)))
 		(function_eval (cadr shit)))
-		;(debug "penis")
-		
-		;(display "\n"))
-		
+
 		((= (length shit) 1); null line
-		;(debug "asshile"))
 		;(cons ((shit) '())))
 		))
 )
