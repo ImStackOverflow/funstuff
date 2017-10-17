@@ -17,7 +17,7 @@
 (    5          (let i 2))
 (    6          (let j (+ i 3)))
 (    7          (let k (+ (* 8 i) (/ 9 j))))
-(    8          (print "i=" j))
+(    8          (print "i=" j))	
 (    9          (print "j=" j))
 (   10          (print "k=" k))
 )

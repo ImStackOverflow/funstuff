@@ -66,13 +66,11 @@
 ;let function to define varriables in variable-table
 ;type true if array, false if symbol
 (define (let-function varriable value)
-	(if (null? (cadr varriable));checks if not array
-		(variable-put varriable value)
-		(if (varriable-got-key varriable);check to make sure is array
-			(vector-set! (car varriable) (cadr varriable) value);set index to value
-			(die '("non-vector returned in let-function")));error out if not array
-		));puts varriable into symbol table
-#|
+		(varriable-put! varriable value))
+		#|(if (varriable-got-key varriable);check to make sure is in table
+			;puts varriable into symbol table
+			(die '("non-symbol returned in let-function")));error out if not array
+		)
 (define (print-func accumulate shit)
 		(cond 
 		((string? shit)
@@ -87,17 +85,17 @@
     (lambda (pair)
             (function-put! (car pair) (cadr pair)))
     `(
-		(dim    ,(lambda (x y) (variable-put! x (make-vector y))));creates an array of y dimension
+		(dim    ,(lambda (x y) (varriable-put x (make-vector y))));creates an array of y dimension
 		(let    ,(lambda (var val) (let-function var val)));assigns varriables
 		(goto   ,(lambda (x) (label-get x)));returns label data from label-table*
 		(if     ,(lambda (relop exp1 exp2 label) (if-statement relop exp1 exp2 label)));if statement
-		(print  ,(lambda x (display x)));print statement
+		(print  ,(lambda x (display x) (display "\n")));print statement
 		(input , (lambda (x) (display x))) ;dont know how the fuck to do this left blank
         (log10_2 0.301029995663981195213738894724493026768189881)
         (sqrt_2  1.414213562373095048801688724209698078569671875)
         (e       2.718281828459045235360287471352662497757247093)
         (pi      3.141592653589793238462643383279502884197169399)
-        (div     ,(lambda (x y) (floor (/ x y))))
+        (/     ,(lambda (x y) (+ (/ x y) 0.0)))
         (log10   ,(lambda (x) (/ (log x) (log 10.0))))
         (mod     ,(lambda (x y) (- x (* (div x y) y))))
         (quot    ,(lambda (x y) (truncate (/ x y))))
@@ -105,7 +103,6 @@
         (+       ,(lambda (x y) (+ x y)))
 		(*		 ,(lambda (x y) (* x y)))
 		(-		 ,(lambda (x y) (- x y)))
-		(/		 ,(lambda (x y) (/ x y)))
         (^       ,expt)
         (ceil    ,ceiling)
         (exp     ,exp)
@@ -173,16 +170,16 @@
 		((= (length shit) 3) ;label and statement
 		;(cons ((car shit) function_eval (cddr shit)))) ;get line # and statement
 		(function_eval (caddr shit))
-		(debug (caddr shit))
-		(display "\n")) ;get line # and statement
+		(debug (caddr shit)))
+		;(display "\n")) ;get line # and statement
 		
 		((= (length shit) 2); label or statement, either append label or statment
 		;(cons ((car shit) (function_eval (cdr shit)))))
 		;(debug (length (cadr shit)))
-		(function_eval (cadr shit))
+		(function_eval (cadr shit)))
 		;(debug "penis")
 		
-		(display "\n"))
+		;(display "\n"))
 		
 		((= (length shit) 1); null line
 		;(debug "asshile"))
@@ -195,6 +192,7 @@
 		(display " debuged \n"))
 
 (define (function_eval expr)
+	;(debug expr)
 	(cond
 		((string? expr);if string
           ;(debug "string")
@@ -209,6 +207,9 @@
 			;(debug "function")
 		  (function-get expr)) 
 		  ;(cons (function-get expr) (function_eval (cdr expr))))
+		
+		((varriable-got-key expr)
+			(varriable-get expr))
 		  
 		((list? expr) ;if list
 		;(debug "list")
@@ -217,9 +218,9 @@
              (let([top (function-get (car expr))]);let the top be the <func>
              	(cond
              	   ((procedure? top)
-					;(debug (cdr expr))
+					;(debug top)
              	   	 (apply top (map (lambda (x) (function_eval x)) (cdr expr))))
-		;			 (display "penis"))
+					 ;(display "penis"))
 					 ;apply function-eval recursivly to rest of list
              	   ((vector? top)
              	   	(vector-ref top (cadr expr)))
@@ -234,8 +235,9 @@
              	         (car expr) " not in function table\n"))
 		)
 		)
+		(else ;(debug "else")
+		expr)
      )
-	;(debug "cunt")
 )	 
 
 ; Inserts all labels in program into label table
@@ -274,7 +276,6 @@
 	;(map (lambda (line)  (printf "~s~n" (cadr line))) program)
     ;(map (lambda (line) (function_eval (cadr line))) program)
     (map (lambda (line) (interpret_line line)) program)
-	
     (printf ")~n"))
 
 (define (main arglist)
