@@ -1,4 +1,4 @@
-#!/afs/cats.ucsc.edu/courses/cmps112-wm/usr/racket/bin/mzscheme -qr
+#!/afs/cats.ucsc.edu/courses/cmps112-wm/usr/racket/bin/mzscheme -qr "00-hello-world.sbir"
 ;; $Id: sbi.scm,v 1.3 2016-09-23 18:23:20-07 - - $
 ;;
 ;; NAME
