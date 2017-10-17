@@ -91,8 +91,8 @@
 		(let    ,(lambda (var val) (let-function var val)));assigns varriables
 		(goto   ,(lambda (x) (label-get x)));returns label data from label-table*
 		(if     ,(lambda (relop exp1 exp2 label) (if-statement relop exp1 exp2 label)));if statement
-		(print  ,(lambda (x) (display x)));print statement
-		(input , (lambda (x) (x))) ;dont know how the fuck to do this left blank
+		(print  ,(lambda x (display x)));print statement
+		(input , (lambda (x) (display x))) ;dont know how the fuck to do this left blank
         (log10_2 0.301029995663981195213738894724493026768189881)
         (sqrt_2  1.414213562373095048801688724209698078569671875)
         (e       2.718281828459045235360287471352662497757247093)
@@ -103,6 +103,9 @@
         (quot    ,(lambda (x y) (truncate (/ x y))))
         (rem     ,(lambda (x y) (- x (* (quot x y) y))))
         (+       ,(lambda (x y) (+ x y)))
+		(*		 ,(lambda (x y) (* x y)))
+		(-		 ,(lambda (x y) (- x y)))
+		(/		 ,(lambda (x y) (/ x y)))
         (^       ,expt)
         (ceil    ,ceiling)
         (exp     ,exp)
