@@ -87,11 +87,34 @@
 	|#
 
 (define (print-this-shit expr)
+		(debug (car expr))
         (if (varriable-got-key (car expr))
-			expr
-			expr))
+		;if the varriable table has the expr
+			(display (vector-ref (varriable-get (car expr))
+			     (cadr expr)))
+			(display expr)))
 		;if the varriable exists
 		    
+(define (input-func expr)
+		(varriable-put! 'inputcount (input-func2 expr 0))
+		)
+(define (input-func2 expr count)
+        (if (null? expr);if all varriables asigned a value
+		count ;return the count
+		(begin (varriable-put! (car expr) (get_num))
+		 (input-func2 (cdr expr) (+ 1 count)))
+		 ;otherwise keep getting input and incrimenting
+	   )	 
+	)
+;makes sure input is a number =
+(define (get_num)
+		;(debug "in num")
+      (let ((input (read)))
+	  (if (number? input)
+	  input ;return if its a number
+	  (get_num))))
+;     (begin (varriable-put! (car expr)))
+	 
 (for-each
 	(lambda (pair)
 			(function-put! (car pair) (cadr pair)))
@@ -105,7 +128,7 @@
 	(if     ,(lambda (relop exp1 exp2 label) 
 			(if-statement relop exp1 exp2 label)));if statement
 	(print  ,(lambda x (display x) (display "\n")));print statement
-	(input , (lambda (x) (display x))) 
+	(input , (begin (lambda x (input-func x))))
 	;dont know how the fuck to do this left blank
 		(log10_2 0.301029995663981195)
 		(sqrt_2  1.414213562373095048)
