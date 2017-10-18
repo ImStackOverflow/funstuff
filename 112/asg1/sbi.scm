@@ -97,7 +97,7 @@
 		    
 (define (input-func expr)
 		(varriable-put! 'inputcount (input-func2 expr 0))
-		)`
+		)
 (define (input-func2 expr count)
         (if (null? expr);if all varriables asigned a value
 		count ;return the count
