@@ -97,7 +97,7 @@
 		    
 (define (input-func expr)
 		(varriable-put! 'inputcount (input-func2 expr 0))
-		)
+		)`
 (define (input-func2 expr count)
         (if (null? expr);if all varriables asigned a value
 		count ;return the count
@@ -244,31 +244,32 @@
 					(map (lambda (x) (function_eval x)) (cdr expr))))
 				;(display "penis"))
 				;apply function-eval recursivly to rest of list
+				(else
+						(die "Fatal: Not in function table."))
+				)
+			)
+		(if (varriable-got-key (car expr))
+		(let ((top (varriable-get (car expr))))
+		(cond
 				((vector? top)
 					(vector-ref top (cadr expr)))
 				((number? top)
 					top)
 				(else
-						(die "Fatal: Not in function table."))
-				)
-			)
-		(if (pair? expr)
-		    #|(if (varriable-got-key (car expr));check if made
-			    (if (varriable-got-key (cadr expr));if index exists
-				    (vector-ref (varriable-get (car expr))
-				       (varriable-get (cadr expr)))
-			        (display 
-					(vector-ref (varriable-get (car expr))
-				       (cadr expr))));otherwise index is #
-			    expr)
-			;if its a pair must be an array arg
-		    ;otherwise it must be an error
-			|#
-			expr
-			(die (list "Fatal error:"
+				(die (list "Fatal error:"
+						(car expr) " not in varriable table\n")))
+						)
+						)
+			(if (pair? expr)
+				expr
+				(die (list "Fatal error:"
 						(car expr) " not in function table\n")))
+						)
+						
 				
 	)
+	
+		
 	)
 	(else ;if its not a function just return the expr
 	expr)
