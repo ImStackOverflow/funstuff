@@ -209,6 +209,7 @@
 
 (define (function_eval expr)
 (cond
+<<<<<<< HEAD
     ((string? expr);if string
         expr)
         
@@ -265,7 +266,7 @@
     (else ;if its not a function just return the expr
     expr)
     )
-)    
+	)
 
 ; Inserts all labels in program into label table
 (define (scan-label program)

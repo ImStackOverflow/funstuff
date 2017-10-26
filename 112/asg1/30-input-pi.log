@@ -1,0 +1,2 @@
+./testrun.sh: line 18: ./sbi.scm: Permission denied
+./testrun.sh: line 20: ./sbi.scm: Permission denied
