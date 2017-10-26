@@ -1,1 +1,5 @@
-./testrun.sh: line 6: ./sbi.scm: Permission denied
+==================================================
+sbi.scm: "00-hello-world.sbir"
+==================================================
+(
+(Hello, World!)
