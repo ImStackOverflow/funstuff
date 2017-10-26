@@ -1,67 +1,65 @@
-# $Id: Makefile,v 7.25 2017-06-29 17:17:43-07 - - $
+#$Id: Makefile,v 1.15 2014-11-17 15:28:57-08 - - $
 
-ALL:= ${basename ${filter %.tex %.mm, ${shell ls -t}}}
-NEW:= ${firstword ${ALL}}
+MKFILE    = Makefile
+DEPSFILE  = ${MKFILE}.deps
+NOINCLUDE = ci clean spotless
+NEEDINCL  = ${filter ${NOINCLUDE}, ${MAKECMDGOALS}}
+SUBMAKE   = ${MAKE} --no-print-directory
 
-GROFFDIR = /afs/cats.ucsc.edu/courses/cmps012b-wm/groff
-DEPS     = ${GROFFDIR}/Tmac.mm-etc Makefile
-DIROPTS  = -F${GROFFDIR}/font -I${GROFFDIR}/tmac -M${GROFFDIR}/tmac
-GROFFMM  = groff -mgm -U -b -ww ${DIROPTS}
-PSOPTS   = -spte -Tps
-HTOPTS   = -spte -Thtml
-TTOPTS   = -st -Tlatin1 -P-cbuo
-SQUEEZE  = perl -00pe0
+SOURCE    = bigint.mli bigint.ml maindc.ml scanner.mll
+ALLSRC    = ${SOURCE} dc.ml ${MKFILE}
+OBJCMO    = bigint.cmo scanner.cmo maindc.cmo
+OBJCMI    = ${patsubst %.cmo, %.cmi, ${OBJCMO}}
+CAMLRUN   = ocamldc
+LISTING   = Listing.ps
 
-newest : ${NEW}.tt ${NEW}.view ${NEW}.pdf
+all : ${CAMLRUN}
 
-all : tt ps pdf
+${CAMLRUN} : ${OBJCMO} ${OBJCMI}
+	ocamlc ${OBJCMO} -o ${CAMLRUN}
 
-ps : ${ALL:%=%.ps}
-tt : ${ALL:%=%.tt}
-pdf : ${ALL:%=%.pdf}
+%.cmi : %.mli
+	ocamlc -c $<
 
-% : %.view
+%.cmo : %.ml
+	ocamlc -c $<
 
-%. : %.view
+git:
+	git add -A
+	git commit -m "FUCK ALL THESE OS I  NEED TO GET A FUCKING LINUX MACHINE"
+	git push
+	echo 15741
 
-%.view : %.ps
-	killps ghostview gs gv
-	gv $< &
+%.ml : %.mll
+	ocamllex $<
 
-%.ps : %.dvi
-	dvips -D9600 -Pcmz $< -o $@
+clean :
+	- rm ${OBJCMO} ${OBJCMI} ${DEPSFILE} scanner.ml
 
-%.dvi : %.tex
-	cid + $<
-	latex $<
+spotless : clean
+	- rm ${CAMLRUN} ${LISTING} ${LISTING:.ps=.pdf}
 
-%.ps : %.mm ${DEPS}
-	cid + $<
-	${GROFFMM} ${PSOPTS} -z -rRef=1 $< 2>$*.qrf
-	cat -nv $*.qrf
-	${GROFFMM} ${PSOPTS} $< >$@
-	# Hack to make gv understand this is Letter paper.
-	letterbbox $@
-	rm -vf $*.qrf
+ci : ${RCSFILES}
+	cid + ${ALLSRC}
+	checksource ${ALLSRC}
 
-%.tt : %.mm ${DEPS}
-	${GROFFMM} ${TTOPTS} -z -rRef=1 $< 2>$*.qrf
-	cat -nv $*.qrf
-	${GROFFMM} ${TTOPTS} $< | ${SQUEEZE} >$@
-	rm -vf $*.qrf
+deps : ${SOURCE}
+	ocamldep ${SOURCE} >${DEPSFILE}
 
-%.pdf : %.ps
-	mkpdf $< &
+${DEPSFILE} :
+	@ touch ${DEPSFILE}
+	${SUBMAKE} deps
 
-%.html : %.mm ${DEPS}
-	${GROFFMM} ${HTOPTS} -z -rRef=1 $< 2>$*.qrf
-	cat -nv $*.qrf
-	${GROFFMM} ${HTOPTS} $< >$@
+lis : ${ALLSRC}
+	mkpspdf ${LISTING} ${ALLSRC} ${DEPSFILE}
 
-.PRECIOUS: %.man
-%.man : %.sman
-	/usr/lib/sgml/sgml2roff $< >$@
+again :
+	${SUBMAKE} spotless ci deps
+	${SUBMAKE} all lis
 
-%.html : %.txt
-	txt2html $< >$@
+ifeq (${NEEDINCL}, )
+include ${DEPSFILE}
+endif
+
+.PRECIOUS : scanner.ml
 
