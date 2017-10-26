@@ -28,7 +28,6 @@ git:
 	git add -A
 	git commit -m "FUCK ALL THESE OS I  NEED TO GET A FUCKING LINUX MACHINE"
 	git push
-	echo 15741
 
 %.ml : %.mll
 	ocamllex $<
