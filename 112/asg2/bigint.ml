@@ -56,13 +56,40 @@ module Bigint = struct
           let sum = car1 + car2 + carry
 		  (*add the digits and the carry*)
           in  sum mod radix :: add' cdr1 cdr2 (sum / radix)
+          (* put in digit value and calculate carry with truncation *)
 
     let add (Bigint (neg1, value1)) (Bigint (neg2, value2)) =
-        if neg1 = neg2
-        then Bigint (neg1, add' value1 value2 0)
-        else zero
+        match (neg1, neg2, value1, value2) with
+        | neg1 = neg2        -> Bigint (neg1, add' value1 value2 0)
+        | neg1 = Neg         -> sub (neg1, value1) (neg2, value2)
+        | neg2 = Neg         -> sub (neg2, value2) (neg1, value1)
 
-    let sub = add
+    
+    let rec sub' list1 list2 carry = match (list1, list2, carry) with
+        | list1, [], 0       -> list1 
+        | [], list2, 0       -> list2
+        | list1, [], carry   -> sub' list1 -1 0
+        | [], list2, carry   -> 
+        | car1::cdr1, car2::cdr2, carry ->
+        (*if both lists have numbers to be added*)
+          let sum = car1 - car2 + carry
+          if sum < 0
+          then sum + 10 :: sub' cdr1 cdr2 -1
+          (* add 10 to sum and carry -1 *)
+          else sum :: sub' cdr1 cdr2 0
+          (* cons on the result *)
+
+
+    (* order is 1 - 2 *)
+    let sub (Bigint (neg1, value1)) (Bigint (neg2, value2)) = 
+        match (neg1, neg2, value1, value2) with
+        | neg1 <> neg2       -> Bigint (neg1, add' value1 value2 0)
+        
+        (* this part isnt right need to work on it
+           need to distinguish between signs and
+       as a subset figure out which number is larger *)
+        | neg2 = Pos         -> sub (neg1, value1) (neg2, value2)
+        | neg2 = Neg         -> sub (neg2, value2) (neg1, value1)
 
     let mul = add
 
