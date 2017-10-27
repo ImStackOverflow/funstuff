@@ -1,4 +1,4 @@
-#$Id: Makefile,v 1.15 2014-11-17 15:28:57-08 - - $
+# $Id: Makefile,v 1.15 2014-11-17 15:28:57-08 - - $
 
 MKFILE    = Makefile
 DEPSFILE  = ${MKFILE}.deps
@@ -23,11 +23,6 @@ ${CAMLRUN} : ${OBJCMO} ${OBJCMI}
 
 %.cmo : %.ml
 	ocamlc -c $<
-
-git:
-	git add -A
-	git commit -m "FUCK ALL THESE OS I  NEED TO GET A FUCKING LINUX MACHINE"
-	git push
 
 %.ml : %.mll
 	ocamllex $<
