@@ -47,12 +47,14 @@ module Bigint = struct
                         (map string_of_int reversed))
 
     let rec add' list1 list2 carry = match (list1, list2, carry) with
-        | list1, [], 0       -> list1
+        | list1, [], 0       -> list1 
         | [], list2, 0       -> list2
         | list1, [], carry   -> add' list1 [carry] 0
         | [], list2, carry   -> add' [carry] list2 0
         | car1::cdr1, car2::cdr2, carry ->
+		(*if both lists have numbers to be added*)
           let sum = car1 + car2 + carry
+		  (*add the digits and the carry*)
           in  sum mod radix :: add' cdr1 cdr2 (sum / radix)
 
     let add (Bigint (neg1, value1)) (Bigint (neg2, value2)) =
