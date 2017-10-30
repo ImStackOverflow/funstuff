@@ -17,7 +17,38 @@ module Bigint = struct
     let strlen    = String.length
     let strsub    = String.sub
     let zero      = Bigint (Pos, [])
-
+	
+	
+	let rec compare' x y = 
+	   if x = [] 
+	      then false
+		  else
+		  (*check numerical value *)
+		     let a = car x 
+		     and b = car y
+	         in match ((a > b), (a = b)) with
+	               | true, false    -> true  (* a is bigger num *)
+		           | false, false   -> false (*b is bigger num*)
+		           | false, true    -> compare' (cdr x) (cdr y) 
+		  (* go further down num *)
+			     
+	
+	(* checks length of 2 lists
+	   true if first > second
+	   false if second >= first *)
+	let compare x y = 
+	    let a = List.length x
+		and b = List.length y
+		(*checks first using length *)
+		in match (a > b, a = b) with
+		   | true, false    -> true
+		   | false, false   -> false
+		   | false, true    ->
+		   (*otherwise check numerical values *)
+		      let x = reverse x
+			  and y = reverse y 
+			  in compare' x y
+				 
     let charlist_of_string str = 
         let last = strlen str - 1
         in  let rec charlist pos result =
@@ -46,6 +77,39 @@ module Bigint = struct
                        ((if sign = Pos then "" else "-") ::
                         (map string_of_int reversed))
 
+
+     let rec sub2' list1 list2 carry = printf "made it to sub2' bitch"
+	(*match (list1, list2, carry) with
+        | list1, [], 0       -> list1 
+        | [], list2, 0       -> list2
+        | list1, [], carry   -> sub' list1 -1 0
+        | [], list2, carry   -> 
+        | car1::cdr1, car2::cdr2, carry ->
+        (*if both lists have numbers to be added*)
+          let sum = car1 - car2 + carry
+          if sum < 0
+          then sum + 10 :: sub' cdr1 cdr2 -1
+          (* add 10 to sum and carry -1 *)
+          else sum :: sub' cdr1 cdr2 0
+          (* cons on the result *) *)
+
+		  
+	let sub' list1 list2 = 
+	   if compare list1 list2
+       then Bigint (Pos, sub2' list1 list2 0)
+	   else Bigint (Neg, sub2' list2 list1 0)
+	   
+	   (* order is a - b *)
+    let sub (Bigint (neg1, value1)) (Bigint (neg2, value2)) = 
+        if neg1 <> neg2
+		then Bigint (neg1, add' value1 value2 0)
+		else 
+		match neg2 with
+        | Pos         -> sub' value1 value2
+        | Neg         -> sub' value2 value1	  
+	
+	   
+
     let rec add' list1 list2 carry = match (list1, list2, carry) with
         | list1, [], 0       -> list1 
         | [], list2, 0       -> list2
@@ -58,39 +122,16 @@ module Bigint = struct
           in  sum mod radix :: add' cdr1 cdr2 (sum / radix)
           (* put in digit value and calculate carry with truncation *)
 
+	
     let add (Bigint (neg1, value1)) (Bigint (neg2, value2)) =
-        match (neg1, neg2, value1, value2) with
-        | neg1 = neg2        -> Bigint (neg1, add' value1 value2 0)
-        | neg1 = Neg         -> sub (neg1, value1) (neg2, value2)
-        | neg2 = Neg         -> sub (neg2, value2) (neg1, value1)
+        match (neg1, neg2) with
+        | neg2, neg1    -> printf "penis" (*Bigint (neg1, add' value1 value2 0)*)
+        | Neg, _        -> sub (neg1, value1) (neg2, value2)
+        | _, Neg        -> sub (neg2, value2) (neg1, value1)
 
     
-    let rec sub' list1 list2 carry = match (list1, list2, carry) with
-        | list1, [], 0       -> list1 
-        | [], list2, 0       -> list2
-        | list1, [], carry   -> sub' list1 -1 0
-        | [], list2, carry   -> 
-        | car1::cdr1, car2::cdr2, carry ->
-        (*if both lists have numbers to be added*)
-          let sum = car1 - car2 + carry
-          if sum < 0
-          then sum + 10 :: sub' cdr1 cdr2 -1
-          (* add 10 to sum and carry -1 *)
-          else sum :: sub' cdr1 cdr2 0
-          (* cons on the result *)
-
-
-    (* order is 1 - 2 *)
-    let sub (Bigint (neg1, value1)) (Bigint (neg2, value2)) = 
-        match (neg1, neg2, value1, value2) with
-        | neg1 <> neg2       -> Bigint (neg1, add' value1 value2 0)
-        
-        (* this part isnt right need to work on it
-           need to distinguish between signs and
-       as a subset figure out which number is larger *)
-        | neg2 = Pos         -> sub (neg1, value1) (neg2, value2)
-        | neg2 = Neg         -> sub (neg2, value2) (neg1, value1)
-
+	
+   
     let mul = add
 
     let div = add

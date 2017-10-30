@@ -6,7 +6,8 @@ NOINCLUDE = ci clean spotless
 NEEDINCL  = ${filter ${NOINCLUDE}, ${MAKECMDGOALS}}
 SUBMAKE   = ${MAKE} --no-print-directory
 
-SOURCE    = bigint.mli bigint.ml maindc.ml scanner.mll
+#SOURCE    = bigint.mli bigint.ml maindc.ml scanner.mll
+SOURCE    =  bigint.ml
 ALLSRC    = ${SOURCE} dc.ml ${MKFILE}
 OBJCMO    = bigint.cmo scanner.cmo maindc.cmo
 OBJCMI    = ${patsubst %.cmo, %.cmi, ${OBJCMO}}
