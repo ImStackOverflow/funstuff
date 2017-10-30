@@ -26,7 +26,7 @@ module Bigint = struct
 		  (*check numerical value *)
 		     let a = car x 
 		     and b = car y
-	         in match ((a > b), (a = b)) with
+	         in match (a > b, a = b) with
 	               | true, false    -> true  (* a is bigger num *)
 		           | false, false   -> false (*b is bigger num*)
 		           | false, true    -> compare' (cdr x) (cdr y) 
@@ -78,9 +78,10 @@ module Bigint = struct
                         (map string_of_int reversed))
 
 
-     let rec sub2' list1 list2 carry = printf "made it to sub2' bitch"
-	(*match (list1, list2, carry) with
-        | list1, [], 0       -> list1 
+     let rec sub' list1 list2 carry = 
+	 match (list1, list2, carry) with
+        | _,_,_       -> list1 
+		(*
         | [], list2, 0       -> list2
         | list1, [], carry   -> sub' list1 -1 0
         | [], list2, carry   -> 
@@ -91,24 +92,7 @@ module Bigint = struct
           then sum + 10 :: sub' cdr1 cdr2 -1
           (* add 10 to sum and carry -1 *)
           else sum :: sub' cdr1 cdr2 0
-          (* cons on the result *) *)
-
-		  
-	let sub' list1 list2 = 
-	   if compare list1 list2
-       then Bigint (Pos, sub2' list1 list2 0)
-	   else Bigint (Neg, sub2' list2 list1 0)
-	   
-	   (* order is a - b *)
-    let sub (Bigint (neg1, value1)) (Bigint (neg2, value2)) = 
-        if neg1 <> neg2
-		then Bigint (neg1, add' value1 value2 0)
-		else 
-		match neg2 with
-        | Pos         -> sub' value1 value2
-        | Neg         -> sub' value2 value1	  
-	
-	   
+          (* cons on the result *) *)	   
 
     let rec add' list1 list2 carry = match (list1, list2, carry) with
         | list1, [], 0       -> list1 
@@ -122,11 +106,22 @@ module Bigint = struct
           in  sum mod radix :: add' cdr1 cdr2 (sum / radix)
           (* put in digit value and calculate carry with truncation *)
 
-	
+	 (* order is a - b *)
+	 let sub (Bigint (neg1, value1)) (Bigint (neg2, value2)) = 
+        if neg1 <> neg2
+		then Bigint (neg1, add' value1 value2 0)
+		else 
+		match (neg2, compare value1 value2) with
+        | Pos, true         -> Bigint (Pos, sub' value1 value2 0)
+		| Pos, false        -> Bigint (Neg, sub' value2 value1 0)
+        | Neg, true         -> Bigint (Neg, sub' value1 value2 0)
+        | Neg, false        -> Bigint (Pos, sub' value2 value1 0)		
+
+
     let add (Bigint (neg1, value1)) (Bigint (neg2, value2)) =
         match (neg1, neg2) with
         | neg2, neg1    -> printf "penis" (*Bigint (neg1, add' value1 value2 0)*)
-        | Neg, _        -> sub (neg1, value1) (neg2, value2)
+        | Neg, _        -> sub (Bigint(neg1, value1)) (Bigint(neg2, value2))
         | _, Neg        -> sub (neg2, value2) (neg1, value1)
 
     
