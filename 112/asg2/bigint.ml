@@ -23,7 +23,7 @@ module Bigint = struct
 	   let penis = reverse penis
 	     in let rec trimZero' vagina = 
 		    match vagina with
-			| []         -> [0]
+			| []         -> []
 			| 0::pussy   -> trimZero' pussy
 			| dick       -> dick
 		  in reverse (trimZero' penis)
@@ -149,25 +149,51 @@ module Bigint = struct
    
     let rec mul' value1 value2 acumul =
 	   match (value2, acumul) with
-	   | [], _         -> acumul	
+	   | [], _         -> acumul
+         (* done multiplying return acumulator *)	   
 	   | car::cdr, acumul   -> 
 	      let operate = ( * ) car 
+		  (* curry multiplicator *)
 		  in let newSum = (map operate value1)
+		  (* map multiplicator to list *)
 	         and value1 = 0::value1
+			 (* shift number *)
 	         in  mul' value1 cdr (add' acumul newSum 0)
+			 (* add acumulator and new list *)
 	   
    
     let mul (Bigint (neg1, value1)) (Bigint (neg2, value2)) = 
 	   if neg1 = neg2
 	   then Bigint (Pos, mul' value1 value2 [0])
+	   (*makes a positive # *)
 	   else Bigint (Neg, mul' value1 value2 [0])
+	   (*makes a negative # *)
 	    
 
     let div = add
 
     let rem = add
 
-    let pow = add
+	
+	let rec pow' value1 value2 acumul = 
+	    match value2 with
+		| []         -> acumul
+		| value2     -> 
+		  pow' value1 (* pass in base *)
+		  (trimZero (sub2' value2 [1] 0)) (* exp-- *)
+		  (mul' acumul value1 [0]) (* accumulator *)
+	
+	(* b^a *)
+    let pow (Bigint (neg1, value1)) (Bigint (neg2, value2)) = 
+	   match (neg1, neg2, ((car value2) mod 2) = 0) with 
+	   | _, Neg, _             -> zero
+	   (* negative exponent fuck it *)
+	   |Pos, _, _              -> Bigint (Pos, pow' value1 value2 [1])
+	   (* positive base, othershit dont matter *)
+	   |Neg, _, true           -> Bigint (Pos, pow' value1 value2 [1])
+	   (* negative base but even exponent *)
+	   |Neg, _, false          -> Bigint (Neg, pow' value1 value2 [1])
+	   (* negative base odd exponent *)
 
 end
 
