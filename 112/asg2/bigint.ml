@@ -19,6 +19,15 @@ module Bigint = struct
     let zero      = Bigint (Pos, [])
 	
 	
+	let trimZero penis = 
+	   let penis = reverse penis
+	     in let rec trimZero' vagina = 
+		     let first = car vagina 
+		     in if first = 0 
+		     then trimZero' (cdr vagina)
+		     else vagina
+		  in trimZero' penis
+	
 	let rec compare' x y = 
 	   if x = [] 
 	      then false
@@ -114,20 +123,20 @@ module Bigint = struct
 		then Bigint (neg1, add' value1 value2 0)
 		else 
 		match (neg2, compare value1 value2) with
-        | Pos, true         -> Bigint (Pos, sub' value1 value2 0)
-		| Pos, false        -> Bigint (Neg, sub' value2 value1 0)
-        | Neg, true         -> Bigint (Neg, sub' value1 value2 0)
-        | Neg, false        -> Bigint (Pos, sub' value2 value1 0)		
+        | Pos, true         -> Bigint (Pos, trimZero (sub' value1 value2 0))
+		| Pos, false        -> Bigint (Neg, trimZero (sub' value2 value1 0))
+        | Neg, true         -> Bigint (Neg, trimZero (sub' value1 value2 0))
+        | Neg, false        -> Bigint (Pos, trimZero (sub' value2 value1 0))		
 
 
     let add (Bigint (neg1, value1)) (Bigint (neg2, value2)) =
 	    if neg1 = neg2 
 		then Bigint (neg1, add' value1 value2 0)
 		else match (neg2, compare value1 value2) with
-        | Neg, true         -> Bigint (Pos, sub' value1 value2 0)
-        | Neg, false        -> Bigint (Neg, sub' value2 value1 0)
-        | Pos, true         -> Bigint (Neg, sub' value1 value2 0)
-        | Pos, false        -> Bigint (Pos, sub' value2 value1 0)	
+        | Neg, true         -> Bigint (Pos, trimZero (sub' value1 value2 0))
+        | Neg, false        -> Bigint (Neg, trimZero (sub' value2 value1 0))
+        | Pos, true         -> Bigint (Neg, trimZero (sub' value1 value2 0))
+        | Pos, false        -> Bigint (Pos, trimZero (sub' value2 value1 0))	
 
     
 	
