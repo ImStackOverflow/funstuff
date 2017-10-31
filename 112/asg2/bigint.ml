@@ -22,14 +22,11 @@ module Bigint = struct
 	let trimZero penis = 
 	   let penis = reverse penis
 	     in let rec trimZero' vagina = 
-		    if vagina = []
-			then [0]
-			else
-		     let first = car vagina 
-		     in if first = 0 
-		     then trimZero' (cdr vagina)
-		     else vagina
-		  in trimZero' penis
+		    match vagina with
+			| []         -> [0]
+			| 0::pussy   -> trimZero' pussy
+			| dick       -> dick
+		  in reverse (trimZero' penis)
 	
 	let rec compare' x y = 
 	   if x = [] (*reached end of lists *)
@@ -84,30 +81,15 @@ module Bigint = struct
                      then Bigint (Neg, to_intlist 1)
                      else Bigint (Pos, to_intlist 0)
 
-    let string_of_bigint (Bigint (sign, value)) =
+    (*max line length = 69 *)
+	let string_of_bigint (Bigint (sign, value)) =
         match value with
         | []    -> "0"
         | value -> let reversed = reverse value
                    in  strcat ""
                        ((if sign = Pos then "" else "-") ::
                         (map string_of_int reversed))
-
-
-     let rec sub' list1 list2 carry = 
-	 (*list1 should always be longer *)
-	 match (list1, list2, carry) with
-        | list1, [], 0       -> list1 
-        | list1, [], carry   -> sub' list1 [1] 0
-        | car1::cdr1, car2::cdr2, carry ->
-        (*if both lists have numbers to be added*)
-          let sum = car1 - car2 - carry
-          in if sum < 0
-          then sum + 10 :: sub' cdr1 cdr2 1
-          (* add 10 to sum and carry -1 *)
-          else sum :: sub' cdr1 cdr2 0
-          (* cons on the result *)	  
-        | [], list2, _       -> []
-		(* if list2 is longer than list1 theres an error *)		  
+	  
 
     let rec add' list1 list2 carry = match (list1, list2, carry) with
         | list1, [], 0       -> list1 
@@ -121,35 +103,65 @@ module Bigint = struct
           in  sum mod radix :: add' cdr1 cdr2 (sum / radix)
           (* put in digit value and calculate carry with truncation *)
 
+	let rec sub2' list1 list2 carry = 
+	 (*list1 should always be longer *)
+	    match (list1, list2, carry) with
+        | list1, [], 0       -> list1 
+        | list1, [], carry   -> sub2' list1 [1] 0
+        | car1::cdr1, car2::cdr2, carry ->
+        (*if both lists have numbers to be added*)
+          let sum = car1 - car2 - carry
+          in if sum < 0
+          then sum + 10 :: sub2' cdr1 cdr2 1
+          (* add 10 to sum and carry -1 *)
+          else sum :: sub2' cdr1 cdr2 0
+          (* cons on the result *)	  
+        | [], list2, _       -> []
+		(* if list2 is longer than list1 theres an error *)		  
+		  
+	let sub' neg2 value1 value2 = 
+	    match (neg2, compare value1 value2) with
+        | Pos, 1        -> Bigint (Pos, trimZero (sub2' value1 value2 0))
+		(* a-b, a>b *)
+		| Pos, 2        -> Bigint (Neg, trimZero (sub2' value2 value1 0))
+		(* a-b, a<b *)
+        | Neg, 1        -> Bigint (Neg, trimZero (sub2' value1 value2 0))
+		(* b-a, a>b *)
+        | Neg, 2        -> Bigint (Pos, trimZero (sub2' value2 value1 0))
+		(* b-a, a<b *)
+		| _, 0          -> Bigint (Pos, [0])
+		(* numbers equal *)
+		| _, _          -> Bigint (Neg, [0])
+		
+		
 	 (* order is a - b *)
-	 let sub (Bigint (neg1, value1)) (Bigint (neg2, value2)) = 
+	let sub (Bigint (neg1, value1)) (Bigint (neg2, value2)) = 
         if neg1 <> neg2
 		then Bigint (neg1, add' value1 value2 0)
-		else 
-		match (neg2, compare value1 value2) with
-        | Pos, 1        -> Bigint (Pos, trimZero (sub' value1 value2 0))
-		| Pos, 2        -> Bigint (Neg, trimZero (sub' value2 value1 0))
-        | Neg, 1        -> Bigint (Neg, trimZero (sub' value1 value2 0))
-        | Neg, 2        -> Bigint (Pos, trimZero (sub' value2 value1 0))
-		| _, 0          -> Bigint (Pos, [0])
-		| _, _          -> Bigint (Neg, [0])
-
+		else sub' neg2 value1 value2
 
     let add (Bigint (neg1, value1)) (Bigint (neg2, value2)) =
 	    if neg1 = neg2 
 		then Bigint (neg1, add' value1 value2 0)
-		else match (neg2, compare value1 value2) with
-        | Neg, 1        -> Bigint (Pos, trimZero (sub' value1 value2 0))
-        | Neg, 2        -> Bigint (Neg, trimZero (sub' value2 value1 0))
-        | Pos, 1        -> Bigint (Neg, trimZero (sub' value1 value2 0))
-        | Pos, 2        -> Bigint (Pos, trimZero (sub' value2 value1 0))
-		| _, 0          -> Bigint (Pos, [0])
-		| _, _          -> Bigint (Neg, [0])
-
-    
-	
+		else match neg2 with  
+		|Pos            -> sub' Neg value1 value2
+        |Neg            -> sub' Pos value1 value2
    
-    let mul = add
+    let rec mul' value1 value2 acumul =
+	   match (value2, acumul) with
+	   | [], _         -> acumul	
+	   | car::cdr, acumul   -> 
+	      let operate = ( * ) car 
+		  in let newSum = (map operate value1)
+	         and value1 = 0::value1
+	         in  mul' value1 cdr (add' acumul newSum 0)
+	   
+   
+    let mul (Bigint (neg1, value1)) (Bigint (neg2, value2)) = 
+	   if neg1 = neg2
+	   then Bigint (Pos, mul' value1 value2 [0])
+	   else Bigint (Neg, mul' value1 value2 [0])
+	    
 
     let div = add
 
