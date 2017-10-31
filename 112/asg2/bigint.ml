@@ -30,6 +30,7 @@ module Bigint = struct
 	               | true, false    -> true  (* a is bigger num *)
 		           | false, false   -> false (*b is bigger num*)
 		           | false, true    -> compare' (cdr x) (cdr y) 
+				   | _, _           -> false
 		  (* go further down num *)
 			     
 	
@@ -48,6 +49,7 @@ module Bigint = struct
 		      let x = reverse x
 			  and y = reverse y 
 			  in compare' x y
+		   | _, _           -> false
 				 
     let charlist_of_string str = 
         let last = strlen str - 1
@@ -79,20 +81,20 @@ module Bigint = struct
 
 
      let rec sub' list1 list2 carry = 
+	 (*list1 should always be longer *)
 	 match (list1, list2, carry) with
-        | _,_,_       -> list1 
-		(*
-        | [], list2, 0       -> list2
-        | list1, [], carry   -> sub' list1 -1 0
-        | [], list2, carry   -> 
+        | list1, [], 0       -> list1 
+        | list1, [], carry   -> sub' list1 [1] 0
         | car1::cdr1, car2::cdr2, carry ->
         (*if both lists have numbers to be added*)
-          let sum = car1 - car2 + carry
-          if sum < 0
-          then sum + 10 :: sub' cdr1 cdr2 -1
+          let sum = car1 - car2 - carry
+          in if sum < 0
+          then sum + 10 :: sub' cdr1 cdr2 1
           (* add 10 to sum and carry -1 *)
           else sum :: sub' cdr1 cdr2 0
-          (* cons on the result *) *)	   
+          (* cons on the result *)	  
+        | [], list2, _       -> []
+		(* if list2 is longer than list1 theres an error *)		  
 
     let rec add' list1 list2 carry = match (list1, list2, carry) with
         | list1, [], 0       -> list1 
@@ -119,10 +121,13 @@ module Bigint = struct
 
 
     let add (Bigint (neg1, value1)) (Bigint (neg2, value2)) =
-        match (neg1, neg2) with
-        | neg2, neg1    -> printf "penis" (*Bigint (neg1, add' value1 value2 0)*)
-        | Neg, _        -> sub (Bigint (neg1, value1)) (Bigint (neg2, value2))
-        | _, Neg        -> sub (neg2, value2) (neg1, value1)
+	    if neg1 = neg2 
+		then Bigint (neg1, add' value1 value2 0)
+		else match (neg2, compare value1 value2) with
+        | Neg, true         -> Bigint (Pos, sub' value1 value2 0)
+        | Neg, false        -> Bigint (Neg, sub' value2 value1 0)
+        | Pos, true         -> Bigint (Neg, sub' value1 value2 0)
+        | Pos, false        -> Bigint (Pos, sub' value2 value1 0)	
 
     
 	
