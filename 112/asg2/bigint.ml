@@ -22,6 +22,9 @@ module Bigint = struct
 	let trimZero penis = 
 	   let penis = reverse penis
 	     in let rec trimZero' vagina = 
+		    if vagina = []
+			then [0]
+			else
 		     let first = car vagina 
 		     in if first = 0 
 		     then trimZero' (cdr vagina)
