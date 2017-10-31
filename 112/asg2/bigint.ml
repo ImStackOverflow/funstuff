@@ -32,36 +32,37 @@ module Bigint = struct
 		  in trimZero' penis
 	
 	let rec compare' x y = 
-	   if x = [] 
-	      then false
+	   if x = [] (*reached end of lists *)
+	      then 0 (* numbers equal *)
 		  else
 		  (*check numerical value *)
 		     let a = car x 
 		     and b = car y
 	         in match (a > b, a = b) with
-	               | true, false    -> true  (* a is bigger num *)
-		           | false, false   -> false (*b is bigger num*)
+	               | true, false    -> 1  (* a is bigger num *)
+		           | false, false   -> 2 (*b is bigger num*)
 		           | false, true    -> compare' (cdr x) (cdr y) 
-				   | _, _           -> false
+				   | _, _           -> 3
 		  (* go further down num *)
 			     
 	
 	(* checks length of 2 lists
-	   true if first > second
-	   false if second >= first *)
+	   0 if first = second
+	   1 if first > second
+	   2 if second > first *)
 	let compare x y = 
 	    let a = List.length x
 		and b = List.length y
 		(*checks first using length *)
 		in match (a > b, a = b) with
-		   | true, false    -> true
-		   | false, false   -> false
+		   | true, false    -> 1
+		   | false, false   -> 2
 		   | false, true    ->
 		   (*otherwise check numerical values *)
 		      let x = reverse x
 			  and y = reverse y 
 			  in compare' x y
-		   | _, _           -> false
+		   | _, _           -> 3
 				 
     let charlist_of_string str = 
         let last = strlen str - 1
@@ -126,20 +127,24 @@ module Bigint = struct
 		then Bigint (neg1, add' value1 value2 0)
 		else 
 		match (neg2, compare value1 value2) with
-        | Pos, true         -> Bigint (Pos, trimZero (sub' value1 value2 0))
-		| Pos, false        -> Bigint (Neg, trimZero (sub' value2 value1 0))
-        | Neg, true         -> Bigint (Neg, trimZero (sub' value1 value2 0))
-        | Neg, false        -> Bigint (Pos, trimZero (sub' value2 value1 0))		
+        | Pos, 1        -> Bigint (Pos, trimZero (sub' value1 value2 0))
+		| Pos, 2        -> Bigint (Neg, trimZero (sub' value2 value1 0))
+        | Neg, 1        -> Bigint (Neg, trimZero (sub' value1 value2 0))
+        | Neg, 2        -> Bigint (Pos, trimZero (sub' value2 value1 0))
+		| _, 0          -> Bigint (Pos, [0])
+		| _, _          -> Bigint (Neg, [0])
 
 
     let add (Bigint (neg1, value1)) (Bigint (neg2, value2)) =
 	    if neg1 = neg2 
 		then Bigint (neg1, add' value1 value2 0)
 		else match (neg2, compare value1 value2) with
-        | Neg, true         -> Bigint (Pos, trimZero (sub' value1 value2 0))
-        | Neg, false        -> Bigint (Neg, trimZero (sub' value2 value1 0))
-        | Pos, true         -> Bigint (Neg, trimZero (sub' value1 value2 0))
-        | Pos, false        -> Bigint (Pos, trimZero (sub' value2 value1 0))	
+        | Neg, 1        -> Bigint (Pos, trimZero (sub' value1 value2 0))
+        | Neg, 2        -> Bigint (Neg, trimZero (sub' value2 value1 0))
+        | Pos, 1        -> Bigint (Neg, trimZero (sub' value1 value2 0))
+        | Pos, 2        -> Bigint (Pos, trimZero (sub' value2 value1 0))
+		| _, 0          -> Bigint (Pos, [0])
+		| _, _          -> Bigint (Neg, [0])
 
     
 	
