@@ -121,7 +121,7 @@ module Bigint = struct
     let add (Bigint (neg1, value1)) (Bigint (neg2, value2)) =
         match (neg1, neg2) with
         | neg2, neg1    -> printf "penis" (*Bigint (neg1, add' value1 value2 0)*)
-        | Neg, _        -> sub (Bigint(neg1, value1)) (Bigint(neg2, value2))
+        | Neg, _        -> sub (Bigint (neg1, value1)) (Bigint (neg2, value2))
         | _, Neg        -> sub (neg2, value2) (neg1, value1)
 
     
