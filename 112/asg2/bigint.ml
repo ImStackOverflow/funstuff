@@ -81,14 +81,28 @@ module Bigint = struct
                      then Bigint (Neg, to_intlist 1)
                      else Bigint (Pos, to_intlist 0)
 
+					 
+	let rec lineSplit value counter return = 
+	   match (value, counter = 0) with 
+	   | [], _              -> return
+	   (* list is done *)
+	   | value, true    -> 
+	   (* reached 69 chars add newline and reset counter *)
+	   let front = "\ \n"
+	   in lineSplit value 69 front::return
+	   | car::cdr, false   ->
+	   (* conert list to string *)	   
+	   lineSplit cdr (counter-1) (string_of_int car)::return
+	   
+	   
     (*max line length = 69 *)
 	let string_of_bigint (Bigint (sign, value)) =
         match value with
         | []    -> "0"
-        | value -> let reversed = reverse value
-                   in  strcat ""
-                       ((if sign = Pos then "" else "-") ::
-                        (map string_of_int reversed))
+        | value -> strcat ""
+                       (if sign = Pos then "" else "-") ::
+                        (lineSplit value 69 [])
+						(* line split should reverse list *)
 	  
 
     let rec add' list1 list2 carry = match (list1, list2, carry) with
@@ -169,9 +183,25 @@ module Bigint = struct
 	   else Bigint (Neg, mul' value1 value2 [0])
 	   (*makes a negative # *)
 	    
-
+	
     let div = add
-
+	
+	(*
+	let rec div' value1 value2 remainder = 
+	   if (car value1) >= value2
+	
+	
+    let div (Bigint (neg1, value1)) (Bigint (neg2, value2)) = 
+	   match (neg1 = neg2, compare value1 value2) with
+	   | _ , 2                 -> zero
+	   (* trying to divide by larger num *)
+	   | _, 3                  -> Bigint (Pos, [1])
+	   (* divide by same number *)
+	   | true, 1               -> Bigint (Pos, div' value1 value2)
+	   (* neg or pos nums *)
+	   | false, 1              -> Bigint (Neg, div' value1 value2)
+	   (* neg and pos num *)
+	   *)
     let rem = add
 
 	
