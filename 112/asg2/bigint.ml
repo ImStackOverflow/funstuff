@@ -183,26 +183,39 @@ module Bigint = struct
 	   else Bigint (Neg, mul' value1 value2 [0])
 	   (*makes a negative # *)
 	    
-	
-    let div = add
-	
-	(*
-	let rec div' value1 value2 remainder = 
-	   if (car value1) >= value2
-	
+		
+	(*uses egyptian multiplication *)
+	let rec divrem dividend divisor adder = 
+	   if (compare divisor dividend) = 1
+	      then [0], dividend
+		  else let quotient, remainder =
+		        divrem dividend (add' divisor divisor 0) (add' adder adder 0)
+			 in if (compare remainder divisor) = 2
+			    then quotient, remainder
+				(*hit end, return result *)
+				else (add' quotient adder 0), (trimZero (sub2' remainder divisor 0))
+				(* otherwise keep adding to quotent
+				and sub divisor from remaining number *)
 	
     let div (Bigint (neg1, value1)) (Bigint (neg2, value2)) = 
-	   match (neg1 = neg2, compare value1 value2) with
-	   | _ , 2                 -> zero
+	   match (compare value1 value2) with
+	   | 2               -> zero
 	   (* trying to divide by larger num *)
-	   | _, 3                  -> Bigint (Pos, [1])
+	   | 0               -> Bigint (Pos, [1])
 	   (* divide by same number *)
-	   | true, 1               -> Bigint (Pos, div' value1 value2)
-	   (* neg or pos nums *)
-	   | false, 1              -> Bigint (Neg, div' value1 value2)
-	   (* neg and pos num *)
-	   *)
-    let rem = add
+	   | 1               -> 
+	   (* neg or pos nums cleared for div *)
+   	      let quotient, _ =
+	      divrem value1 value2 [1] 
+	      in if neg1 = neg2
+	         then Bigint (Pos, trimZero quotient)
+			 else Bigint (Neg, trimZero quotient)
+	   | _               -> zero
+	   (* fuck u and your warnings *)
+	   
+    let rem (Bigint (neg1, value1)) (Bigint (neg2, value2)) = 
+	   let _, remainder = divrem value1 value2 [1]
+	   in Bigint (Pos, trimZero remainder)
 
 	
 	let rec pow' value1 value2 acumul = 
