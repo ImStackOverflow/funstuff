@@ -89,20 +89,20 @@ module Bigint = struct
 	   | value, true    -> 
 	   (* reached 69 chars add newline and reset counter *)
 	   let front = "\\ \n"
-	   in lineSplit value 69 (front::return)
+	   in lineSplit value 69 (return @ [front])
 	   | car::cdr, false   ->
 	   (* conert list to string *)	   
-	   lineSplit cdr (counter-1) ((string_of_int car)::return)
+	   lineSplit cdr (counter-1) (return @ [string_of_int car])
 	   
 	   
     (*max line length = 69 *)
 	let string_of_bigint (Bigint (sign, value)) =
         match value with
         | []    -> "0"
-        | value -> strcat ""
+        | value -> let reversed = reverse value
+                       in strcat ""
                        ((if sign = Pos then "" else "-") ::
-                        (lineSplit value 69 []))
-						(* line split should reverse list *)
+                        (lineSplit reversed 69 []))
 	  
 
     let rec add' list1 list2 carry = match (list1, list2, carry) with
