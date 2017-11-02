@@ -82,17 +82,17 @@ module Bigint = struct
                      else Bigint (Pos, to_intlist 0)
 
 					 
-	let rec lineSplit value counter return = 
+	let rec lineSplit value counter return 	 = 
 	   match (value, counter = 0) with 
 	   | [], _              -> return
 	   (* list is done *)
 	   | value, true    -> 
 	   (* reached 69 chars add newline and reset counter *)
 	   let front = "\ \n"
-	   in lineSplit value 69 front::return
+	   in lineSplit value 69 (front::return)
 	   | car::cdr, false   ->
 	   (* conert list to string *)	   
-	   lineSplit cdr (counter-1) (string_of_int car)::return
+	   lineSplit cdr (counter-1) ((string_of_int car)::return)
 	   
 	   
     (*max line length = 69 *)
@@ -100,8 +100,8 @@ module Bigint = struct
         match value with
         | []    -> "0"
         | value -> strcat ""
-                       (if sign = Pos then "" else "-") ::
-                        (lineSplit value 69 [])
+                       ((if sign = Pos then "" else "-") ::
+                        (lineSplit value 69 []))
 						(* line split should reverse list *)
 	  
 
