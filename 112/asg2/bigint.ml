@@ -88,7 +88,7 @@ module Bigint = struct
 	   (* list is done *)
 	   | value, true    -> 
 	   (* reached 69 chars add newline and reset counter *)
-	   let front = "\\ \n"
+	   let front = "\\\n"
 	   in lineSplit value 69 (return @ [front])
 	   | car::cdr, false   ->
 	   (* conert list to string *)	   
