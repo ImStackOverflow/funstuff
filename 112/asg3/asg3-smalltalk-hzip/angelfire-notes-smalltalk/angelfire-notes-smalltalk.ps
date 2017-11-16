@@ -1,0 +1,3766 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 38 24 574 768
+%%Title: angelfire-notes-smalltalk.ps
+%%For: Wesley Mackey
+%%Creator: GNU Enscript 1.6.6
+%%CreationDate: Wed Oct 26 13:06:06 2016
+%%Orientation: Landscape
+%%Pages: (atend)
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: (atend)
+%%EndComments
+%%BeginProlog
+%%BeginResource: procset Enscript-Prolog 1.6 6
+%
+% Procedures.
+%
+
+/_S {	% save current state
+  /_s save def
+} def
+/_R {	% restore from saved state
+  _s restore
+} def
+
+/S {	% showpage protecting gstate
+  gsave
+  showpage
+  grestore
+} bind def
+
+/MF {	% fontname newfontname -> -	make a new encoded font
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  % insert only valid encoding vectors
+  encoding_vector length 256 eq {
+    newfont /Encoding encoding_vector put
+  } if
+
+  newfontname newfont definefont pop
+} def
+
+/MF_PS { % fontname newfontname -> -	make a new font preserving its enc
+  /newfontname exch def
+  /fontname exch def
+
+  /fontdict fontname findfont def
+  /newfont fontdict maxlength dict def
+
+  fontdict {
+    exch
+    dup /FID eq {
+      % skip FID pair
+      pop pop
+    } {
+      % copy to the new font dictionary
+      exch newfont 3 1 roll put
+    } ifelse
+  } forall
+
+  newfont /FontName newfontname put
+
+  newfontname newfont definefont pop
+} def
+
+/SF { % fontname width height -> -	set a new font
+  /height exch def
+  /width exch def
+
+  findfont
+  [width 0 0 height 0 0] makefont setfont
+} def
+
+/SUF { % fontname width height -> -	set a new user font
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF
+  /F-gs-user-font width height SF
+} def
+
+/SUF_PS { % fontname width height -> -	set a new user font preserving its enc
+  /height exch def
+  /width exch def
+
+  /F-gs-user-font MF_PS
+  /F-gs-user-font width height SF
+} def
+
+/M {moveto} bind def
+/s {show} bind def
+
+/Box {	% x y w h -> -			define box path
+  /d_h exch def /d_w exch def /d_y exch def /d_x exch def
+  d_x d_y  moveto
+  d_w 0 rlineto
+  0 d_h rlineto
+  d_w neg 0 rlineto
+  closepath
+} def
+
+/bgs {	% x y height blskip gray str -> -	show string with bg color
+  /str exch def
+  /gray exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    gray setgray
+    fill
+  grestore
+  x y M str s
+} def
+
+/bgcs { % x y height blskip red green blue str -> -  show string with bg color
+  /str exch def
+  /blue exch def
+  /green exch def
+  /red exch def
+  /blskip exch def
+  /height exch def
+  /y exch def
+  /x exch def
+
+  gsave
+    x y blskip sub str stringwidth pop height Box
+    red green blue setrgbcolor
+    fill
+  grestore
+  x y M str s
+} def
+
+% Highlight bars.
+/highlight_bars {	% nlines lineheight output_y_margin gray -> -
+  gsave
+    setgray
+    /ymarg exch def
+    /lineheight exch def
+    /nlines exch def
+
+    % This 2 is just a magic number to sync highlight lines to text.
+    0 d_header_y ymarg sub 2 sub translate
+
+    /cw d_output_w cols div def
+    /nrows d_output_h ymarg 2 mul sub lineheight div cvi def
+
+    % for each column
+    0 1 cols 1 sub {
+      cw mul /xp exch def
+
+      % for each rows
+      0 1 nrows 1 sub {
+        /rn exch def
+        rn lineheight mul neg /yp exch def
+        rn nlines idiv 2 mod 0 eq {
+	  % Draw highlight bar.  4 is just a magic indentation.
+	  xp 4 add yp cw 8 sub lineheight neg Box fill
+	} if
+      } for
+    } for
+
+  grestore
+} def
+
+% Line highlight bar.
+/line_highlight {	% x y width height gray -> -
+  gsave
+    /gray exch def
+    Box gray setgray fill
+  grestore
+} def
+
+% Column separator lines.
+/column_lines {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h translate
+    /cw d_output_w cols div def
+    1 1 cols 1 sub {
+      cw mul 0 moveto
+      0 d_output_h rlineto stroke
+    } for
+  grestore
+} def
+
+% Column borders.
+/column_borders {
+  gsave
+    .1 setlinewidth
+    0 d_footer_h moveto
+    0 d_output_h rlineto
+    d_output_w 0 rlineto
+    0 d_output_h neg rlineto
+    closepath stroke
+  grestore
+} def
+
+% Do the actual underlay drawing
+/draw_underlay {
+  ul_style 0 eq {
+    ul_str true charpath stroke
+  } {
+    ul_str show
+  } ifelse
+} def
+
+% Underlay
+/underlay {	% - -> -
+  gsave
+    0 d_page_h translate
+    d_page_h neg d_page_w atan rotate
+
+    ul_gray setgray
+    ul_font setfont
+    /dw d_page_h dup mul d_page_w dup mul add sqrt def
+    ul_str stringwidth pop dw exch sub 2 div ul_h_ptsize -2 div moveto
+    draw_underlay
+  grestore
+} def
+
+/user_underlay {	% - -> -
+  gsave
+    ul_x ul_y translate
+    ul_angle rotate
+    ul_gray setgray
+    ul_font setfont
+    0 0 ul_h_ptsize 2 div sub moveto
+    draw_underlay
+  grestore
+} def
+
+% Page prefeed
+/page_prefeed {		% bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} def
+
+% Wrapped line markers
+/wrapped_line_mark {	% x y charwith charheight type -> -
+  /type exch def
+  /h exch def
+  /w exch def
+  /y exch def
+  /x exch def
+
+  type 2 eq {
+    % Black boxes (like TeX does)
+    gsave
+      0 setlinewidth
+      x w 4 div add y M
+      0 h rlineto w 2 div 0 rlineto 0 h neg rlineto
+      closepath fill
+    grestore
+  } {
+    type 3 eq {
+      % Small arrows
+      gsave
+        .2 setlinewidth
+        x w 2 div add y h 2 div add M
+        w 4 div 0 rlineto
+        x w 4 div add y lineto stroke
+
+        x w 4 div add w 8 div add y h 4 div add M
+        x w 4 div add y lineto
+	w 4 div h 8 div rlineto stroke
+      grestore
+    } {
+      % do nothing
+    } ifelse
+  } ifelse
+} def
+
+% EPSF import.
+
+/BeginEPSF {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack
+  userdict begin
+  /showpage { } def
+  0 setgray 0 setlinecap
+  1 setlinewidth 0 setlinejoin
+  10 setmiterlimit [ ] 0 setdash newpath
+  /languagelevel where {
+    pop languagelevel
+    1 ne {
+      false setstrokeadjust false setoverprint
+    } if
+  } if
+} bind def
+
+/EndEPSF {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+%%EndResource
+%%BeginResource: procset Enscript-Encoding-88591 1.6 6
+/encoding_vector [
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclam       	/quotedbl     	/numbersign   	
+/dollar       	/percent      	/ampersand    	/quoteright   	
+/parenleft    	/parenright   	/asterisk     	/plus         	
+/comma        	/hyphen       	/period       	/slash        	
+/zero         	/one          	/two          	/three        	
+/four         	/five         	/six          	/seven        	
+/eight        	/nine         	/colon        	/semicolon    	
+/less         	/equal        	/greater      	/question     	
+/at           	/A            	/B            	/C            	
+/D            	/E            	/F            	/G            	
+/H            	/I            	/J            	/K            	
+/L            	/M            	/N            	/O            	
+/P            	/Q            	/R            	/S            	
+/T            	/U            	/V            	/W            	
+/X            	/Y            	/Z            	/bracketleft  	
+/backslash    	/bracketright 	/asciicircum  	/underscore   	
+/quoteleft    	/a            	/b            	/c            	
+/d            	/e            	/f            	/g            	
+/h            	/i            	/j            	/k            	
+/l            	/m            	/n            	/o            	
+/p            	/q            	/r            	/s            	
+/t            	/u            	/v            	/w            	
+/x            	/y            	/z            	/braceleft    	
+/bar          	/braceright   	/tilde        	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/.notdef      	/.notdef      	/.notdef      	/.notdef      	
+/space        	/exclamdown   	/cent         	/sterling     	
+/currency     	/yen          	/brokenbar    	/section      	
+/dieresis     	/copyright    	/ordfeminine  	/guillemotleft	
+/logicalnot   	/hyphen       	/registered   	/macron       	
+/degree       	/plusminus    	/twosuperior  	/threesuperior	
+/acute        	/mu           	/paragraph    	/bullet       	
+/cedilla      	/onesuperior  	/ordmasculine 	/guillemotright	
+/onequarter   	/onehalf      	/threequarters	/questiondown 	
+/Agrave       	/Aacute       	/Acircumflex  	/Atilde       	
+/Adieresis    	/Aring        	/AE           	/Ccedilla     	
+/Egrave       	/Eacute       	/Ecircumflex  	/Edieresis    	
+/Igrave       	/Iacute       	/Icircumflex  	/Idieresis    	
+/Eth          	/Ntilde       	/Ograve       	/Oacute       	
+/Ocircumflex  	/Otilde       	/Odieresis    	/multiply     	
+/Oslash       	/Ugrave       	/Uacute       	/Ucircumflex  	
+/Udieresis    	/Yacute       	/Thorn        	/germandbls   	
+/agrave       	/aacute       	/acircumflex  	/atilde       	
+/adieresis    	/aring        	/ae           	/ccedilla     	
+/egrave       	/eacute       	/ecircumflex  	/edieresis    	
+/igrave       	/iacute       	/icircumflex  	/idieresis    	
+/eth          	/ntilde       	/ograve       	/oacute       	
+/ocircumflex  	/otilde       	/odieresis    	/divide       	
+/oslash       	/ugrave       	/uacute       	/ucircumflex  	
+/udieresis    	/yacute       	/thorn        	/ydieresis    	
+] def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier-Bold
+/HFpt_w 10 def
+/HFpt_h 10 def
+/Courier-Bold /HF-gs-font MF
+/HF /HF-gs-font findfont [HFpt_w 0 0 HFpt_h 0 0] makefont def
+/Courier-Bold /F-gs-font MF
+/F-gs-font 10 10 SF
+/#copies 1 def
+% Pagedevice definitions:
+gs_languagelevel 1 gt {
+  <<
+    /PageSize [612 792] 
+  >> setpagedevice
+} if
+%%BeginResource: procset Enscript-Header-enscript-mycolor 1.6 6
+%%IncludeResource: font Times-Bold
+%%IncludeResource: font Times-Roman
+
+% Fonts.
+/Times-Bold /HeaderFont-Bold MF
+/HeaderDateF /HeaderFont-Bold findfont 12 scalefont def
+
+/Times-Roman /HeaderFont-Times MF
+/HeaderHDRF /HeaderFont-Times findfont 14 scalefont def
+
+/HeaderPageNumF /Helvetica-Bold findfont 28.8 scalefont def
+/HeaderPageCountF /Helvetica-Bold findfont 18 scalefont def
+
+/do_header {	% print enscript header
+  gsave
+    d_header_x d_header_y translate
+
+    /dhw d_header_w 4 sub def
+
+    /linecolor {0 0 0 setrgbcolor} bind def  % line color
+    /txcolor   {0 0 0 setrgbcolor} bind def  % text color
+    /fncolor   {0 0 0 setrgbcolor} bind def  % filename line color
+
+    .5 setlinewidth
+
+    % line across bottom of the header area
+    linecolor
+    0 0 moveto dhw 0 lineto
+
+    % side boxes
+    /sbw d_header_h 2 mul def	% side box width
+
+    % left side box
+    0 0 sbw d_header_h Box
+    linecolor
+    stroke
+
+    % date/time in left box
+    txcolor
+    HeaderDateF setfont
+    moddatestr dup stringwidth pop sbw exch sub 2 div
+    d_header_h 2 div 2 add moveto show
+    modtimestr dup stringwidth pop sbw exch sub 2 div
+    d_header_h 5 div moveto show
+
+    % right side box
+    dhw sbw sub 0 sbw d_header_h Box
+    linecolor
+    stroke
+
+    % get width of pagecount
+    HeaderPageCountF setfont
+    pagecountstr stringwidth pop
+
+    txcolor
+    HeaderPageNumF setfont
+    pagenumstr stringwidth pop add  % add to width of pagecount
+    sbw exch sub 2 div dhw sbw sub add
+    d_header_h .2 mul moveto
+
+    pagenumstr show
+
+    HeaderPageCountF setfont
+    pagecountstr show
+
+    % filename
+    fncolor
+    HeaderHDRF setfont
+    dhw fname stringwidth pop sub 2 div d_header_h 8 div moveto
+    fname show
+
+    % user supplied header string.
+    user_header_p {
+      /h d_header_h 8 div 5 mul def
+
+      % HACK around a bug in enscript 1.6.0:
+      % for some reason this is getting set to "(null)" and
+      %
+      user_header_center_str (\(null\)) eq {
+        /user_header_center_str () def
+      } if
+
+      % Implement strict enscript compatibility.
+      user_header_center_str () eq user_header_right_str () eq and {
+        dhw user_header_left_str stringwidth pop sub 2 div
+        h moveto user_header_left_str show
+      } {
+        sbw 5 add h moveto user_header_left_str show
+
+        dhw user_header_center_str stringwidth pop sub 2 div
+        h moveto user_header_center_str show
+
+	dhw sbw sub 5 sub user_header_right_str stringwidth pop
+	sub h moveto user_header_right_str show
+      } ifelse
+    } if
+
+  grestore
+} bind def
+%%EndResource
+/d_page_w 744 def
+/d_page_h 536 def
+/d_header_x 0 def
+/d_header_y 500 def
+/d_header_w 744 def
+/d_header_h 36 def
+/d_footer_x 0 def
+/d_footer_y 0 def
+/d_footer_w 744 def
+/d_footer_h 0 def
+/d_output_w 744 def
+/d_output_h 500 def
+/cols 1 def
+%%EndSetup
+%%Page: (1) 1
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 1 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (1) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+30 487 M (1:) s
+30 476 M (2:) s
+30 465 M (3:) s
+48 465 M
+(    [1]Chris Rathman / [2]ChrisRath@aol.com) s
+30 454 M (4:) s
+48 454 M
+(     _________________________________________________________________) s
+30 443 M (5:) s
+30 432 M (6:) s
+48 432 M
+("************************************************************************) s
+30 421 M (7:) s
+48 421 M
+( * Allowable characters:                                                *) s
+30 410 M (8:) s
+48 410 M
+( *    - a-z                                                             *) s
+30 399 M (9:) s
+48 399 M
+( *    - A-Z                                                             *) s
+24 388 M (10:) s
+48 388 M
+( *    - 0-9                                                             *) s
+24 377 M (11:) s
+48 377 M
+( *    - .+/\\*~<>@%|&?                                                   *) s
+24 366 M (12:) s
+48 366 M
+( *    - blank, tab, cr, ff, lf                                          *) s
+24 355 M (13:) s
+48 355 M
+( *                                                                      *) s
+24 344 M (14:) s
+48 344 M
+( * Variables:                                                           *) s
+24 333 M (15:) s
+48 333 M
+( *    - variables must be declared before use                           *) s
+24 322 M (16:) s
+48 322 M
+( *    - shared vars must begin with uppercase                           *) s
+24 311 M (17:) s
+48 311 M
+( *    - local vars must begin with lowercase                            *) s
+24 300 M (18:) s
+48 300 M
+( *    - reserved names: nil, true, false, self, super, and Smalltalk    *) s
+24 289 M (19:) s
+48 289 M
+( *                                                                      *) s
+24 278 M (20:) s
+48 278 M
+( * Variable scope:                                                      *) s
+24 267 M (21:) s
+48 267 M
+( *    - Global: defined in Dictionary Smalltalk and accessible by all   *) s
+24 256 M (22:) s
+48 256 M
+( *         objects in system                                            *) s
+24 245 M (23:) s
+48 245 M
+( *    - Special: \(reserved\) Smalltalk, super, self, true, false, & nil  *) s
+24 234 M (24:) s
+48 234 M
+( *    - Method Temporary: local to a method                             *) s
+24 223 M (25:) s
+48 223 M
+( *    - Block Temporary: local to a block                               *) s
+24 212 M (26:) s
+48 212 M
+( *    - Pool: variables in a Dictionary object                          *) s
+24 201 M (27:) s
+48 201 M
+( *    - Method Parameters: automatic local vars created as a result of  *) s
+24 190 M (28:) s
+48 190 M
+( *         message call with params                                     *) s
+24 179 M (29:) s
+48 179 M
+( *    - Block Parameters: automatic local vars created as a result of   *) s
+24 168 M (30:) s
+48 168 M
+( *         value: message call                                          *) s
+24 157 M (31:) s
+48 157 M
+( *    - Class: shared with all instances of one class & its subclasses  *) s
+24 146 M (32:) s
+48 146 M
+( *    - Class Instance: unique to each instance of a class              *) s
+24 135 M (33:) s
+48 135 M
+( *    - Instance Variables: unique to each instance                     *) s
+24 124 M (34:) s
+48 124 M
+( ************************************************************************") s
+24 113 M (35:) s
+48 113 M
+("Comments are enclosed in quotes") s
+24 102 M (36:) s
+48 102 M
+("Period \(.\) is the statement seperator") s
+24 91 M (37:) s
+24 80 M (38:) s
+48 80 M
+("************************************************************************) s
+24 69 M (39:) s
+48 69 M
+( * Transcript:                                                          *) s
+24 58 M (40:) s
+48 58 M
+( ************************************************************************") s
+24 47 M (41:) s
+48 47 M
+(Transcript clear.                                           "clear to transcript window") s
+24 36 M (42:) s
+48 36 M
+(Transcript show: 'Hello World'.                             "output string in transcript window") s
+24 25 M (43:) s
+48 25 M
+(Transcript nextPutAll: 'Hello World'.                       "output string in transcript window") s
+24 14 M (44:) s
+48 14 M
+(Transcript nextPut: $A.                                     "output character in transcript window") s
+24 3 M (45:) s
+48 3 M
+(Transcript space.                                           "output space character in transcript window") s
+_R
+S
+%%Page: (2) 2
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 2 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (2) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+24 487 M (46:) s
+48 487 M
+(Transcript tab.                                             "output tab character in transcript window") s
+24 476 M (47:) s
+48 476 M
+(Transcript cr.                                              "carriage return /linefeed") s
+24 465 M (48:) s
+48 465 M
+('Hello' printOn: Transcript.                                "append print string into the window") s
+24 454 M (49:) s
+48 454 M
+('Hello' storeOn: Transcript.                                "append store string into the window") s
+24 443 M (50:) s
+48 443 M
+(Transcript endEntry.                                        "flush the output buffer") s
+24 432 M (51:) s
+24 421 M (52:) s
+48 421 M
+("************************************************************************) s
+24 410 M (53:) s
+48 410 M
+( * Assignment:                                                          *) s
+24 399 M (54:) s
+48 399 M
+( ************************************************************************") s
+24 388 M (55:) s
+48 388 M
+(| x y |) s
+24 377 M (56:) s
+48 377 M
+(x _ 4.                                                      "assignment \(Squeak\) <-") s
+24 366 M (57:) s
+48 366 M
+(x := 5.                                                     "assignment") s
+24 355 M (58:) s
+48 355 M
+(x := y := z := 6.                                           "compound assignment") s
+24 344 M (59:) s
+48 344 M
+(x := \(y := 6\) + 1.) s
+24 333 M (60:) s
+48 333 M
+(x := Object new.                                            "bind to allocatedinstance of a class") s
+24 322 M (61:) s
+48 322 M
+(x := 123 class.                                             "discover the object class") s
+24 311 M (62:) s
+48 311 M
+(x := Integer superclass.                                    "discover the superclass of a class") s
+24 300 M (63:) s
+48 300 M
+(x := Object allInstances.                                   "get an array of all instances of a class") s
+24 289 M (64:) s
+48 289 M
+(x := Integer allSuperclasses.                               "get all superclasses of a class") s
+24 278 M (65:) s
+48 278 M
+(x := 1.2 hash.                                              "hash value for object") s
+24 267 M (66:) s
+48 267 M
+(y := x copy.                                                "copy object") s
+24 256 M (67:) s
+48 256 M
+(y := x shallowCopy.                                         "copy object \(not overridden\)") s
+24 245 M (68:) s
+48 245 M
+(y := x deepCopy.                                            "copy object and instance vars") s
+24 234 M (69:) s
+48 234 M
+(y := x veryDeepCopy.                                        "complete tree copy using a dictionary") s
+24 223 M (70:) s
+24 212 M (71:) s
+48 212 M
+("************************************************************************) s
+24 201 M (72:) s
+48 201 M
+( * Constants:                                                           *) s
+24 190 M (73:) s
+48 190 M
+( ************************************************************************") s
+24 179 M (74:) s
+48 179 M
+(| b |) s
+24 168 M (75:) s
+48 168 M
+(b := true.                                                  "true constant") s
+24 157 M (76:) s
+48 157 M
+(b := false.                                                 "false constant") s
+24 146 M (77:) s
+48 146 M
+(x := nil.                                                   "nil object constant") s
+24 135 M (78:) s
+48 135 M
+(x := 1.                                                     "integer constants") s
+24 124 M (79:) s
+48 124 M
+(x := 3.14.                                                  "float constants") s
+24 113 M (80:) s
+48 113 M
+(x := 2e-2.                                                  "fractional constants") s
+24 102 M (81:) s
+48 102 M
+(x := 16r0F.                                                 "hex constant".) s
+24 91 M (82:) s
+48 91 M
+(x := -1.                                                    "negative constants") s
+24 80 M (83:) s
+48 80 M
+(x := 'Hello'.                                               "string constant") s
+24 69 M (84:) s
+48 69 M
+(x := 'I''m here'.                                           "single quote escape") s
+24 58 M (85:) s
+48 58 M
+(x := $A.                                                    "character constant") s
+24 47 M (86:) s
+48 47 M
+(x := $ .                                                    "character constant \(space\)") s
+24 36 M (87:) s
+48 36 M
+(x := #aSymbol.                                              "symbol constants") s
+24 25 M (88:) s
+48 25 M
+(x := #\(3 2 1\).                                              "array constants") s
+24 14 M (89:) s
+48 14 M
+(x := #\('abc' 2 $a\).                                         "mixing of types allowed") s
+24 3 M (90:) s
+_R
+S
+%%Page: (3) 3
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 3 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (3) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+24 487 M (91:) s
+48 487 M
+("************************************************************************) s
+24 476 M (92:) s
+48 476 M
+( * Booleans:                                                            *) s
+24 465 M (93:) s
+48 465 M
+( ************************************************************************") s
+24 454 M (94:) s
+48 454 M
+(| b x y |) s
+24 443 M (95:) s
+48 443 M
+(x := 1. y := 2.) s
+24 432 M (96:) s
+48 432 M
+(b := \(x = y\).                                               "equals") s
+24 421 M (97:) s
+48 421 M
+(b := \(x ~= y\).                                              "not equals") s
+24 410 M (98:) s
+48 410 M
+(b := \(x == y\).                                              "identical") s
+24 399 M (99:) s
+48 399 M
+(b := \(x ~~ y\).                                              "not identical") s
+18 388 M (100:) s
+48 388 M
+(b := \(x > y\).                                               "greater than") s
+18 377 M (101:) s
+48 377 M
+(b := \(x < y\).                                               "less than") s
+18 366 M (102:) s
+48 366 M
+(b := \(x >= y\).                                              "greater than or equal") s
+18 355 M (103:) s
+48 355 M
+(b := \(x <= y\).                                              "less than or equal") s
+18 344 M (104:) s
+48 344 M
+(b := b not.                                                 "boolean not") s
+18 333 M (105:) s
+48 333 M
+(b := \(x < 5\) & \(y > 1\).                                     "boolean and") s
+18 322 M (106:) s
+48 322 M
+(b := \(x < 5\) | \(y > 1\).                                     "boolean or") s
+18 311 M (107:) s
+48 311 M
+(b := \(x < 5\) and: [y > 1].                                  "boolean and \(short-circuit\)") s
+18 300 M (108:) s
+48 300 M
+(b := \(x < 5\) or: [y > 1].                                   "boolean or \(short-circuit\)") s
+18 289 M (109:) s
+48 289 M
+(b := \(x < 5\) eqv: \(y > 1\).                                  "test if both trueor both false") s
+18 278 M (110:) s
+48 278 M
+(b := \(x < 5\) xor: \(y > 1\).                                  "test if one true and other false") s
+18 267 M (111:) s
+48 267 M
+(b := 5 between: 3 and: 12.                                  "between \(inclusive\)") s
+18 256 M (112:) s
+48 256 M
+(b := 123 isKindOf: Number.                                  "test if object isclass or subclass of") s
+18 245 M (113:) s
+48 245 M
+(b := 123 isMemberOf: SmallInteger.                          "test if object istype of class") s
+18 234 M (114:) s
+48 234 M
+(b := 123 respondsTo: sqrt.                                  "test if object responds to message") s
+18 223 M (115:) s
+48 223 M
+(b := x isNil.                                               "test if object isnil") s
+18 212 M (116:) s
+48 212 M
+(b := x isZero.                                              "test if number iszero") s
+18 201 M (117:) s
+48 201 M
+(b := x positive.                                            "test if number ispositive") s
+18 190 M (118:) s
+48 190 M
+(b := x strictlyPositive.                                    "test if number isgreater than zero") s
+18 179 M (119:) s
+48 179 M
+(b := x negative.                                            "test if number isnegative") s
+18 168 M (120:) s
+48 168 M
+(b := x even.                                                "test if number iseven") s
+18 157 M (121:) s
+48 157 M
+(b := x odd.                                                 "test if number isodd") s
+18 146 M (122:) s
+48 146 M
+(b := x isLiteral.                                           "test if literal constant") s
+18 135 M (123:) s
+48 135 M
+(b := x isInteger.                                           "test if object isinteger") s
+18 124 M (124:) s
+48 124 M
+(b := x isFloat.                                             "test if object isfloat") s
+18 113 M (125:) s
+48 113 M
+(b := x isNumber.                                            "test if object isnumber") s
+18 102 M (126:) s
+48 102 M
+(b := $A isUppercase.                                        "test if upper case character") s
+18 91 M (127:) s
+48 91 M
+(b := $A isLowercase.                                        "test if lower case character") s
+18 80 M (128:) s
+18 69 M (129:) s
+48 69 M
+("************************************************************************) s
+18 58 M (130:) s
+48 58 M
+( * Arithmetic expressions:                                              *) s
+18 47 M (131:) s
+48 47 M
+( ************************************************************************") s
+18 36 M (132:) s
+48 36 M
+(| x |) s
+18 25 M (133:) s
+48 25 M
+(x := 6 + 3.                                                 "addition") s
+18 14 M (134:) s
+48 14 M
+(x := 6 - 3.                                                 "subtraction") s
+18 3 M (135:) s
+48 3 M
+(x := 6 * 3.                                                 "multiplication") s
+_R
+S
+%%Page: (4) 4
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 4 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (4) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18 487 M (136:) s
+48 487 M
+(x := 1 + 2 * 3.                                             "evaluation alwaysleft to right \(1 + 2\) * 3") s
+18 476 M (137:) s
+48 476 M
+(x := 5 / 3.                                                 "division with fractional result") s
+18 465 M (138:) s
+48 465 M
+(x := 5.0 / 3.0.                                             "division with float result") s
+18 454 M (139:) s
+48 454 M
+(x := 5.0 // 3.0.                                            "integer divide") s
+18 443 M (140:) s
+48 443 M
+(x := 5.0 \\\\ 3.0.                                            "integer remainder") s
+18 432 M (141:) s
+48 432 M
+(x := -5.                                                    "unary minus") s
+18 421 M (142:) s
+48 421 M
+(x := 5 sign.                                                "numeric sign \(1, -1 or 0\)") s
+18 410 M (143:) s
+48 410 M
+(x := 5 negated.                                             "negate receiver") s
+18 399 M (144:) s
+48 399 M
+(x := 1.2 integerPart.                                       "integer part of number \(1.0\)") s
+18 388 M (145:) s
+48 388 M
+(x := 1.2 fractionPart.                                      "fractional part of number \(0.2\)") s
+18 377 M (146:) s
+48 377 M
+(x := 5 reciprocal.                                          "reciprocal function") s
+18 366 M (147:) s
+48 366 M
+(x := 6 * 3.1.                                               "auto convert to float") s
+18 355 M (148:) s
+48 355 M
+(x := 5 squared.                                             "square function") s
+18 344 M (149:) s
+48 344 M
+(x := 25 sqrt.                                               "square root") s
+18 333 M (150:) s
+48 333 M
+(x := 5 raisedTo: 2.                                         "power function") s
+18 322 M (151:) s
+48 322 M
+(x := 5 raisedToInteger: 2.                                  "power function with integer") s
+18 311 M (152:) s
+48 311 M
+(x := 5 exp.                                                 "exponential") s
+18 300 M (153:) s
+48 300 M
+(x := -5 abs.                                                "absolute value") s
+18 289 M (154:) s
+48 289 M
+(x := 3.99 rounded.                                          "round") s
+18 278 M (155:) s
+48 278 M
+(x := 3.99 truncated.                                        "truncate") s
+18 267 M (156:) s
+48 267 M
+(x := 3.99 roundTo: 1.                                       "round to specified decimal places") s
+18 256 M (157:) s
+48 256 M
+(x := 3.99 truncateTo: 1.                                    "truncate to specified decimal places") s
+18 245 M (158:) s
+48 245 M
+(x := 3.99 floor.                                            "truncate") s
+18 234 M (159:) s
+48 234 M
+(x := 3.99 ceiling.                                          "round up") s
+18 223 M (160:) s
+48 223 M
+(x := 5 factorial.                                           "factorial") s
+18 212 M (161:) s
+48 212 M
+(x := -5 quo: 3.                                             "integer divide rounded toward zero") s
+18 201 M (162:) s
+48 201 M
+(x := -5 rem: 3.                                             "integer remainderrounded toward zero") s
+18 190 M (163:) s
+48 190 M
+(x := 28 gcd: 12.                                            "greatest common denominator") s
+18 179 M (164:) s
+48 179 M
+(x := 28 lcm: 12.                                            "least common multiple") s
+18 168 M (165:) s
+48 168 M
+(x := 100 ln.                                                "natural logarithm") s
+18 157 M (166:) s
+48 157 M
+(x := 100 log.                                               "base 10 logarithm") s
+18 146 M (167:) s
+48 146 M
+(x := 100 log: 10.                                           "logarithm with specified base") s
+18 135 M (168:) s
+48 135 M
+(x := 100 floorLog: 10.                                      "floor of the log") s
+18 124 M (169:) s
+48 124 M
+(x := 180 degreesToRadians.                                  "convert degrees to radians") s
+18 113 M (170:) s
+48 113 M
+(x := 3.14 radiansToDegrees.                                 "convert radians to degrees") s
+18 102 M (171:) s
+48 102 M
+(x := 0.7 sin.                                               "sine") s
+18 91 M (172:) s
+48 91 M
+(x := 0.7 cos.                                               "cosine") s
+18 80 M (173:) s
+48 80 M
+(x := 0.7 tan.                                               "tangent") s
+18 69 M (174:) s
+48 69 M
+(x := 0.7 arcSin.                                            "arcsine") s
+18 58 M (175:) s
+48 58 M
+(x := 0.7 arcCos.                                            "arccosine") s
+18 47 M (176:) s
+48 47 M
+(x := 0.7 arcTan.                                            "arctangent") s
+18 36 M (177:) s
+48 36 M
+(x := 10 max: 20.                                            "get maximum of two numbers") s
+18 25 M (178:) s
+48 25 M
+(x := 10 min: 20.                                            "get minimum of two numbers") s
+18 14 M (179:) s
+48 14 M
+(x := Float pi.                                              "pi") s
+18 3 M (180:) s
+48 3 M
+(x := Float e.                                               "exp constant") s
+_R
+S
+%%Page: (5) 5
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 5 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (5) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18 487 M (181:) s
+48 487 M
+(x := Float infinity.                                        "infinity") s
+18 476 M (182:) s
+48 476 M
+(x := Float nan.                                             "not-a-number") s
+18 465 M (183:) s
+48 465 M
+(x := Random new next; yourself. x next.                     "random number stream \(0.0 to 1.0\)) s
+18 454 M (184:) s
+48 454 M
+(x := 100 atRandom.                                          "quick random number") s
+18 443 M (185:) s
+18 432 M (186:) s
+48 432 M
+("************************************************************************) s
+18 421 M (187:) s
+48 421 M
+( * Bitwise Manipulation:                                                *) s
+18 410 M (188:) s
+48 410 M
+( ************************************************************************") s
+18 399 M (189:) s
+48 399 M
+(| b x |) s
+18 388 M (190:) s
+48 388 M
+(x := 16rFF bitAnd: 16r0F.                                   "and bits") s
+18 377 M (191:) s
+48 377 M
+(x := 16rF0 bitOr: 16r0F.                                    "or bits") s
+18 366 M (192:) s
+48 366 M
+(x := 16rFF bitXor: 16r0F.                                   "xor bits") s
+18 355 M (193:) s
+48 355 M
+(x := 16rFF bitInvert.                                       "invert bits") s
+18 344 M (194:) s
+48 344 M
+(x := 16r0F bitShift: 4.                                     "left shift") s
+18 333 M (195:) s
+48 333 M
+(x := 16rF0 bitShift: -4.                                    "right shift") s
+18 322 M (196:) s
+48 322 M
+("x := 16r80 bitAt: 7."                                      "bit at position \(0|1\) [!Squeak]") s
+18 311 M (197:) s
+48 311 M
+(x := 16r80 highbit.                                         "position of highest bit set") s
+18 300 M (198:) s
+48 300 M
+(b := 16rFF allMask: 16r0F.                                  "test if all bits set in mask set in receiver") s
+18 289 M (199:) s
+48 289 M
+(b := 16rFF anyMask: 16r0F.                                  "test if any bits set in mask set in receiver") s
+18 278 M (200:) s
+48 278 M
+(b := 16rFF noMask: 16r0F.                                   "test if all bits set in mask clear in receiver") s
+18 267 M (201:) s
+18 256 M (202:) s
+48 256 M
+("************************************************************************) s
+18 245 M (203:) s
+48 245 M
+( * Conversion:                                                          *) s
+18 234 M (204:) s
+48 234 M
+( ************************************************************************") s
+18 223 M (205:) s
+48 223 M
+(| x |) s
+18 212 M (206:) s
+48 212 M
+(x := 3.99 asInteger.                                        "convert number tointeger \(truncates in Squeak\)") s
+18 201 M (207:) s
+48 201 M
+(x := 3.99 asFraction.                                       "convert number tofraction") s
+18 190 M (208:) s
+48 190 M
+(x := 3 asFloat.                                             "convert number tofloat") s
+18 179 M (209:) s
+48 179 M
+(x := 65 asCharacter.                                        "convert integer to character") s
+18 168 M (210:) s
+48 168 M
+(x := $A asciiValue.                                         "convert characterto integer") s
+18 157 M (211:) s
+48 157 M
+(x := 3.99 printString.                                      "convert object tostring via printOn:") s
+18 146 M (212:) s
+48 146 M
+(x := 3.99 storeString.                                      "convert object tostring via storeOn:") s
+18 135 M (213:) s
+48 135 M
+(x := 15 radix: 16.                                          "convert to stringin given base") s
+18 124 M (214:) s
+48 124 M
+(x := 15 printStringBase: 16.) s
+18 113 M (215:) s
+48 113 M
+(x := 15 storeStringBase: 16.) s
+18 102 M (216:) s
+18 91 M (217:) s
+48 91 M
+("************************************************************************) s
+18 80 M (218:) s
+48 80 M
+( * Blocks:                                                              *) s
+18 69 M (219:) s
+48 69 M
+( *    - blocks are objects and may be assigned to a variable            *) s
+18 58 M (220:) s
+48 58 M
+( *    - value is last expression evaluated unless explicit return       *) s
+18 47 M (221:) s
+48 47 M
+( *    - blocks may be nested                                            *) s
+18 36 M (222:) s
+48 36 M
+( *    - specification [ arguments | | localvars | expressions ]         *) s
+18 25 M (223:) s
+48 25 M
+( *    - Squeak does not currently support localvars in blocks           *) s
+18 14 M (224:) s
+48 14 M
+( *    - max of three arguments allowed                                  *) s
+18 3 M (225:) s
+48 3 M
+( *    - ^expression terminates block & method \(exits all nested blocks\) *) s
+_R
+S
+%%Page: (6) 6
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 6 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (6) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18 487 M (226:) s
+48 487 M
+( *    - blocks intended for long term storage should not contain ^      *) s
+18 476 M (227:) s
+48 476 M
+( ************************************************************************") s
+18 465 M (228:) s
+48 465 M
+(| x y z |) s
+18 454 M (229:) s
+48 454 M
+(x := [ y := 1. z := 2. ]. x value.                          "simple block usage") s
+18 443 M (230:) s
+48 443 M
+(x := [ :argOne :argTwo |   argOne, ' and ' , argTwo.].      "set up block withargument passing") s
+18 432 M (231:) s
+48 432 M
+(Transcript show: \(x value: 'First' value: 'Second'\); cr.    "use block with argument passing") s
+18 421 M (232:) s
+48 421 M
+("x := [ | z | z := 1.].                                      localvars not available in squeak blocks") s
+18 410 M (233:) s
+18 399 M (234:) s
+48 399 M
+("************************************************************************) s
+18 388 M (235:) s
+48 388 M
+( * Method calls:                                                        *) s
+18 377 M (236:) s
+48 377 M
+( *    - unary methods are messages with no arguments                    *) s
+18 366 M (237:) s
+48 366 M
+( *    - binary methods                                                  *) s
+18 355 M (238:) s
+48 355 M
+( *    - keyword methods are messages with selectors including colons    *) s
+18 344 M (239:) s
+48 344 M
+( *                                                                      *) s
+18 333 M (240:) s
+48 333 M
+( * standard categories/protocols:                                       *) s
+18 322 M (241:) s
+48 322 M
+( *    - initialize-release    \(methods called for new instance\)         *) s
+18 311 M (242:) s
+48 311 M
+( *    - accessing             \(get/set methods\)                         *) s
+18 300 M (243:) s
+48 300 M
+( *    - testing               \(boolean tests - is\)                      *) s
+18 289 M (244:) s
+48 289 M
+( *    - comparing             \(boolean tests with parameter             *) s
+18 278 M (245:) s
+48 278 M
+( *    - displaying            \(gui related methods\)                     *) s
+18 267 M (246:) s
+48 267 M
+( *    - printing              \(methods for printing\)                    *) s
+18 256 M (247:) s
+48 256 M
+( *    - updating              \(receive notification of changes\)         *) s
+18 245 M (248:) s
+48 245 M
+( *    - private               \(methods private to class\)                *) s
+18 234 M (249:) s
+48 234 M
+( *    - instance-creation     \(class methods for creating instance\)     *) s
+18 223 M (250:) s
+48 223 M
+( ************************************************************************") s
+18 212 M (251:) s
+48 212 M
+(| x |) s
+18 201 M (252:) s
+48 201 M
+(x := 2 sqrt.                                                "unary message") s
+18 190 M (253:) s
+48 190 M
+(x := 2 raisedTo: 10.                                        "keyword message") s
+18 179 M (254:) s
+48 179 M
+(x := 194 * 9.                                               "binary message") s
+18 168 M (255:) s
+48 168 M
+(Transcript show: \(194 * 9\) printString; cr.                 "combination \(chaining\)") s
+18 157 M (256:) s
+48 157 M
+(x := 2 perform: #sqrt.                                      "indirect method invocation") s
+18 146 M (257:) s
+48 146 M
+(Transcript                                                  "Cascading - send multiple messages to receiver") s
+18 135 M (258:) s
+48 135 M
+(   show: 'hello ';) s
+18 124 M (259:) s
+48 124 M
+(   show: 'world';) s
+18 113 M (260:) s
+48 113 M
+(   cr.) s
+18 102 M (261:) s
+48 102 M
+(x := 3 + 2; * 100.                                          "result=300. Sendsmessage to same receiver \(3\)") s
+18 91 M (262:) s
+18 80 M (263:) s
+48 80 M
+("************************************************************************) s
+18 69 M (264:) s
+48 69 M
+( * Conditional Statements:                                              *) s
+18 58 M (265:) s
+48 58 M
+( ************************************************************************") s
+18 47 M (266:) s
+48 47 M
+(| x |) s
+18 36 M (267:) s
+48 36 M
+(x > 10 ifTrue: [Transcript show: 'ifTrue'; cr].             "if then") s
+18 25 M (268:) s
+48 25 M
+(x > 10 ifFalse: [Transcript show: 'ifFalse'; cr].           "if else") s
+18 14 M (269:) s
+48 14 M
+(x > 10                                                      "if then else") s
+18 3 M (270:) s
+48 3 M
+(   ifTrue: [Transcript show: 'ifTrue'; cr]) s
+_R
+S
+%%Page: (7) 7
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 7 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (7) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18 487 M (271:) s
+48 487 M
+(   ifFalse: [Transcript show: 'ifFalse'; cr].) s
+18 476 M (272:) s
+48 476 M
+(x > 10                                                      "if else then") s
+18 465 M (273:) s
+48 465 M
+(   ifFalse: [Transcript show: 'ifFalse'; cr]) s
+18 454 M (274:) s
+48 454 M
+(   ifTrue: [Transcript show: 'ifTrue'; cr].) s
+18 443 M (275:) s
+48 443 M
+(Transcript) s
+18 432 M (276:) s
+48 432 M
+(   show:) s
+18 421 M (277:) s
+48 421 M
+(      \(x > 10) s
+18 410 M (278:) s
+48 410 M
+(         ifTrue: ['ifTrue']) s
+18 399 M (279:) s
+48 399 M
+(         ifFalse: ['ifFalse']\);) s
+18 388 M (280:) s
+48 388 M
+(   cr.) s
+18 377 M (281:) s
+48 377 M
+(Transcript                                                  "nested if then else") s
+18 366 M (282:) s
+48 366 M
+(   show:) s
+18 355 M (283:) s
+48 355 M
+(      \(x > 10) s
+18 344 M (284:) s
+48 344 M
+(         ifTrue: [x > 5) s
+18 333 M (285:) s
+48 333 M
+(            ifTrue: ['A']) s
+18 322 M (286:) s
+48 322 M
+(            ifFalse: ['B']]) s
+18 311 M (287:) s
+48 311 M
+(         ifFalse: ['C']\);) s
+18 300 M (288:) s
+48 300 M
+(   cr.) s
+18 289 M (289:) s
+48 289 M
+(switch := Dictionary new.                                   "switch functionality") s
+18 278 M (290:) s
+48 278 M
+(switch at: $A put: [Transcript show: 'Case A'; cr].) s
+18 267 M (291:) s
+48 267 M
+(switch at: $B put: [Transcript show: 'Case B'; cr].) s
+18 256 M (292:) s
+48 256 M
+(switch at: $C put: [Transcript show: 'Case C'; cr].) s
+18 245 M (293:) s
+48 245 M
+(result := \(switch at: $B\) value.) s
+18 234 M (294:) s
+18 223 M (295:) s
+48 223 M
+("************************************************************************) s
+18 212 M (296:) s
+48 212 M
+( * Iteration statements:                                                *) s
+18 201 M (297:) s
+48 201 M
+( ************************************************************************") s
+18 190 M (298:) s
+48 190 M
+(| x y |) s
+18 179 M (299:) s
+48 179 M
+(x := 4. y := 1.) s
+18 168 M (300:) s
+48 168 M
+([x > 0] whileTrue: [x := x - 1. y := y * 2].                "while true loop") s
+18 157 M (301:) s
+48 157 M
+([x >= 4] whileFalse: [x := x + 1. y := y * 2].              "while false loop") s
+18 146 M (302:) s
+48 146 M
+(x timesRepeat: [y := y * 2].                                "times repear loop\(i := 1 to x\)") s
+18 135 M (303:) s
+48 135 M
+(1 to: x do: [:a | y := y * 2].                              "for loop") s
+18 124 M (304:) s
+48 124 M
+(1 to: x by: 2 do: [:a | y := y / 2].                        "for loop with specified increment") s
+18 113 M (305:) s
+48 113 M
+(#\(5 4 3\) do: [:a | x := x + a].                             "iterate over array elements") s
+18 102 M (306:) s
+18 91 M (307:) s
+48 91 M
+("************************************************************************) s
+18 80 M (308:) s
+48 80 M
+( * Character:                                                           *) s
+18 69 M (309:) s
+48 69 M
+( ************************************************************************") s
+18 58 M (310:) s
+48 58 M
+(| x y |) s
+18 47 M (311:) s
+48 47 M
+(x := $A.                                                    "character assignment") s
+18 36 M (312:) s
+48 36 M
+(y := x isLowercase.                                         "test if lower case") s
+18 25 M (313:) s
+48 25 M
+(y := x isUppercase.                                         "test if upper case") s
+18 14 M (314:) s
+48 14 M
+(y := x isLetter.                                            "test if letter") s
+18 3 M (315:) s
+48 3 M
+(y := x isDigit.                                             "test if digit") s
+_R
+S
+%%Page: (8) 8
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 8 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (8) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18 487 M (316:) s
+48 487 M
+(y := x isAlphaNumeric.                                      "test if alphanumeric") s
+18 476 M (317:) s
+48 476 M
+(y := x isSeparator.                                         "test if seperatorchar") s
+18 465 M (318:) s
+48 465 M
+(y := x isVowel.                                             "test if vowel") s
+18 454 M (319:) s
+48 454 M
+(y := x digitValue.                                          "convert to numeric digit value") s
+18 443 M (320:) s
+48 443 M
+(y := x asLowercase.                                         "convert to lower case") s
+18 432 M (321:) s
+48 432 M
+(y := x asUppercase.                                         "convert to upper case") s
+18 421 M (322:) s
+48 421 M
+(y := x asciiValue.                                          "convert to numeric ascii value") s
+18 410 M (323:) s
+48 410 M
+(y := x asString.                                            "convert to string") s
+18 399 M (324:) s
+48 399 M
+(b := $A <= $B.                                              "comparison") s
+18 388 M (325:) s
+48 388 M
+(y := $A max: $B.) s
+18 377 M (326:) s
+18 366 M (327:) s
+48 366 M
+("************************************************************************) s
+18 355 M (328:) s
+48 355 M
+( * Symbol:                                                              *) s
+18 344 M (329:) s
+48 344 M
+( ************************************************************************") s
+18 333 M (330:) s
+48 333 M
+(| b x y |) s
+18 322 M (331:) s
+48 322 M
+(x := #Hello.                                                "symbol assignment") s
+18 311 M (332:) s
+48 311 M
+(y := 'String', 'Concatenation'.                             "symbol concatenation \(result is string\)") s
+18 300 M (333:) s
+48 300 M
+(b := x isEmpty.                                             "test if symbol isempty") s
+18 289 M (334:) s
+48 289 M
+(y := x size.                                                "string size") s
+18 278 M (335:) s
+48 278 M
+(y := x at: 2.                                               "char at location") s
+18 267 M (336:) s
+48 267 M
+(y := x copyFrom: 2 to: 4.                                   "substring") s
+18 256 M (337:) s
+48 256 M
+(y := x indexOf: $e ifAbsent: [0].                           "first position ofcharacter within string") s
+18 245 M (338:) s
+48 245 M
+(x do: [:a | Transcript show: a printString; cr].            "iterate over the string") s
+18 234 M (339:) s
+48 234 M
+(b := x conform: [:a | \(a >= $a\) & \(a <= $z\)].               "test if all elements meet condition") s
+18 223 M (340:) s
+48 223 M
+(y := x select: [:a | a > $a].                               "return all elements that meet condition") s
+18 212 M (341:) s
+48 212 M
+(y := x asString.                                            "convert symbol tostring") s
+18 201 M (342:) s
+48 201 M
+(y := x asText.                                              "convert symbol totext") s
+18 190 M (343:) s
+48 190 M
+(y := x asArray.                                             "convert symbol toarray") s
+18 179 M (344:) s
+48 179 M
+(y := x asOrderedCollection.                                 "convert symbol toordered collection") s
+18 168 M (345:) s
+48 168 M
+(y := x asSortedCollection.                                  "convert symbol tosorted collection") s
+18 157 M (346:) s
+48 157 M
+(y := x asBag.                                               "convert symbol tobag collection") s
+18 146 M (347:) s
+48 146 M
+(y := x asSet.                                               "convert symbol toset collection") s
+18 135 M (348:) s
+18 124 M (349:) s
+48 124 M
+("************************************************************************) s
+18 113 M (350:) s
+48 113 M
+( * String:                                                              *) s
+18 102 M (351:) s
+48 102 M
+( ************************************************************************") s
+18 91 M (352:) s
+48 91 M
+(| b x y |) s
+18 80 M (353:) s
+48 80 M
+(x := 'This is a string'.                                    "string assignment") s
+18 69 M (354:) s
+48 69 M
+(x := 'String', 'Concatenation'.                             "string concatenation") s
+18 58 M (355:) s
+48 58 M
+(b := x isEmpty.                                             "test if string isempty") s
+18 47 M (356:) s
+48 47 M
+(y := x size.                                                "string size") s
+18 36 M (357:) s
+48 36 M
+(y := x at: 2.                                               "char at location") s
+18 25 M (358:) s
+48 25 M
+(y := x copyFrom: 2 to: 4.                                   "substring") s
+18 14 M (359:) s
+48 14 M
+(y := x indexOf: $a ifAbsent: [0].                           "first position ofcharacter within string") s
+18 3 M (360:) s
+48 3 M
+(x := String new: 4.                                         "allocate string object") s
+_R
+S
+%%Page: (9) 9
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 9 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (9) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18 487 M (361:) s
+48 487 M
+(x                                                           "set string elements") s
+18 476 M (362:) s
+48 476 M
+(   at: 1 put: $a;) s
+18 465 M (363:) s
+48 465 M
+(   at: 2 put: $b;) s
+18 454 M (364:) s
+48 454 M
+(   at: 3 put: $c;) s
+18 443 M (365:) s
+48 443 M
+(   at: 4 put: $e.) s
+18 432 M (366:) s
+48 432 M
+(x := String with: $a with: $b with: $c with: $d.            "set up to 4 elements at a time") s
+18 421 M (367:) s
+48 421 M
+(x do: [:a | Transcript show: a printString; cr].            "iterate over the string") s
+18 410 M (368:) s
+48 410 M
+(b := x conform: [:a | \(a >= $a\) & \(a <= $z\)].               "test if all elements meet condition") s
+18 399 M (369:) s
+48 399 M
+(y := x select: [:a | a > $a].                               "return all elements that meet condition") s
+18 388 M (370:) s
+48 388 M
+(y := x asSymbol.                                            "convert string tosymbol") s
+18 377 M (371:) s
+48 377 M
+(y := x asArray.                                             "convert string toarray") s
+18 366 M (372:) s
+48 366 M
+(x := 'ABCD' asByteArray.                                    "convert string tobyte array") s
+18 355 M (373:) s
+48 355 M
+(y := x asOrderedCollection.                                 "convert string toordered collection") s
+18 344 M (374:) s
+48 344 M
+(y := x asSortedCollection.                                  "convert string tosorted collection") s
+18 333 M (375:) s
+48 333 M
+(y := x asBag.                                               "convert string tobag collection") s
+18 322 M (376:) s
+48 322 M
+(y := x asSet.                                               "convert string toset collection") s
+18 311 M (377:) s
+48 311 M
+(y := x shuffled.                                            "randomly shuffle string") s
+18 300 M (378:) s
+18 289 M (379:) s
+48 289 M
+("************************************************************************) s
+18 278 M (380:) s
+48 278 M
+( * Array:         Fixed length collection                               *) s
+18 267 M (381:) s
+48 267 M
+( * ByteArray:     Array limited to byte elements \(0-255\)                *) s
+18 256 M (382:) s
+48 256 M
+( * WordArray:     Array limited to word elements \(0-2^32\)               *) s
+18 245 M (383:) s
+48 245 M
+( ************************************************************************") s
+18 234 M (384:) s
+48 234 M
+(| b x y sum max |) s
+18 223 M (385:) s
+48 223 M
+(x := #\(4 3 2 1\).                                            "constant array") s
+18 212 M (386:) s
+48 212 M
+(x := Array with: 5 with: 4 with: 3 with: 2.                 "create array withup to 4 elements") s
+18 201 M (387:) s
+48 201 M
+(x := Array new: 4.                                          "allocate an arraywith specified size") s
+18 190 M (388:) s
+48 190 M
+(x                                                           "set array elements") s
+18 179 M (389:) s
+48 179 M
+(   at: 1 put: 5;) s
+18 168 M (390:) s
+48 168 M
+(   at: 2 put: 4;) s
+18 157 M (391:) s
+48 157 M
+(   at: 3 put: 3;) s
+18 146 M (392:) s
+48 146 M
+(   at: 4 put: 2.) s
+18 135 M (393:) s
+48 135 M
+(b := x isEmpty.                                             "test if array is empty") s
+18 124 M (394:) s
+48 124 M
+(y := x size.                                                "array size") s
+18 113 M (395:) s
+48 113 M
+(y := x at: 4.                                               "get array elementat index") s
+18 102 M (396:) s
+48 102 M
+(b := x includes: 3.                                         "test if element is in array") s
+18 91 M (397:) s
+48 91 M
+(y := x copyFrom: 2 to: 4.                                   "subarray") s
+18 80 M (398:) s
+48 80 M
+(y := x indexOf: 3 ifAbsent: [0].                            "first position ofelement within array") s
+18 69 M (399:) s
+48 69 M
+(y := x occurrencesOf: 3.                                    "number of times object in collection") s
+18 58 M (400:) s
+48 58 M
+(x do: [:a | Transcript show: a printString; cr].            "iterate over the array") s
+18 47 M (401:) s
+48 47 M
+(b := x conform: [:a | \(a >= 1\) & \(a <= 4\)].                 "test if all elements meet condition") s
+18 36 M (402:) s
+48 36 M
+(y := x select: [:a | a > 2].                                "return collectionof elements that pass test") s
+18 25 M (403:) s
+48 25 M
+(y := x reject: [:a | a < 2].                                "return collectionof elements that fail test") s
+18 14 M (404:) s
+48 14 M
+(y := x collect: [:a | a + a].                               "transform each element for new collection") s
+18 3 M (405:) s
+48 3 M
+(y := x detect: [:a | a > 3] ifNone: [].                     "find position of first element that passes test") s
+_R
+S
+%%Page: (10) 10
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 10 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (10) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18 487 M (406:) s
+48 487 M
+(sum := 0. x do: [:a | sum := sum + a]. sum.                 "sum array elements") s
+18 476 M (407:) s
+48 476 M
+(sum := 0. 1 to: \(x size\) do: [:a | sum := sum + \(x at: a\)]. "sum array elements") s
+18 465 M (408:) s
+48 465 M
+(sum := x inject: 0 into: [:a :c | a + c].                   "sum array elements") s
+18 454 M (409:) s
+48 454 M
+(max := x inject: 0 into: [:a :c | \(a > c\)                   "find max element in array") s
+18 443 M (410:) s
+48 443 M
+(   ifTrue: [a]) s
+18 432 M (411:) s
+48 432 M
+(   ifFalse: [c]].) s
+18 421 M (412:) s
+48 421 M
+(y := x shuffled.                                            "randomly shuffle collection") s
+18 410 M (413:) s
+48 410 M
+(y := x asArray.                                             "convert to array") s
+18 399 M (414:) s
+48 399 M
+("y := x asByteArray."                                       "note: this instruction not available on Squeak") s
+18 388 M (415:) s
+48 388 M
+(y := x asWordArray.                                         "convert to word array") s
+18 377 M (416:) s
+48 377 M
+(y := x asOrderedCollection.                                 "convert to ordered collection") s
+18 366 M (417:) s
+48 366 M
+(y := x asSortedCollection.                                  "convert to sortedcollection") s
+18 355 M (418:) s
+48 355 M
+(y := x asBag.                                               "convert to bag collection") s
+18 344 M (419:) s
+48 344 M
+(y := x asSet.                                               "convert to set collection") s
+18 333 M (420:) s
+18 322 M (421:) s
+48 322 M
+("************************************************************************) s
+18 311 M (422:) s
+48 311 M
+( * OrderedCollection: acts like an expandable array                     *) s
+18 300 M (423:) s
+48 300 M
+( ************************************************************************") s
+18 289 M (424:) s
+48 289 M
+(| b x y sum max |) s
+18 278 M (425:) s
+48 278 M
+(x := OrderedCollection with: 4 with: 3 with: 2 with: 1.     "create collectionwith up to 4 elements") s
+18 267 M (426:) s
+48 267 M
+(x := OrderedCollection new.                                 "allocate collection") s
+18 256 M (427:) s
+48 256 M
+(x add: 3; add: 2; add: 1; add: 4; yourself.                 "add element to collection") s
+18 245 M (428:) s
+48 245 M
+(y := x addFirst: 5.                                         "add element at beginning of collection") s
+18 234 M (429:) s
+48 234 M
+(y := x removeFirst.                                         "remove first element in collection") s
+18 223 M (430:) s
+48 223 M
+(y := x addLast: 6.                                          "add element at end of collection") s
+18 212 M (431:) s
+48 212 M
+(y := x removeLast.                                          "remove last element in collection") s
+18 201 M (432:) s
+48 201 M
+(y := x addAll: #\(7 8 9\).                                    "add multiple elements to collection") s
+18 190 M (433:) s
+48 190 M
+(y := x removeAll: #\(7 8 9\).                                 "remove multiple elements from collection") s
+18 179 M (434:) s
+48 179 M
+(x at: 2 put: 3.                                             "set element at index") s
+18 168 M (435:) s
+48 168 M
+(y := x remove: 5 ifAbsent: [].                              "remove element from collection") s
+18 157 M (436:) s
+48 157 M
+(b := x isEmpty.                                             "test if empty") s
+18 146 M (437:) s
+48 146 M
+(y := x size.                                                "number of elements") s
+18 135 M (438:) s
+48 135 M
+(y := x at: 2.                                               "retrieve element at index") s
+18 124 M (439:) s
+48 124 M
+(y := x first.                                               "retrieve first element in collection") s
+18 113 M (440:) s
+48 113 M
+(y := x last.                                                "retrieve last element in collection") s
+18 102 M (441:) s
+48 102 M
+(b := x includes: 5.                                         "test if element is in collection") s
+18 91 M (442:) s
+48 91 M
+(y := x copyFrom: 2 to: 3.                                   "subcollection") s
+18 80 M (443:) s
+48 80 M
+(y := x indexOf: 3 ifAbsent: [0].                            "first position ofelement within collection") s
+18 69 M (444:) s
+48 69 M
+(y := x occurrencesOf: 3.                                    "number of times object in collection") s
+18 58 M (445:) s
+48 58 M
+(x do: [:a | Transcript show: a printString; cr].            "iterate over the collection") s
+18 47 M (446:) s
+48 47 M
+(b := x conform: [:a | \(a >= 1\) & \(a <= 4\)].                 "test if all elements meet condition") s
+18 36 M (447:) s
+48 36 M
+(y := x select: [:a | a > 2].                                "return collectionof elements that pass test") s
+18 25 M (448:) s
+48 25 M
+(y := x reject: [:a | a < 2].                                "return collectionof elements that fail test") s
+18 14 M (449:) s
+48 14 M
+(y := x collect: [:a | a + a].                               "transform each element for new collection") s
+18 3 M (450:) s
+48 3 M
+(y := x detect: [:a | a > 3] ifNone: [].                     "find position of first element that passes test") s
+_R
+S
+%%Page: (11) 11
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 11 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (11) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18 487 M (451:) s
+48 487 M
+(sum := 0. x do: [:a | sum := sum + a]. sum.                 "sum elements") s
+18 476 M (452:) s
+48 476 M
+(sum := 0. 1 to: \(x size\) do: [:a | sum := sum + \(x at: a\)]. "sum elements") s
+18 465 M (453:) s
+48 465 M
+(sum := x inject: 0 into: [:a :c | a + c].                   "sum elements") s
+18 454 M (454:) s
+48 454 M
+(max := x inject: 0 into: [:a :c | \(a > c\)                   "find max element in collection") s
+18 443 M (455:) s
+48 443 M
+(   ifTrue: [a]) s
+18 432 M (456:) s
+48 432 M
+(   ifFalse: [c]].) s
+18 421 M (457:) s
+48 421 M
+(y := x shuffled.                                            "randomly shuffle collection") s
+18 410 M (458:) s
+48 410 M
+(y := x asArray.                                             "convert to array") s
+18 399 M (459:) s
+48 399 M
+(y := x asOrderedCollection.                                 "convert to ordered collection") s
+18 388 M (460:) s
+48 388 M
+(y := x asSortedCollection.                                  "convert to sortedcollection") s
+18 377 M (461:) s
+48 377 M
+(y := x asBag.                                               "convert to bag collection") s
+18 366 M (462:) s
+48 366 M
+(y := x asSet.                                               "convert to set collection") s
+18 355 M (463:) s
+18 344 M (464:) s
+48 344 M
+("************************************************************************) s
+18 333 M (465:) s
+48 333 M
+( * SortedCollection:    like OrderedCollection except order of elements *) s
+18 322 M (466:) s
+48 322 M
+( *                         determined by sorting criteria               *) s
+18 311 M (467:) s
+48 311 M
+( ************************************************************************") s
+18 300 M (468:) s
+48 300 M
+(| b x y sum max |) s
+18 289 M (469:) s
+48 289 M
+(x := SortedCollection with: 4 with: 3 with: 2 with: 1.      "create collectionwith up to 4 elements") s
+18 278 M (470:) s
+48 278 M
+(x := SortedCollection new.                                  "allocate collection") s
+18 267 M (471:) s
+48 267 M
+(x := SortedCollection sortBlock: [:a :c | a > c].           "set sort criteria") s
+18 256 M (472:) s
+48 256 M
+(x add: 3; add: 2; add: 1; add: 4; yourself.                 "add element to collection") s
+18 245 M (473:) s
+48 245 M
+(y := x addFirst: 5.                                         "add element at beginning of collection") s
+18 234 M (474:) s
+48 234 M
+(y := x removeFirst.                                         "remove first element in collection") s
+18 223 M (475:) s
+48 223 M
+(y := x addLast: 6.                                          "add element at end of collection") s
+18 212 M (476:) s
+48 212 M
+(y := x removeLast.                                          "remove last element in collection") s
+18 201 M (477:) s
+48 201 M
+(y := x addAll: #\(7 8 9\).                                    "add multiple elements to collection") s
+18 190 M (478:) s
+48 190 M
+(y := x removeAll: #\(7 8 9\).                                 "remove multiple elements from collection") s
+18 179 M (479:) s
+48 179 M
+(y := x remove: 5 ifAbsent: [].                              "remove element from collection") s
+18 168 M (480:) s
+48 168 M
+(b := x isEmpty.                                             "test if empty") s
+18 157 M (481:) s
+48 157 M
+(y := x size.                                                "number of elements") s
+18 146 M (482:) s
+48 146 M
+(y := x at: 2.                                               "retrieve element at index") s
+18 135 M (483:) s
+48 135 M
+(y := x first.                                               "retrieve first element in collection") s
+18 124 M (484:) s
+48 124 M
+(y := x last.                                                "retrieve last element in collection") s
+18 113 M (485:) s
+48 113 M
+(b := x includes: 4.                                         "test if element is in collection") s
+18 102 M (486:) s
+48 102 M
+(y := x copyFrom: 2 to: 3.                                   "subcollection") s
+18 91 M (487:) s
+48 91 M
+(y := x indexOf: 3 ifAbsent: [0].                            "first position ofelement within collection") s
+18 80 M (488:) s
+48 80 M
+(y := x occurrencesOf: 3.                                    "number of times object in collection") s
+18 69 M (489:) s
+48 69 M
+(x do: [:a | Transcript show: a printString; cr].            "iterate over the collection") s
+18 58 M (490:) s
+48 58 M
+(b := x conform: [:a | \(a >= 1\) & \(a <= 4\)].                 "test if all elements meet condition") s
+18 47 M (491:) s
+48 47 M
+(y := x select: [:a | a > 2].                                "return collectionof elements that pass test") s
+18 36 M (492:) s
+48 36 M
+(y := x reject: [:a | a < 2].                                "return collectionof elements that fail test") s
+18 25 M (493:) s
+48 25 M
+(y := x collect: [:a | a + a].                               "transform each element for new collection") s
+18 14 M (494:) s
+48 14 M
+(y := x detect: [:a | a > 3] ifNone: [].                     "find position of first element that passes test") s
+18 3 M (495:) s
+48 3 M
+(sum := 0. x do: [:a | sum := sum + a]. sum.                 "sum elements") s
+_R
+S
+%%Page: (12) 12
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 12 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (12) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18 487 M (496:) s
+48 487 M
+(sum := 0. 1 to: \(x size\) do: [:a | sum := sum + \(x at: a\)]. "sum elements") s
+18 476 M (497:) s
+48 476 M
+(sum := x inject: 0 into: [:a :c | a + c].                   "sum elements") s
+18 465 M (498:) s
+48 465 M
+(max := x inject: 0 into: [:a :c | \(a > c\)                   "find max element in collection") s
+18 454 M (499:) s
+48 454 M
+(   ifTrue: [a]) s
+18 443 M (500:) s
+48 443 M
+(   ifFalse: [c]].) s
+18 432 M (501:) s
+48 432 M
+(y := x asArray.                                             "convert to array") s
+18 421 M (502:) s
+48 421 M
+(y := x asOrderedCollection.                                 "convert to ordered collection") s
+18 410 M (503:) s
+48 410 M
+(y := x asSortedCollection.                                  "convert to sortedcollection") s
+18 399 M (504:) s
+48 399 M
+(y := x asBag.                                               "convert to bag collection") s
+18 388 M (505:) s
+48 388 M
+(y := x asSet.                                               "convert to set collection") s
+18 377 M (506:) s
+18 366 M (507:) s
+48 366 M
+("************************************************************************) s
+18 355 M (508:) s
+48 355 M
+( * Bag:        like OrderedCollection except elements are in no         *) s
+18 344 M (509:) s
+48 344 M
+( *                particular order                                      *) s
+18 333 M (510:) s
+48 333 M
+( ************************************************************************") s
+18 322 M (511:) s
+48 322 M
+(| b x y sum max |) s
+18 311 M (512:) s
+48 311 M
+(x := Bag with: 4 with: 3 with: 2 with: 1.                   "create collectionwith up to 4 elements") s
+18 300 M (513:) s
+48 300 M
+(x := Bag new.                                               "allocate collection") s
+18 289 M (514:) s
+48 289 M
+(x add: 4; add: 3; add: 1; add: 2; yourself.                 "add element to collection") s
+18 278 M (515:) s
+48 278 M
+(x add: 3 withOccurrences: 2.                                "add multiple copies to collection") s
+18 267 M (516:) s
+48 267 M
+(y := x addAll: #\(7 8 9\).                                    "add multiple elements to collection") s
+18 256 M (517:) s
+48 256 M
+(y := x removeAll: #\(7 8 9\).                                 "remove multiple elements from collection") s
+18 245 M (518:) s
+48 245 M
+(y := x remove: 4 ifAbsent: [].                              "remove element from collection") s
+18 234 M (519:) s
+48 234 M
+(b := x isEmpty.                                             "test if empty") s
+18 223 M (520:) s
+48 223 M
+(y := x size.                                                "number of elements") s
+18 212 M (521:) s
+48 212 M
+(b := x includes: 3.                                         "test if element is in collection") s
+18 201 M (522:) s
+48 201 M
+(y := x occurrencesOf: 3.                                    "number of times object in collection") s
+18 190 M (523:) s
+48 190 M
+(x do: [:a | Transcript show: a printString; cr].            "iterate over the collection") s
+18 179 M (524:) s
+48 179 M
+(b := x conform: [:a | \(a >= 1\) & \(a <= 4\)].                 "test if all elements meet condition") s
+18 168 M (525:) s
+48 168 M
+(y := x select: [:a | a > 2].                                "return collectionof elements that pass test") s
+18 157 M (526:) s
+48 157 M
+(y := x reject: [:a | a < 2].                                "return collectionof elements that fail test") s
+18 146 M (527:) s
+48 146 M
+(y := x collect: [:a | a + a].                               "transform each element for new collection") s
+18 135 M (528:) s
+48 135 M
+(y := x detect: [:a | a > 3] ifNone: [].                     "find position of first element that passes test") s
+18 124 M (529:) s
+48 124 M
+(sum := 0. x do: [:a | sum := sum + a]. sum.                 "sum elements") s
+18 113 M (530:) s
+48 113 M
+(sum := x inject: 0 into: [:a :c | a + c].                   "sum elements") s
+18 102 M (531:) s
+48 102 M
+(max := x inject: 0 into: [:a :c | \(a > c\)                   "find max element in collection") s
+18 91 M (532:) s
+48 91 M
+(   ifTrue: [a]) s
+18 80 M (533:) s
+48 80 M
+(   ifFalse: [c]].) s
+18 69 M (534:) s
+48 69 M
+(y := x asOrderedCollection.                                 "convert to ordered collection") s
+18 58 M (535:) s
+48 58 M
+(y := x asSortedCollection.                                  "convert to sortedcollection") s
+18 47 M (536:) s
+48 47 M
+(y := x asBag.                                               "convert to bag collection") s
+18 36 M (537:) s
+48 36 M
+(y := x asSet.                                               "convert to set collection") s
+18 25 M (538:) s
+18 14 M (539:) s
+48 14 M
+("************************************************************************) s
+18 3 M (540:) s
+48 3 M
+( * Set:           like Bag except duplicates not allowed                *) s
+_R
+S
+%%Page: (13) 13
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 13 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (13) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18 487 M (541:) s
+48 487 M
+( * IdentitySet:   uses identity test \(== rather than =\)                 *) s
+18 476 M (542:) s
+48 476 M
+( ************************************************************************") s
+18 465 M (543:) s
+48 465 M
+(| b x y sum max |) s
+18 454 M (544:) s
+48 454 M
+(x := Set with: 4 with: 3 with: 2 with: 1.                   "create collectionwith up to 4 elements") s
+18 443 M (545:) s
+48 443 M
+(x := Set new.                                               "allocate collection") s
+18 432 M (546:) s
+48 432 M
+(x add: 4; add: 3; add: 1; add: 2; yourself.                 "add element to collection") s
+18 421 M (547:) s
+48 421 M
+(y := x addAll: #\(7 8 9\).                                    "add multiple elements to collection") s
+18 410 M (548:) s
+48 410 M
+(y := x removeAll: #\(7 8 9\).                                 "remove multiple elements from collection") s
+18 399 M (549:) s
+48 399 M
+(y := x remove: 4 ifAbsent: [].                              "remove element from collection") s
+18 388 M (550:) s
+48 388 M
+(b := x isEmpty.                                             "test if empty") s
+18 377 M (551:) s
+48 377 M
+(y := x size.                                                "number of elements") s
+18 366 M (552:) s
+48 366 M
+(x includes: 4.                                              "test if element is in collection") s
+18 355 M (553:) s
+48 355 M
+(x do: [:a | Transcript show: a printString; cr].            "iterate over the collection") s
+18 344 M (554:) s
+48 344 M
+(b := x conform: [:a | \(a >= 1\) & \(a <= 4\)].                 "test if all elements meet condition") s
+18 333 M (555:) s
+48 333 M
+(y := x select: [:a | a > 2].                                "return collectionof elements that pass test") s
+18 322 M (556:) s
+48 322 M
+(y := x reject: [:a | a < 2].                                "return collectionof elements that fail test") s
+18 311 M (557:) s
+48 311 M
+(y := x collect: [:a | a + a].                               "transform each element for new collection") s
+18 300 M (558:) s
+48 300 M
+(y := x detect: [:a | a > 3] ifNone: [].                     "find position of first element that passes test") s
+18 289 M (559:) s
+48 289 M
+(sum := 0. x do: [:a | sum := sum + a]. sum.                 "sum elements") s
+18 278 M (560:) s
+48 278 M
+(sum := x inject: 0 into: [:a :c | a + c].                   "sum elements") s
+18 267 M (561:) s
+48 267 M
+(max := x inject: 0 into: [:a :c | \(a > c\)                   "find max element in collection") s
+18 256 M (562:) s
+48 256 M
+(   ifTrue: [a]) s
+18 245 M (563:) s
+48 245 M
+(   ifFalse: [c]].) s
+18 234 M (564:) s
+48 234 M
+(y := x asArray.                                             "convert to array") s
+18 223 M (565:) s
+48 223 M
+(y := x asOrderedCollection.                                 "convert to ordered collection") s
+18 212 M (566:) s
+48 212 M
+(y := x asSortedCollection.                                  "convert to sortedcollection") s
+18 201 M (567:) s
+48 201 M
+(y := x asBag.                                               "convert to bag collection") s
+18 190 M (568:) s
+48 190 M
+(y := x asSet.                                               "convert to set collection") s
+18 179 M (569:) s
+18 168 M (570:) s
+48 168 M
+("************************************************************************) s
+18 157 M (571:) s
+48 157 M
+( * Interval:                                                            *) s
+18 146 M (572:) s
+48 146 M
+( ************************************************************************") s
+18 135 M (573:) s
+48 135 M
+(| b x y sum max |) s
+18 124 M (574:) s
+48 124 M
+(x := Interval from: 5 to: 10.                               "create interval object") s
+18 113 M (575:) s
+48 113 M
+(x := 5 to: 10.) s
+18 102 M (576:) s
+48 102 M
+(x := Interval from: 5 to: 10 by: 2.                         "create interval object with specified increment") s
+18 91 M (577:) s
+48 91 M
+(x := 5 to: 10 by: 2.) s
+18 80 M (578:) s
+48 80 M
+(b := x isEmpty.                                             "test if empty") s
+18 69 M (579:) s
+48 69 M
+(y := x size.                                                "number of elements") s
+18 58 M (580:) s
+48 58 M
+(x includes: 9.                                              "test if element is in collection") s
+18 47 M (581:) s
+48 47 M
+(x do: [:k | Transcript show: k printString; cr].            "iterate over interval") s
+18 36 M (582:) s
+48 36 M
+(b := x conform: [:a | \(a >= 1\) & \(a <= 4\)].                 "test if all elements meet condition") s
+18 25 M (583:) s
+48 25 M
+(y := x select: [:a | a > 7].                                "return collectionof elements that pass test") s
+18 14 M (584:) s
+48 14 M
+(y := x reject: [:a | a < 2].                                "return collectionof elements that fail test") s
+18 3 M (585:) s
+48 3 M
+(y := x collect: [:a | a + a].                               "transform each element for new collection") s
+_R
+S
+%%Page: (14) 14
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 14 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (14) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18 487 M (586:) s
+48 487 M
+(y := x detect: [:a | a > 3] ifNone: [].                     "find position of first element that passes test") s
+18 476 M (587:) s
+48 476 M
+(sum := 0. x do: [:a | sum := sum + a]. sum.                 "sum elements") s
+18 465 M (588:) s
+48 465 M
+(sum := 0. 1 to: \(x size\) do: [:a | sum := sum + \(x at: a\)]. "sum elements") s
+18 454 M (589:) s
+48 454 M
+(sum := x inject: 0 into: [:a :c | a + c].                   "sum elements") s
+18 443 M (590:) s
+48 443 M
+(max := x inject: 0 into: [:a :c | \(a > c\)                   "find max element in collection") s
+18 432 M (591:) s
+48 432 M
+(   ifTrue: [a]) s
+18 421 M (592:) s
+48 421 M
+(   ifFalse: [c]].) s
+18 410 M (593:) s
+48 410 M
+(y := x asArray.                                             "convert to array") s
+18 399 M (594:) s
+48 399 M
+(y := x asOrderedCollection.                                 "convert to ordered collection") s
+18 388 M (595:) s
+48 388 M
+(y := x asSortedCollection.                                  "convert to sortedcollection") s
+18 377 M (596:) s
+48 377 M
+(y := x asBag.                                               "convert to bag collection") s
+18 366 M (597:) s
+48 366 M
+(y := x asSet.                                               "convert to set collection") s
+18 355 M (598:) s
+18 344 M (599:) s
+48 344 M
+("************************************************************************) s
+18 333 M (600:) s
+48 333 M
+( * Associations:                                                        *) s
+18 322 M (601:) s
+48 322 M
+( ************************************************************************") s
+18 311 M (602:) s
+48 311 M
+(| x y |) s
+18 300 M (603:) s
+48 300 M
+(x := #myVar->'hello'.) s
+18 289 M (604:) s
+48 289 M
+(y := x key.) s
+18 278 M (605:) s
+48 278 M
+(y := x value.) s
+18 267 M (606:) s
+18 256 M (607:) s
+48 256 M
+("************************************************************************) s
+18 245 M (608:) s
+48 245 M
+( * Dictionary:                                                          *) s
+18 234 M (609:) s
+48 234 M
+( * IdentityDictionary:   uses identity test \(== rather than =\)          *) s
+18 223 M (610:) s
+48 223 M
+( ************************************************************************") s
+18 212 M (611:) s
+48 212 M
+(| b x y |) s
+18 201 M (612:) s
+48 201 M
+(x := Dictionary new.                                        "allocate collection") s
+18 190 M (613:) s
+48 190 M
+(x add: #a->4; add: #b->3; add: #c->1; add: #d->2; yourself. "add element to collection") s
+18 179 M (614:) s
+48 179 M
+(x at: #e put: 3.                                            "set element at index") s
+18 168 M (615:) s
+48 168 M
+(b := x isEmpty.                                             "test if empty") s
+18 157 M (616:) s
+48 157 M
+(y := x size.                                                "number of elements") s
+18 146 M (617:) s
+48 146 M
+(y := x at: #a ifAbsent: [].                                 "retrieve element at index") s
+18 135 M (618:) s
+48 135 M
+(y := x keyAtValue: 3 ifAbsent: [].                          "retrieve key for given value with error block") s
+18 124 M (619:) s
+48 124 M
+(y := x removeKey: #e ifAbsent: [].                          "remove element from collection") s
+18 113 M (620:) s
+48 113 M
+(b := x includes: 3.                                         "test if element is in values collection") s
+18 102 M (621:) s
+48 102 M
+(b := x includesKey: #a.                                     "test if element is in keys collection") s
+18 91 M (622:) s
+48 91 M
+(y := x occurrencesOf: 3.                                    "number of times object in collection") s
+18 80 M (623:) s
+48 80 M
+(y := x keys.                                                "set of keys") s
+18 69 M (624:) s
+48 69 M
+(y := x values.                                              "bag of values") s
+18 58 M (625:) s
+48 58 M
+(x do: [:a | Transcript show: a printString; cr].            "iterate over the values collection") s
+18 47 M (626:) s
+48 47 M
+(x keysDo: [:a | Transcript show: a printString; cr].        "iterate over the keys collection") s
+18 36 M (627:) s
+48 36 M
+(x associationsDo: [:a | Transcript show: a printString; cr]."iterate over the associations") s
+18 25 M (628:) s
+48 25 M
+(x keysAndValuesDo: [:aKey :aValue | Transcript              "iterate over keysand values") s
+18 14 M (629:) s
+48 14 M
+(   show: aKey printString; space;) s
+18 3 M (630:) s
+48 3 M
+(   show: aValue printString; cr].) s
+_R
+S
+%%Page: (15) 15
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 15 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (15) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18 487 M (631:) s
+48 487 M
+(b := x conform: [:a | \(a >= 1\) & \(a <= 4\)].                 "test if all elements meet condition") s
+18 476 M (632:) s
+48 476 M
+(y := x select: [:a | a > 2].                                "return collectionof elements that pass test") s
+18 465 M (633:) s
+48 465 M
+(y := x reject: [:a | a < 2].                                "return collectionof elements that fail test") s
+18 454 M (634:) s
+48 454 M
+(y := x collect: [:a | a + a].                               "transform each element for new collection") s
+18 443 M (635:) s
+48 443 M
+(y := x detect: [:a | a > 3] ifNone: [].                     "find position of first element that passes test") s
+18 432 M (636:) s
+48 432 M
+(sum := 0. x do: [:a | sum := sum + a]. sum.                 "sum elements") s
+18 421 M (637:) s
+48 421 M
+(sum := x inject: 0 into: [:a :c | a + c].                   "sum elements") s
+18 410 M (638:) s
+48 410 M
+(max := x inject: 0 into: [:a :c | \(a > c\)                   "find max element in collection") s
+18 399 M (639:) s
+48 399 M
+(   ifTrue: [a]) s
+18 388 M (640:) s
+48 388 M
+(   ifFalse: [c]].) s
+18 377 M (641:) s
+48 377 M
+(y := x asArray.                                             "convert to array") s
+18 366 M (642:) s
+48 366 M
+(y := x asOrderedCollection.                                 "convert to ordered collection") s
+18 355 M (643:) s
+48 355 M
+(y := x asSortedCollection.                                  "convert to sortedcollection") s
+18 344 M (644:) s
+48 344 M
+(y := x asBag.                                               "convert to bag collection") s
+18 333 M (645:) s
+48 333 M
+(y := x asSet.                                               "convert to set collection") s
+18 322 M (646:) s
+18 311 M (647:) s
+48 311 M
+(Smalltalk at: #CMRGlobal put: 'CMR entry'.                  "put global in Smalltalk Dictionary") s
+18 300 M (648:) s
+48 300 M
+(x := Smalltalk at: #CMRGlobal.                              "read global from Smalltalk Dictionary") s
+18 289 M (649:) s
+48 289 M
+(Transcript show: \(CMRGlobal printString\).                   "entries are directly accessible by name") s
+18 278 M (650:) s
+48 278 M
+(Smalltalk keys do: [ :k |                                   "print out all classes") s
+18 267 M (651:) s
+48 267 M
+(   \(\(Smalltalk at: k\) isKindOf: Class\)) s
+18 256 M (652:) s
+48 256 M
+(      ifFalse: [Transcript show: k printString; cr]].) s
+18 245 M (653:) s
+48 245 M
+(Smalltalk at: #CMRDictionary put: \(Dictionary new\).         "set up user defined dictionary") s
+18 234 M (654:) s
+48 234 M
+(CMRDictionary at: #MyVar1 put: 'hello1'.                    "put entry in dictionary") s
+18 223 M (655:) s
+48 223 M
+(CMRDictionary add: #MyVar2->'hello2'.                       "add entry to dictionary use key->value combo") s
+18 212 M (656:) s
+48 212 M
+(CMRDictionary size.                                         "dictionary size") s
+18 201 M (657:) s
+48 201 M
+(CMRDictionary keys do: [ :k |                               "print out keys indictionary") s
+18 190 M (658:) s
+48 190 M
+(   Transcript show: k printString; cr].) s
+18 179 M (659:) s
+48 179 M
+(CMRDictionary values do: [ :k |                             "print out values in dictionary") s
+18 168 M (660:) s
+48 168 M
+(   Transcript show: k printString; cr].) s
+18 157 M (661:) s
+48 157 M
+(CMRDictionary keysAndValuesDo: [:aKey :aValue |             "print out keys and values") s
+18 146 M (662:) s
+48 146 M
+(   Transcript) s
+18 135 M (663:) s
+48 135 M
+(      show: aKey printString;) s
+18 124 M (664:) s
+48 124 M
+(      space;) s
+18 113 M (665:) s
+48 113 M
+(      show: aValue printString;) s
+18 102 M (666:) s
+48 102 M
+(      cr].) s
+18 91 M (667:) s
+48 91 M
+(CMRDictionary associationsDo: [:aKeyValue |                 "another iterator for printing key values") s
+18 80 M (668:) s
+48 80 M
+(   Transcript show: aKeyValue printString; cr].) s
+18 69 M (669:) s
+48 69 M
+(Smalltalk removeKey: #CMRGlobal ifAbsent: [].               "remove entry fromSmalltalk dictionary") s
+18 58 M (670:) s
+48 58 M
+(Smalltalk removeKey: #CMRDictionary ifAbsent: [].           "remove user dictionary from Smalltalk dictionary") s
+18 47 M (671:) s
+18 36 M (672:) s
+48 36 M
+("************************************************************************) s
+18 25 M (673:) s
+48 25 M
+( * Internal Stream:                                                     *) s
+18 14 M (674:) s
+48 14 M
+( ************************************************************************") s
+18 3 M (675:) s
+48 3 M
+(| b x ios |) s
+_R
+S
+%%Page: (16) 16
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 16 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (16) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18 487 M (676:) s
+48 487 M
+(ios := ReadStream on: 'Hello read stream'.) s
+18 476 M (677:) s
+48 476 M
+(ios := ReadStream on: 'Hello read stream' from: 1 to: 5.) s
+18 465 M (678:) s
+48 465 M
+([\(x := ios nextLine\) notNil]) s
+18 454 M (679:) s
+48 454 M
+(   whileTrue: [Transcript show: x; cr].) s
+18 443 M (680:) s
+48 443 M
+(ios position: 3.) s
+18 432 M (681:) s
+48 432 M
+(ios position.) s
+18 421 M (682:) s
+48 421 M
+(x := ios next.) s
+18 410 M (683:) s
+48 410 M
+(x := ios peek.) s
+18 399 M (684:) s
+48 399 M
+(x := ios contents.) s
+18 388 M (685:) s
+48 388 M
+(b := ios atEnd.) s
+18 377 M (686:) s
+18 366 M (687:) s
+48 366 M
+(ios := ReadWriteStream on: 'Hello read stream'.) s
+18 355 M (688:) s
+48 355 M
+(ios := ReadWriteStream on: 'Hello read stream' from: 1 to: 5.) s
+18 344 M (689:) s
+48 344 M
+(ios := ReadWriteStream with: 'Hello read stream'.) s
+18 333 M (690:) s
+48 333 M
+(ios := ReadWriteStream with: 'Hello read stream' from: 1 to: 10.) s
+18 322 M (691:) s
+48 322 M
+(ios position: 0.) s
+18 311 M (692:) s
+48 311 M
+([\(x := ios nextLine\) notNil]) s
+18 300 M (693:) s
+48 300 M
+(   whileTrue: [Transcript show: x; cr].) s
+18 289 M (694:) s
+48 289 M
+(ios position: 6.) s
+18 278 M (695:) s
+48 278 M
+(ios position.) s
+18 267 M (696:) s
+48 267 M
+(ios nextPutAll: 'Chris'.) s
+18 256 M (697:) s
+48 256 M
+(x := ios next.) s
+18 245 M (698:) s
+48 245 M
+(x := ios peek.) s
+18 234 M (699:) s
+48 234 M
+(x := ios contents.) s
+18 223 M (700:) s
+48 223 M
+(b := ios atEnd.) s
+18 212 M (701:) s
+18 201 M (702:) s
+48 201 M
+("************************************************************************) s
+18 190 M (703:) s
+48 190 M
+( * FileStream:                                                          *) s
+18 179 M (704:) s
+48 179 M
+( ************************************************************************") s
+18 168 M (705:) s
+48 168 M
+(| b x ios |) s
+18 157 M (706:) s
+48 157 M
+(ios := FileStream newFileNamed: 'ios.txt'.) s
+18 146 M (707:) s
+48 146 M
+(ios nextPut: $H; cr.) s
+18 135 M (708:) s
+48 135 M
+(ios nextPutAll: 'Hello File'; cr.) s
+18 124 M (709:) s
+48 124 M
+('Hello File' printOn: ios.) s
+18 113 M (710:) s
+48 113 M
+('Hello File' storeOn: ios.) s
+18 102 M (711:) s
+48 102 M
+(ios close.) s
+18 91 M (712:) s
+18 80 M (713:) s
+48 80 M
+(ios := FileStream oldFileNamed: 'ios.txt'.) s
+18 69 M (714:) s
+48 69 M
+([\(x := ios nextLine\) notNil]) s
+18 58 M (715:) s
+48 58 M
+(   whileTrue: [Transcript show: x; cr].) s
+18 47 M (716:) s
+48 47 M
+(ios position: 3.) s
+18 36 M (717:) s
+48 36 M
+(x := ios position.) s
+18 25 M (718:) s
+48 25 M
+(x := ios next.) s
+18 14 M (719:) s
+48 14 M
+(x := ios peek.) s
+18 3 M (720:) s
+48 3 M
+(b := ios atEnd.) s
+_R
+S
+%%Page: (17) 17
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 17 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (17) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18 487 M (721:) s
+48 487 M
+(ios close.) s
+18 476 M (722:) s
+18 465 M (723:) s
+48 465 M
+("************************************************************************) s
+18 454 M (724:) s
+48 454 M
+( * Date:                                                                *) s
+18 443 M (725:) s
+48 443 M
+( ************************************************************************") s
+18 432 M (726:) s
+48 432 M
+(| x y |) s
+18 421 M (727:) s
+48 421 M
+(x := Date today.                                            "create date for today") s
+18 410 M (728:) s
+48 410 M
+(x := Date dateAndTimeNow.                                   "create date from current time/date") s
+18 399 M (729:) s
+48 399 M
+(x := Date readFromString: '01/02/1999'.                     "create date from formatted string") s
+18 388 M (730:) s
+48 388 M
+(x := Date newDay: 12 month: #July year: 1999                "create date from parts") s
+18 377 M (731:) s
+48 377 M
+(x := Date fromDays: 36000.                                  "create date from elapsed days since 1/1/1901") s
+18 366 M (732:) s
+48 366 M
+(y := Date dayOfWeek: #Monday.                               "day of week as int \(1-7\)") s
+18 355 M (733:) s
+48 355 M
+(y := Date indexOfMonth: #January.                           "month of year as int \(1-12\)") s
+18 344 M (734:) s
+48 344 M
+(y := Date daysInMonth: 2 forYear: 1996.                     "day of month as int \(1-31\)") s
+18 333 M (735:) s
+48 333 M
+(y := Date daysInYear: 1996.                                 "days in year \(365|366\)") s
+18 322 M (736:) s
+48 322 M
+(y := Date nameOfDay: 1                                      "weekday name \(#Monday,...\)") s
+18 311 M (737:) s
+48 311 M
+(y := Date nameOfMonth: 1.                                   "month name \(#January,...\)") s
+18 300 M (738:) s
+48 300 M
+(y := Date leapYear: 1996.                                   "1 if leap year; 0if not leap year") s
+18 289 M (739:) s
+48 289 M
+(y := x weekday.                                             "day of week \(#Monday,...\)") s
+18 278 M (740:) s
+48 278 M
+(y := x previous: #Monday.                                   "date for previousday of week") s
+18 267 M (741:) s
+48 267 M
+(y := x dayOfMonth.                                          "day of month \(1-31\)") s
+18 256 M (742:) s
+48 256 M
+(y := x day.                                                 "day of year \(1-366\)") s
+18 245 M (743:) s
+48 245 M
+(y := x firstDayOfMonth.                                     "day of year for first day of month") s
+18 234 M (744:) s
+48 234 M
+(y := x monthName.                                           "month of year \(#January,...\)") s
+18 223 M (745:) s
+48 223 M
+(y := x monthIndex.                                          "month of year \(1-12\)") s
+18 212 M (746:) s
+48 212 M
+(y := x daysInMonth.                                         "days in month \(1-31\)") s
+18 201 M (747:) s
+48 201 M
+(y := x year.                                                "year \(19xx\)") s
+18 190 M (748:) s
+48 190 M
+(y := x daysInYear.                                          "days in year \(365|366\)") s
+18 179 M (749:) s
+48 179 M
+(y := x daysLeftInYear.                                      "days left in year\(364|365\)") s
+18 168 M (750:) s
+48 168 M
+(y := x asSeconds.                                           "seconds elapsed since 1/1/1901") s
+18 157 M (751:) s
+48 157 M
+(y := x addDays: 10.                                         "add days to date object") s
+18 146 M (752:) s
+48 146 M
+(y := x subtractDays: 10.                                    "subtract days to date object") s
+18 135 M (753:) s
+48 135 M
+(y := x subtractDate: \(Date today\).                          "subtract date \(result in days\)") s
+18 124 M (754:) s
+48 124 M
+(y := x printFormat: #\(2 1 3 $/ 1 1\).                        "print formatted date") s
+18 113 M (755:) s
+48 113 M
+(b := \(x <= Date today\).                                     "comparison") s
+18 102 M (756:) s
+18 91 M (757:) s
+48 91 M
+("************************************************************************) s
+18 80 M (758:) s
+48 80 M
+( * Time:                                                                *) s
+18 69 M (759:) s
+48 69 M
+( ************************************************************************") s
+18 58 M (760:) s
+48 58 M
+(| x y |) s
+18 47 M (761:) s
+48 47 M
+(x := Time now.                                              "create time from current time") s
+18 36 M (762:) s
+48 36 M
+(x := Time dateAndTimeNow.                                   "create time from current time/date") s
+18 25 M (763:) s
+48 25 M
+(x := Time readFromString: '3:47:26 pm'.                     "create time from formatted string") s
+18 14 M (764:) s
+48 14 M
+(x := Time fromSeconds: \(60 * 60 * 4\).                       "create time from elapsed time from midnight") s
+18 3 M (765:) s
+48 3 M
+(y := Time millisecondClockValue.                            "milliseconds since midnight") s
+_R
+S
+%%Page: (18) 18
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 18 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (18) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18 487 M (766:) s
+48 487 M
+(y := Time totalSeconds.                                     "total seconds since 1/1/1901") s
+18 476 M (767:) s
+48 476 M
+(y := x seconds.                                             "seconds past minute \(0-59\)") s
+18 465 M (768:) s
+48 465 M
+(y := x minutes.                                             "minutes past hour\(0-59\)") s
+18 454 M (769:) s
+48 454 M
+(y := x hours.                                               "hours past midnight \(0-23\)") s
+18 443 M (770:) s
+48 443 M
+(y := x addTime: \(Time now\).                                 "add time to time object") s
+18 432 M (771:) s
+48 432 M
+(y := x subtractTime: \(Time now\).                            "subtract time to time object") s
+18 421 M (772:) s
+48 421 M
+(y := x asSeconds.                                           "convert time to seconds") s
+18 410 M (773:) s
+48 410 M
+(x := Time millisecondsToRun: [                              "timing facility") s
+18 399 M (774:) s
+48 399 M
+(   1 to: 1000 do: [:index | y := 3.14 * index]].) s
+18 388 M (775:) s
+48 388 M
+(b := \(x <= Time now\).                                       "comparison") s
+18 377 M (776:) s
+18 366 M (777:) s
+48 366 M
+("************************************************************************) s
+18 355 M (778:) s
+48 355 M
+( * Point:                                                               *) s
+18 344 M (779:) s
+48 344 M
+( ************************************************************************") s
+18 333 M (780:) s
+48 333 M
+(| x y |) s
+18 322 M (781:) s
+48 322 M
+(x := 200@100.                                               "obtain a new point") s
+18 311 M (782:) s
+48 311 M
+(y := x x.                                                   "x coordinate") s
+18 300 M (783:) s
+48 300 M
+(y := x y.                                                   "y coordinate") s
+18 289 M (784:) s
+48 289 M
+(x := 200@100 negated.                                       "negates x and y") s
+18 278 M (785:) s
+48 278 M
+(x := \(-200@-100\) abs.                                       "absolute value ofx and y") s
+18 267 M (786:) s
+48 267 M
+(x := \(200.5@100.5\) rounded.                                 "round x and y") s
+18 256 M (787:) s
+48 256 M
+(x := \(200.5@100.5\) truncated.                               "truncate x and y") s
+18 245 M (788:) s
+48 245 M
+(x := 200@100 + 100.                                         "add scale to bothx and y") s
+18 234 M (789:) s
+48 234 M
+(x := 200@100 - 100.                                         "subtract scale from both x and y") s
+18 223 M (790:) s
+48 223 M
+(x := 200@100 * 2.                                           "multiply x and y by scale") s
+18 212 M (791:) s
+48 212 M
+(x := 200@100 / 2.                                           "divide x and y byscale") s
+18 201 M (792:) s
+48 201 M
+(x := 200@100 // 2.                                          "divide x and y byscale") s
+18 190 M (793:) s
+48 190 M
+(x := 200@100 \\\\ 3.                                          "remainder of x and y by scale") s
+18 179 M (794:) s
+48 179 M
+(x := 200@100 + 50@25.                                       "add points") s
+18 168 M (795:) s
+48 168 M
+(x := 200@100 - 50@25.                                       "subtract points") s
+18 157 M (796:) s
+48 157 M
+(x := 200@100 * 3@4.                                         "multiply points") s
+18 146 M (797:) s
+48 146 M
+(x := 200@100 // 3@4.                                        "divide points") s
+18 135 M (798:) s
+48 135 M
+(x := 200@100 max: 50@200.                                   "max x and y") s
+18 124 M (799:) s
+48 124 M
+(x := 200@100 min: 50@200.                                   "min x and y") s
+18 113 M (800:) s
+48 113 M
+(x := 20@5 dotProduct: 10@2.                                 "sum of product \(x1*x2 + y1*y2\)") s
+18 102 M (801:) s
+18 91 M (802:) s
+48 91 M
+("************************************************************************) s
+18 80 M (803:) s
+48 80 M
+( * Rectangle:                                                           *) s
+18 69 M (804:) s
+48 69 M
+( ************************************************************************") s
+18 58 M (805:) s
+48 58 M
+(Rectangle fromUser.) s
+18 47 M (806:) s
+18 36 M (807:) s
+48 36 M
+("************************************************************************) s
+18 25 M (808:) s
+48 25 M
+( * Pen:                                                                 *) s
+18 14 M (809:) s
+48 14 M
+( ************************************************************************") s
+18 3 M (810:) s
+48 3 M
+(| myPen |) s
+_R
+S
+%%Page: (19) 19
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 19 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (19) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18 487 M (811:) s
+48 487 M
+(Display restoreAfter: [) s
+18 476 M (812:) s
+48 476 M
+(   Display fillWhite.) s
+18 465 M (813:) s
+18 454 M (814:) s
+48 454 M
+(myPen := Pen new.                                           "get graphic pen") s
+18 443 M (815:) s
+48 443 M
+(myPen squareNib: 1.) s
+18 432 M (816:) s
+48 432 M
+(myPen color: \(Color blue\).                                  "set pen color") s
+18 421 M (817:) s
+48 421 M
+(myPen home.                                                 "position pen at center of display") s
+18 410 M (818:) s
+48 410 M
+(myPen up.                                                   "makes nib unable to draw") s
+18 399 M (819:) s
+48 399 M
+(myPen down.                                                 "enable the nib todraw") s
+18 388 M (820:) s
+48 388 M
+(myPen north.                                                "points direction towards top") s
+18 377 M (821:) s
+48 377 M
+(myPen turn: -180.                                           "add specified degrees to direction") s
+18 366 M (822:) s
+48 366 M
+(myPen direction.                                            "get current angleof pen") s
+18 355 M (823:) s
+48 355 M
+(myPen go: 50.                                               "move pen specified number of pixels") s
+18 344 M (824:) s
+48 344 M
+(myPen location.                                             "get the pen position") s
+18 333 M (825:) s
+48 333 M
+(myPen goto: 200@200.                                        "move to specifiedpoint") s
+18 322 M (826:) s
+48 322 M
+(myPen place: 250@250.                                       "move to specifiedpoint without drawing") s
+18 311 M (827:) s
+48 311 M
+(myPen print: 'Hello World' withFont: \(TextStyle default fontAt: 1\).) s
+18 300 M (828:) s
+48 300 M
+(Display extent.                                             "get display width@height") s
+18 289 M (829:) s
+48 289 M
+(Display width.                                              "get display width") s
+18 278 M (830:) s
+48 278 M
+(Display height.                                             "get display height") s
+18 267 M (831:) s
+18 256 M (832:) s
+48 256 M
+(].) s
+18 245 M (833:) s
+18 234 M (834:) s
+48 234 M
+("************************************************************************) s
+18 223 M (835:) s
+48 223 M
+( * Dynamic Message Calling/Compiling:                                   *) s
+18 212 M (836:) s
+48 212 M
+( ************************************************************************") s
+18 201 M (837:) s
+48 201 M
+(| receiver message result argument keyword1 keyword2 argument1 argument2 |) s
+18 190 M (838:) s
+48 190 M
+("unary message") s
+18 179 M (839:) s
+48 179 M
+(receiver := 5.) s
+18 168 M (840:) s
+48 168 M
+(message := 'factorial' asSymbol.) s
+18 157 M (841:) s
+48 157 M
+(result := receiver perform: message.) s
+18 146 M (842:) s
+48 146 M
+(result := Compiler evaluate: \(\(receiver storeString\), ' ', message\).) s
+18 135 M (843:) s
+48 135 M
+(result := \(Message new setSelector: message arguments: #\(\)\) sentTo: receiver.) s
+18 124 M (844:) s
+18 113 M (845:) s
+48 113 M
+("binary message") s
+18 102 M (846:) s
+48 102 M
+(receiver := 1.) s
+18 91 M (847:) s
+48 91 M
+(message := '+' asSymbol.) s
+18 80 M (848:) s
+48 80 M
+(argument := 2.) s
+18 69 M (849:) s
+48 69 M
+(result := receiver perform: message withArguments: \(Array with: argument\).) s
+18 58 M (850:) s
+48 58 M
+(result := Compiler evaluate: \(\(receiver storeString\), ' ', message, ' ', \(argument storeString\)\).) s
+18 47 M (851:) s
+48 47 M
+(result := \(Message new setSelector: message arguments: \(Array with: argument\)\)sentTo: receiver.) s
+18 36 M (852:) s
+18 25 M (853:) s
+48 25 M
+("keyword messages") s
+18 14 M (854:) s
+48 14 M
+(receiver := 12.) s
+18 3 M (855:) s
+48 3 M
+(keyword1 := 'between:' asSymbol.) s
+_R
+S
+%%Page: (20) 20
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 20 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (20) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18 487 M (856:) s
+48 487 M
+(keyword2 := 'and:' asSymbol.) s
+18 476 M (857:) s
+48 476 M
+(argument1 := 10.) s
+18 465 M (858:) s
+48 465 M
+(argument2 := 20.) s
+18 454 M (859:) s
+48 454 M
+(result := receiver) s
+18 443 M (860:) s
+48 443 M
+(   perform: \(keyword1, keyword2\) asSymbol) s
+18 432 M (861:) s
+48 432 M
+(   withArguments: \(Array with: argument1 with: argument2\).) s
+18 421 M (862:) s
+48 421 M
+(result := Compiler evaluate:) s
+18 410 M (863:) s
+48 410 M
+(   \(\(receiver storeString\), ' ', keyword1, \(argument1 storeString\) , ' ', keyword2, \(argument2 storeString\)\).) s
+18 399 M (864:) s
+48 399 M
+(result := \(Message) s
+18 388 M (865:) s
+48 388 M
+(   new) s
+18 377 M (866:) s
+48 377 M
+(      setSelector: \(keyword1, keyword2\) asSymbol) s
+18 366 M (867:) s
+48 366 M
+(      arguments: \(Array with: argument1 with: argument2\)\)) s
+18 355 M (868:) s
+48 355 M
+(   sentTo: receiver.) s
+18 344 M (869:) s
+18 333 M (870:) s
+48 333 M
+("************************************************************************) s
+18 322 M (871:) s
+48 322 M
+( * class/meta-class:                                                    *) s
+18 311 M (872:) s
+48 311 M
+( ************************************************************************") s
+18 300 M (873:) s
+48 300 M
+(| b x |) s
+18 289 M (874:) s
+48 289 M
+(x := String name.                                           "class name") s
+18 278 M (875:) s
+48 278 M
+(x := String category.                                       "organization category") s
+18 267 M (876:) s
+48 267 M
+(x := String comment.                                        "class comment") s
+18 256 M (877:) s
+48 256 M
+(x := String kindOfSubclass.                                 "subclass type - subclass: variableSubclass, etc") s
+18 245 M (878:) s
+48 245 M
+(x := String definition.                                     "class definition") s
+18 234 M (879:) s
+48 234 M
+(x := String instVarNames.                                   "immediate instance variable names") s
+18 223 M (880:) s
+48 223 M
+(x := String allInstVarNames.                                "accumulated instance variable names") s
+18 212 M (881:) s
+48 212 M
+(x := String classVarNames.                                  "immediate class variable names") s
+18 201 M (882:) s
+48 201 M
+(x := String allClassVarNames.                               "accumulated classvariable names") s
+18 190 M (883:) s
+48 190 M
+(x := String sharedPools.                                    "immediate dictionaries used as shared pools") s
+18 179 M (884:) s
+48 179 M
+(x := String allSharedPools.                                 "accumulated dictionaries used as shared pools") s
+18 168 M (885:) s
+48 168 M
+(x := String selectors.                                      "message selectorsfor class") s
+18 157 M (886:) s
+48 157 M
+(x := String sourceCodeAt: #size.                            "source code for specified method") s
+18 146 M (887:) s
+48 146 M
+(x := String allInstances.                                   "collection of allinstances of class") s
+18 135 M (888:) s
+48 135 M
+(x := String superclass.                                     "immediate superclass") s
+18 124 M (889:) s
+48 124 M
+(x := String allSuperclasses.                                "accumulated superclasses") s
+18 113 M (890:) s
+48 113 M
+(x := String withAllSuperclasses.                            "receiver class and accumulated superclasses") s
+18 102 M (891:) s
+48 102 M
+(x := String subclasses.                                     "immediate subclasses") s
+18 91 M (892:) s
+48 91 M
+(x := String allSubclasses.                                  "accumulated subclasses") s
+18 80 M (893:) s
+48 80 M
+(x := String withAllSubclasses.                              "receiver class and accumulated subclasses") s
+18 69 M (894:) s
+48 69 M
+(b := String instSize.                                       "number of named instance variables") s
+18 58 M (895:) s
+48 58 M
+(b := String isFixed.                                        "true if no indexed instance variables") s
+18 47 M (896:) s
+48 47 M
+(b := String isVariable.                                     "true if has indexed instance variables") s
+18 36 M (897:) s
+48 36 M
+(b := String isPointers.                                     "true if index instance vars contain objects") s
+18 25 M (898:) s
+48 25 M
+(b := String isBits.                                         "true if index instance vars contain bytes/words") s
+18 14 M (899:) s
+48 14 M
+(b := String isBytes.                                        "true if index instance vars contain bytes") s
+18 3 M (900:) s
+48 3 M
+(b := String isWords.                                        true if index instance vars contain words") s
+_R
+S
+%%Page: (21) 21
+%%BeginPageSetup
+_S
+90 rotate
+24 -574 translate
+/pagenum 21 def
+/fname (angelfire-notes-smalltalk.txt) def
+/fdir (.) def
+/ftail (angelfire-notes-smalltalk.txt) def
+% User defined strings:
+/pagenumstr (21) def
+/moddatestr (10/10/14) def
+/pagecountstr (/21) def
+/modtimestr (16:37:29) def
+/user_header_p true def
+/user_header_left_str ($cmps112-wm/Languages/smalltalk/angelfire-notes-smalltalk/) def
+/user_header_center_str () def
+/user_header_right_str () def
+/user_footer_p false def
+%%EndPageSetup
+column_borders
+do_header
+18 487 M (901:) s
+48 487 M
+(Object withAllSubclasses size.                              "get total number of class entries") s
+18 476 M (902:) s
+18 465 M (903:) s
+48 465 M
+("************************************************************************) s
+18 454 M (904:) s
+48 454 M
+( * debuging:                                                            *) s
+18 443 M (905:) s
+48 443 M
+( ************************************************************************") s
+18 432 M (906:) s
+48 432 M
+(| a b x |) s
+18 421 M (907:) s
+48 421 M
+(x yourself.                                                 "returns receiver") s
+18 410 M (908:) s
+48 410 M
+(String browse.                                              "browse specified class") s
+18 399 M (909:) s
+48 399 M
+(x inspect.                                                  "open object inspector window") s
+18 388 M (910:) s
+48 388 M
+(x confirm: 'Is this correct?'.) s
+18 377 M (911:) s
+48 377 M
+(x halt.                                                     "breakpoint to open debugger window") s
+18 366 M (912:) s
+48 366 M
+(x halt: 'Halt message'.) s
+18 355 M (913:) s
+48 355 M
+(x notify: 'Notify text'.) s
+18 344 M (914:) s
+48 344 M
+(x error: 'Error string'.                                    "open up error window with title") s
+18 333 M (915:) s
+48 333 M
+(x doesNotUnderstand: #cmrMessage.                           "flag message is not handled") s
+18 322 M (916:) s
+48 322 M
+(x shouldNotImplement.                                       "flag message should not be implemented") s
+18 311 M (917:) s
+48 311 M
+(x subclassResponsibility.                                   "flag message as abstract") s
+18 300 M (918:) s
+48 300 M
+(x errorImproperStore.                                       "flag an improper store into indexable object") s
+18 289 M (919:) s
+48 289 M
+(x errorNonIntegerIndex.                                     "flag only integers should be used as index") s
+18 278 M (920:) s
+48 278 M
+(x errorSubscriptBounds.                                     "flag subscript out of bounds") s
+18 267 M (921:) s
+48 267 M
+(x primitiveFailed.                                          "system primitive failed") s
+18 256 M (922:) s
+18 245 M (923:) s
+48 245 M
+(a := 'A1'. b := 'B2'. a become: b.                          "switch two objects") s
+18 234 M (924:) s
+48 234 M
+(Transcript show: a, b; cr.) s
+18 223 M (925:) s
+18 212 M (926:) s
+48 212 M
+("************************************************************************) s
+18 201 M (927:) s
+48 201 M
+( * Misc.                                                                *) s
+18 190 M (928:) s
+48 190 M
+( ************************************************************************") s
+18 179 M (929:) s
+48 179 M
+(| x |) s
+18 168 M (930:) s
+48 168 M
+("Smalltalk condenseChanges."                                "compress the change file") s
+18 157 M (931:) s
+48 157 M
+(x := FillInTheBlank request: 'Prompt Me'.                   "prompt user for input") s
+18 146 M (932:) s
+48 146 M
+(Utilities openCommandKeyHelp) s
+18 135 M (933:) s
+48 135 M
+(     _________________________________________________________________) s
+18 124 M (934:) s
+18 113 M (935:) s
+18 102 M (936:) s
+48 102 M
+(    [3]Chris Rathman / [4]ChrisRath@aol.com) s
+18 91 M (937:) s
+18 80 M (938:) s
+48 80 M
+(References) s
+18 69 M (939:) s
+18 58 M (940:) s
+48 58 M
+(   1. http://www.angelfire.com/tx4/cus/index.html) s
+18 47 M (941:) s
+48 47 M
+(   2. mailto:ChrisRath@aol.com) s
+18 36 M (942:) s
+48 36 M
+(   3. http://www.angelfire.com/tx4/cus/index.html) s
+18 25 M (943:) s
+48 25 M
+(   4. mailto:ChrisRath@aol.com) s
+_R
+S
+%%Trailer
+%%Pages: 21
+%%DocumentNeededResources: font Times-Roman Courier-Bold Times-Bold 
+%%EOF
