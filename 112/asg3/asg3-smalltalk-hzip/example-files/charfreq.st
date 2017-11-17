@@ -64,6 +64,7 @@ freqtable := ZeroArray new: 256.
 [stdin atEnd not] whileTrue: [
    |ordChar|
    ordChar := stdin next asInteger.
+   ordChar inspect.
    freqtable incr: ordChar.
 ].
 

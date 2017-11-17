@@ -67,10 +67,9 @@ file := FileStream open: readStdin mode: FileStream read. "get input file as inp
 [file atEnd] whileFalse: [
    |ordChar index|
    ordChar := file nextLine asString. "get lines and process"
-   index := ordChar size.
-   index inspect.
-   1 to: ordChar size do: [
-   freqtable incr: ordChar nextCharacters.
+   butt := ordChar size.
+   1 to: butt do: [ :index |
+   freqtable incr: (ordChar at: index) asInteger.
    ].
    
 ].
