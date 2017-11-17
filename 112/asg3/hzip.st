@@ -59,6 +59,10 @@ Object subclass: ZeroArray [
 ]
 
 
+|readStdin|
+readStdin := stdin next asInteger
+
+
 freqtable := ZeroArray new: 256.
 file := FileStream stdin. "get input file as input"
 
@@ -66,6 +70,7 @@ file := FileStream stdin. "get input file as input"
 
 [file atEnd] whileFalse: [
    |ordChar|
+   ordChar := Array new: 30
    ordChar := file nextLine asInteger. "get lines and process"
    freqtable incr: ordChar.
 ].

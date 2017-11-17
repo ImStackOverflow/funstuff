@@ -62,16 +62,20 @@ Object subclass: ZeroArray [
 freqtable := ZeroArray new: 256.
 
 [stdin atEnd not] whileTrue: [
-   |ordChar|
-   ordChar := stdin next asInteger.
-   freqtable incr: ordChar.
+   |ordChar|	
+   ordChar := Array new: 15.
+   ordChar at: 1 put: stdin next asString.
+   ordChar inspect
+   "ordChar := ordChar splitOn: Character space."
+   stdout << asCharacter ordChar at: 1.
+   "freqtable incr: ordChar."
 ].
-
+"
 freqtable keysAndValuesDo: [:key :value |
    (value notNil and: [value > 0]) ifTrue: [
       stdout << 'freq[' << key asCharacter visible << ']=' << value
              << nl.
    ]
-].
+]."
 
 "TEST: echo aaaaaaaaaa bbbbb ccc | charfreq.st"
