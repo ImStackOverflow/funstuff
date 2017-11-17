@@ -58,7 +58,20 @@ Object subclass: ZeroArray [
 
 ]
 
+"Object subclass: #main [
 
+
+
+]
+commandLine 
+Smalltalk arguments: 'nil -c -t -u'
+do: [:opt :arg |
+    opt = '-c' ifTrue: ['cunt ' displayNl].
+	opt = '-t' ifTrue: ['twat ' displayNl].
+	opt = '-u' ifTrue: ['umbilical cord ' displayNl].
+	opt = 'nil' ifTrue []
+	]
+"
 |readStdin freqtable file|
 readStdin := stdin nextLine asString.
 freqtable := ZeroArray new: 256.
@@ -71,14 +84,26 @@ file := FileStream open: readStdin mode: FileStream read. "get input file as inp
    1 to: butt do: [ :index |
    freqtable incr: (ordChar at: index) asInteger.
    ].
-   
 ].
+freqtable incr: 256. "add EOF"
 
+priority := SortedCollection new. 
 freqtable keysAndValuesDo: [:key :value |
    (value notNil and: [value > 0]) ifTrue: [
-      stdout << 'freq[' << key asCharacter visible << ']=' << value
+    stdout << 'freq[' << key asCharacter visible << ']=' << value
              << nl.
+      priority add: key.
    ]
 ].
+
+priority sortBlock: [:a :b | 
+(freqtable at: a) < (freqtable at: b)].
+"sort based on frequency"
+
+[0 = priority size] whileFalse: [
+   priority last asCharacter printNl.
+   priority removeLast.
+].
+priority inspect.
 
 "TEST: echo aaaaaaaaaa bbbbb ccc | charfreq.st"

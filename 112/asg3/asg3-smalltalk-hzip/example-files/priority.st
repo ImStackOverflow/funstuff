@@ -6,7 +6,7 @@ nl := Character nl.
 priority := SortedCollection new.
 priority inspect.
 
-priority add:  3; inspect.
+priority add:  3 inspect.
 priority add:  1; inspect.
 priority add:  4; inspect.
 priority add: 14; inspect.
