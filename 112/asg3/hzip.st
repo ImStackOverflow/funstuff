@@ -59,20 +59,20 @@ Object subclass: ZeroArray [
 ]
 
 
-|readStdin|
-readStdin := stdin next asInteger
-
-
+|readStdin freqtable file|
+readStdin := stdin nextLine asString.
 freqtable := ZeroArray new: 256.
-file := FileStream stdin. "get input file as input"
-
-
+file := FileStream open: readStdin mode: FileStream read. "get input file as input"
 
 [file atEnd] whileFalse: [
-   |ordChar|
-   ordChar := Array new: 30
-   ordChar := file nextLine asInteger. "get lines and process"
-   freqtable incr: ordChar.
+   |ordChar index|
+   ordChar := file nextLine asString. "get lines and process"
+   index := ordChar size.
+   index inspect.
+   1 to: ordChar size do: [
+   freqtable incr: ordChar nextCharacters.
+   ].
+   
 ].
 
 freqtable keysAndValuesDo: [:key :value |
