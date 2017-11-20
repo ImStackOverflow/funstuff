@@ -133,24 +133,32 @@ Object subclass: ZeroArray [
 Eval [
 |freqtable file arg|
 freqtable := ZeroArray new: 256.
-"outputFile := stdout."
+outputFile := stdout.
 arg := Smalltalk arguments.
-(2 <= arg size) ifFalse: [
-		MyException signal: 'wrong args fucker'.].
+displayNl.
+displayNl.
+(arg size) displayNl.
+displayNl.
+
+(2 <= arg size) ifTrue: [
+		poop := arg at: 2.
+		poop displayNl.
 		"compression"
-		file := FileStream open: arg at: 2 mode: FileStream read.    
-		[3 = arg size] ifTrue: [
+		file := FileStream open: poop mode: FileStream read.    
+		(3 = arg size) ifTrue: [
 		    "if 3 args, then output file specified"
-		    outputFile := FileStream open: arg at: 3 asString mode: FileStream write.
+			poop := arg at: 3.
+			poop inspect.
+		    outputFile := FileStream open: poop mode: FileStream write.
 		   ].
 		].
-                
-		['-c' = arg at: 1] ifTrue: [
-                  'cunt' displayNl].
-		['-t' = arg at: 1] ifTrue: [
-                'twat ' displayNl].
-		['-u' = arg at: 1] ifTrue: [
-		 'umbilical cord ' displayNl].
+		poop := arg at: 1.
+		('-c' = poop) ifTrue: [
+                  'cunt' displayNl.].
+		('-t' = poop) ifTrue: [
+                'twat ' displayNl.].
+		('-u' = poop) ifTrue: [
+		 'umbilical cord ' displayNl.].
 
 
 [file atEnd] whileFalse: [
@@ -167,8 +175,6 @@ priority := SortedCollection new.
 freqtable keysAndValuesDo: [:key :value |
    (value notNil and: [value > 0]) ifTrue: [
    |vagina|
-    stdout << 'freq[' << key asCharacter visible << ']=' << value
-             << nl.
 	  vagina := Leaf new: key asCharacter count: value asInteger.
       priority add: vagina.
 	  "add leafs into priority queue"
@@ -200,8 +206,16 @@ priority inspect."
    "resort"
 ].
 
+outputFile inspect.
 priority removeFirst inorder: [:char :string |
-   stdout << '[' << char << ']=' << string << nl.
+   outputFile nextPutLine: char asString.
+   outputFile nextPutAll: '    '.
+   outputFile nextPutAll: count asString.
+   outputFile nextPutAll: '    '.
+   outputFile nextPutAll: string asString.
 ] prefix: ''.
+outputFile cr.
+outputFile close.
 ]
 "TEST: echo aaaaaaaaaa bbbbb ccc | charfreq.st"
+
