@@ -1,4 +1,4 @@
-#!/afs/cats.ucsc.edu/courses/cmps112-wm/usr/smalltalk/bin/gst -f
+#!/afs/cats.ucsc.edu/courses/cmps112-wm/usr/smalltalk/bin/gst 
 "$Id: collatz.st,v 1.2 2012-02-23 18:57:47-08 - - $"
 "http://en.wikipedia.org/wiki/Collatz_conjecture"
 
