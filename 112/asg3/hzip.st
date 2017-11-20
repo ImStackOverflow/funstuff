@@ -129,24 +129,29 @@ Object subclass: ZeroArray [
 
 ]
 
-"Object subclass: #main [
 
-
-
-]
-commandLine 
-Smalltalk arguments: 'nil -c -t -u'
-do: [:opt :arg |
-    opt = '-c' ifTrue: ['cunt ' displayNl].
-	opt = '-t' ifTrue: ['twat ' displayNl].
-	opt = '-u' ifTrue: ['umbilical cord ' displayNl].
-	opt = 'nil' ifTrue []
-	]
-"
-|readStdin freqtable file|
-readStdin := stdin nextLine asString.
+Eval [
+|freqtable file arg|
+file := FileStream open: stdin  mode: FileStream write.
 freqtable := ZeroArray new: 256.
-file := FileStream open: readStdin mode: FileStream read. "get input file as input"
+"outputFile := stdout."
+file := stdin.
+
+stdout << Smalltalk arguments.
+arg = stdin.
+(2 <= arg size) ifTrue: [
+		['-c' = arg at: 1] ifTrue: [
+		"compression"
+		file := FileStream open: arg at: 2 asString mode: FileStream read.    
+		[3 = arg size] ifTrue: [
+		    "if 3 args, then output file specified"
+		    outputFile := FileStream open: arg at: 3 asString mode: FileStream write.
+		   ].
+		].
+		opt = '-t' ifTrue: ['twat ' displayNl].
+		opt = '-u' ifTrue: ['umbilical cord ' displayNl].
+	]
+
 
 [file atEnd] whileFalse: [
    |ordChar index|
@@ -178,6 +183,7 @@ priority sortBlock: [:a :b |
 "stdout << 'after sorting'. 
 priority inspect."
 
+
 [1 = priority size] whileFalse: [
    |left right vagina|
    left := priority removeFirst.
@@ -193,8 +199,9 @@ priority inspect."
    a count < b count].
    "resort"
 ].
+
 priority removeFirst inorder: [:char :string |
    stdout << '[' << char << ']=' << string << nl.
 ] prefix: ''.
-
+]
 "TEST: echo aaaaaaaaaa bbbbb ccc | charfreq.st"
