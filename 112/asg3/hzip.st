@@ -156,25 +156,45 @@ file := FileStream open: readStdin mode: FileStream read. "get input file as inp
    freqtable incr: (ordChar at: index) asInteger.
    ].
 ].
-freqtable incr: 256. "add EOF"
+freqtable incr: 255. "add EOF"
 
 priority := SortedCollection new. 
 freqtable keysAndValuesDo: [:key :value |
    (value notNil and: [value > 0]) ifTrue: [
+   |vagina|
     stdout << 'freq[' << key asCharacter visible << ']=' << value
              << nl.
-      priority add: key.
+	  vagina := Leaf new: key asCharacter count: value asInteger.
+      priority add: vagina.
+	  "add leafs into priority queue"
    ]
 ].
+"stdout << 'before sorting'.
+priority inspect."
 
 priority sortBlock: [:a :b | 
-(freqtable at: a) < (freqtable at: b)].
+ a count < b count].
 "sort based on frequency"
+"stdout << 'after sorting'. 
+priority inspect."
 
-[0 = priority size] whileFalse: [
-   priority last asCharacter printNl.
-   priority removeLast.
+[1 = priority size] whileFalse: [
+   |left right vagina|
+   left := priority removeFirst.
+   "left is smaller"
+   right := priority removeFirst.
+   vagina := Tree new: left char 
+   count: left count + right count
+   left: left right: right.
+   "make tree"
+   priority add: vagina.
+   "add back into tree"
+   priority sortBlock: [:a :b | 
+   a count < b count].
+   "resort"
 ].
-priority inspect.
+priority removeFirst inorder: [:char :string |
+   stdout << '[' << char << ']=' << string << nl.
+] prefix: ''.
 
 "TEST: echo aaaaaaaaaa bbbbb ccc | charfreq.st"
