@@ -4,6 +4,44 @@
 
 nl := Character nl.
 
+Character extend [
+   isGraph [
+      ^ (Character space < self) & (self <= $~)
+   ]
+   visible [
+      self isGraph ifTrue: [^ '$', self asString]
+                   ifFalse: [^ self asInteger printStringRadix: 16]
+   ]
+]
+
+Object subclass: BitStream [
+   |bitIndex byte myStream|
+   BitStream class >> new: fileStream [
+      |result|
+      result := super new.
+      result init: fileStream.
+      ^result
+   ]
+   init: fileStream [
+      myStream := fileStream.
+      bitIndex := 1.
+   ]
+   nextBit [
+      bitIndex = 1 ifTrue: [
+         byte := myStream next.
+         bitIndex := 9.
+      ].
+      bitIndex := bitIndex - 1.
+      ^byte value bitAt: bitIndex
+   ]
+   atEnd [
+      ^bitIndex = 1 and: [myStream atEnd]
+   ]
+   currByte [
+      ^byte
+   ]
+]
+
 Object subclass: Leaf [
    |char count|
    char [ ^ char ]
@@ -131,7 +169,7 @@ Object subclass: ZeroArray [
 
 
 Eval [
-|freqtable file arg|
+|freqtable file arg flag|
 freqtable := ZeroArray new: 256.
 outputFile := stdout.
 arg := Smalltalk arguments.
@@ -154,68 +192,70 @@ displayNl.
 		].
 		poop := arg at: 1.
 		('-c' = poop) ifTrue: [
-                  'cunt' displayNl.].
+                  flag := 3.].
 		('-t' = poop) ifTrue: [
-                'twat ' displayNl.].
+                flag := 2.].
 		('-u' = poop) ifTrue: [
-		 'umbilical cord ' displayNl.].
+		 flag := 1.].
 
+(2 <= flag) ifTrue:[
+"generate compression tree"
 
-[file atEnd] whileFalse: [
-   |ordChar index|
-   ordChar := file nextLine asString. "get lines and process"
-   butt := ordChar size.
-   1 to: butt do: [ :index |
-   freqtable incr: (ordChar at: index) asInteger.
-   ].
-].
-freqtable incr: 255. "add EOF"
+"freq table"
+	[file atEnd] whileFalse: [
+	   |ordChar index|
+	   ordChar := file nextLine asString. 
+	   "get lines and process"
+	   butt := ordChar size.
+	   1 to: butt do: [ :index |
+	   freqtable incr: (ordChar at: index) asInteger.
+	   ].
+	].
+	freqtable incr: 255. "add EOF"
 
-priority := SortedCollection new. 
-freqtable keysAndValuesDo: [:key :value |
-   (value notNil and: [value > 0]) ifTrue: [
-   |vagina|
-	  vagina := Leaf new: key asCharacter count: value asInteger.
-      priority add: vagina.
-	  "add leafs into priority queue"
-   ]
-].
-"stdout << 'before sorting'.
-priority inspect."
+"priority queue"
+	priority := SortedCollection new. 
+	freqtable keysAndValuesDo: [:key :value |
+	   (value notNil and: [value > 0]) ifTrue: [
+	   |vagina|
+		  vagina := Leaf new: key asCharacter count: value asInteger.
+		  priority add: vagina.
+		  "add leafs into priority queue"
+	   ]
+	].
+	
+	priority sortBlock: [:a :b | 
+	 a count < b count].
 
-priority sortBlock: [:a :b | 
- a count < b count].
-"sort based on frequency"
-"stdout << 'after sorting'. 
-priority inspect."
+"make tree"
+	[1 = priority size] whileFalse: [
+	   |left right vagina|
+	   left := priority removeFirst.
+	   "left is smaller"
+	   right := priority removeFirst.
+	   vagina := Tree new: left char 
+	   count: left count + right count
+	   left: left right: right.
+	   "make tree"
+	   priority add: vagina.
+	   "add back into tree"
+	   priority sortBlock: [:a :b | 
+	   a count < b count].
+	   "resort"
+	].
 
-
-[1 = priority size] whileFalse: [
-   |left right vagina|
-   left := priority removeFirst.
-   "left is smaller"
-   right := priority removeFirst.
-   vagina := Tree new: left char 
-   count: left count + right count
-   left: left right: right.
-   "make tree"
-   priority add: vagina.
-   "add back into tree"
-   priority sortBlock: [:a :b | 
-   a count < b count].
-   "resort"
-].
-
-outputFile inspect.
-priority removeFirst inorder: [:char :string |
-   outputFile nextPutLine: char asString.
-   outputFile nextPutAll: '    '.
-   outputFile nextPutAll: count asString.
-   outputFile nextPutAll: '    '.
-   outputFile nextPutAll: string asString.
-] prefix: ''.
-outputFile cr.
-outputFile close.
+	outputFile inspect.
+	priority removeFirst inorder: [:char :string |
+	   outputFile nextPutLine: char asString.
+	   outputFile nextPutAll: '    '.
+	   outputFile nextPutAll: count asString.
+	   outputFile nextPutAll: '    '.
+	   outputFile nextPutAll: string asString.
+	] prefix: ''.
+	outputFile cr.
+	outputFile close.
+	]
 ]
+	
 "TEST: echo aaaaaaaaaa bbbbb ccc | charfreq.st"
 
