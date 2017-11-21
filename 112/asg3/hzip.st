@@ -1,8 +1,6 @@
 #!/afs/cats.ucsc.edu/courses/cmps112-wm/usr/smalltalk/bin/gst -f
 "$Id: ghchen@ucsc.edu Gavin Chen 1492980"
-"Count frequency of input characters"
 
-nl := Character nl.
 
 Character extend [
    isGraph [
@@ -77,7 +75,7 @@ Object subclass: Leaf [
    ]
 
    inorder: visitor prefix: string [
-      visitor value: char value: string.
+      visitor value: char value: string value: count.
    ]
 
 ]
@@ -167,37 +165,42 @@ Object subclass: ZeroArray [
 
 ]
 
-
 Eval [
 |freqtable file arg flag|
 freqtable := ZeroArray new: 256.
-outputFile := stdout.
 arg := Smalltalk arguments.
-displayNl.
-displayNl.
-(arg size) displayNl.
-displayNl.
 
-(2 <= arg size) ifTrue: [
-		poop := arg at: 2.
-		poop displayNl.
-		"compression"
-		file := FileStream open: poop mode: FileStream read.    
-		(3 = arg size) ifTrue: [
-		    "if 3 args, then output file specified"
-			poop := arg at: 3.
-			poop inspect.
-		    outputFile := FileStream open: poop mode: FileStream write.
-		   ].
-		].
-		poop := arg at: 1.
-		('-c' = poop) ifTrue: [
-                  flag := 3.].
-		('-t' = poop) ifTrue: [
-                flag := 2.].
-		('-u' = poop) ifTrue: [
-		 flag := 1.].
+"check input count"
+(2 <= arg size) ifFalse: [ 
+'need more inputs yo' displayNl.
+ObjectMemory quit: 1 ].
 
+"check input file"
+poop := arg at: 2.
+(File exists: poop) ifFalse: [ 
+	'file dont exist bro' displayNl.
+	ObjectMemory quit: 1 ].
+
+file := FileStream open: poop mode: FileStream read.    
+(3 = arg size) ifTrue: [
+	"if 3 args, then output file specified"
+	poop := arg at: 3.
+	(File exists: poop) ifFalse: [ 
+		'file dont exist bro' displayNl.
+		ObjectMemory quit: 1 ].
+	stdout := FileStream open: poop mode: FileStream write.
+   ].
+
+"set flag"   
+poop := arg at: 1.
+('-c' = poop) ifTrue: [
+		  flag := 3.].
+('-t' = poop) ifTrue: [
+		flag := 2.].
+('-u' = poop) ifTrue: [
+ flag := 1.].
+
+"compression"
 (2 <= flag) ifTrue:[
 "generate compression tree"
 
@@ -243,18 +246,36 @@ displayNl.
 	   a count < b count].
 	   "resort"
 	].
-
-	outputFile inspect.
-	priority removeFirst inorder: [:char :string |
-	   outputFile nextPutLine: char asString.
-	   outputFile nextPutAll: '    '.
-	   outputFile nextPutAll: count asString.
-	   outputFile nextPutAll: '    '.
-	   outputFile nextPutAll: string asString.
+].
+(flag = 2) ifTrue: [
+"just print tree mutherfucker"
+	priority removeFirst inorder: [:char :string :count |
+	   stdout << char << '    ' << count
+	   << '    ' << string << Character nl.
+	   stdout flush.
+	   stdout flush.
 	] prefix: ''.
-	outputFile cr.
-	outputFile close.
-	]
+	].
+
+(flag = 3) ifTrue: [
+"compress"
+
+stdinBits := BitStream new: stdin.
+priority removeFirst inorder: [:char :string :count |
+cunt := 0.
+stdinBits := char.
+	1 to: 8 do: [ :cunt |
+	   stdout << stdinBits nextBit.
+	   cunt = 4 ifTrue: [stdout << ' '].
+	   cunt = 8 ifTrue: [
+		  stdout << ' ' << stdinBits currByte visible << nl.
+	   ].
+	].
+	 stdout << '    ' << count
+		   << '    ' << string << Character nl.
+		   stdout flush.
+		] prefix: ''.
+].
 ]
 	
 "TEST: echo aaaaaaaaaa bbbbb ccc | charfreq.st"
