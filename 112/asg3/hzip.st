@@ -179,104 +179,104 @@ ObjectMemory quit: 1 ].
 "check input file"
 poop := arg at: 2.
 (File exists: poop) ifFalse: [ 
-	'file dont exist bro' displayNl.
-	ObjectMemory quit: 1 ].
+   'file dont exist bro' displayNl.
+   ObjectMemory quit: 1 ].
 
 file := FileStream open: poop mode: FileStream read.    
 (3 = arg size) ifTrue: [
-	"if 3 args, then output file specified"
-	poop := arg at: 3.
-	(File exists: poop) ifFalse: [ 
-		'file dont exist bro' displayNl.
-		ObjectMemory quit: 1 ].
-	stdout := FileStream open: poop mode: FileStream write.
+   "if 3 args, then output file specified"
+   poop := arg at: 3.
+   (File exists: poop) ifFalse: [ 
+      'file dont exist bro' displayNl.
+      ObjectMemory quit: 1 ].
+   stdout := FileStream open: poop mode: FileStream write.
    ].
 
 "set flag"   
 poop := arg at: 1.
 ('-c' = poop) ifTrue: [
-		  flag := 3.].
+        flag := 3.].
 ('-t' = poop) ifTrue: [
-		flag := 2.].
+      flag := 2.].
 ('-u' = poop) ifTrue: [
  flag := 1.].
 
 (0 = flag) ifTrue: [
 'not right arg bro' displayNl.
-		ObjectMemory quit: 1 ].
+      ObjectMemory quit: 1 ].
 "compression"
 (2 <= flag) ifTrue:[
 "generate compression tree"
 
 "freq table"
-	[file atEnd] whileFalse: [
-	   |ordChar index|
-	   ordChar := file nextLine asString. 
-	   "get lines and process"
-	   butt := ordChar size.
-	   1 to: butt do: [ :index |
-	   freqtable incr: (ordChar at: index) asInteger.
-	   ].
-	].
-	freqtable incr: 255. "add EOF"
+   [file atEnd] whileFalse: [
+      |ordChar index|
+      ordChar := file nextLine asString. 
+      "get lines and process"
+      butt := ordChar size.
+      1 to: butt do: [ :index |
+      freqtable incr: (ordChar at: index) asInteger.
+      ].
+   ].
+   freqtable incr: 255. "add EOF"
 
 "priority queue"
-	priority := SortedCollection new. 
-	freqtable keysAndValuesDo: [:key :value |
-	   (value notNil and: [value > 0]) ifTrue: [
-	   |vagina|
-		  vagina := Leaf new: key asCharacter count: value asInteger.
-		  priority add: vagina.
-		  "add leafs into priority queue"
-	   ]
-	].
-	
-	priority sortBlock: [:a :b | 
-	 a count < b count].
+   priority := SortedCollection new. 
+   freqtable keysAndValuesDo: [:key :value |
+      (value notNil and: [value > 0]) ifTrue: [
+      |vagina|
+        vagina := Leaf new: key asCharacter count: value asInteger.
+        priority add: vagina.
+        "add leafs into priority queue"
+      ]
+   ].
+   
+   priority sortBlock: [:a :b | 
+    a count < b count].
 
 "make tree"
-	[1 = priority size] whileFalse: [
-	   |left right vagina|
-	   left := priority removeFirst.
-	   "left is smaller"
-	   right := priority removeFirst.
-	   vagina := Tree new: left char 
-	   count: left count + right count
-	   left: left right: right.
-	   "make tree"
-	   priority add: vagina.
-	   "add back into tree"
-	   priority sortBlock: [:a :b | 
-	   a count < b count].
-	   "resort"
-	].
+   [1 = priority size] whileFalse: [
+      |left right vagina|
+      left := priority removeFirst.
+      "left is smaller"
+      right := priority removeFirst.
+      vagina := Tree new: left char 
+      count: left count + right count
+      left: left right: right.
+      "make tree"
+      priority add: vagina.
+      "add back into tree"
+      priority sortBlock: [:a :b | 
+      a count < b count].
+      "resort"
+   ].
 ].
 (flag = 2) ifTrue: [
 "just print tree mutherfucker"
-	priority removeFirst inorder: [:char :string :count |
-	   stdout << char << '    ' << count
-	   << '    ' << string << Character nl.
-	   stdout flush.
-	] prefix: ''.
-	].
+   priority removeFirst inorder: [:char :string :count |
+      stdout << char << '    ' << count
+      << '    ' << string << Character nl.
+      stdout flush.
+   ] prefix: ''.
+   ].
 
 (flag = 3) ifTrue: [
 "compress"
 poop := arg at: 2.
 file := FileStream open: poop mode: FileStream read.
    ordChar := file nextLine asString.
-	stdinBits := BitStream new: file.
-	[stdinBits atEnd] whileFalse: [
-	   stdout << stdinBits nextBit.
-	   stdout flush.
+   stdinBits := BitStream new: file.
+   [stdinBits atEnd] whileFalse: [
+      stdout << stdinBits nextBit.
+      stdout flush.
 ].
 ].
 
 "decompress"
 (flag = 1) ifTrue: [
-	1 to: 100  do: [ :x |
-	stdout << ' wassup my dude '.
-	].
+   1 to: 100  do: [ :x |
+   stdout << ' wassup my dude '.
+   ].
 ].
 ]
 
