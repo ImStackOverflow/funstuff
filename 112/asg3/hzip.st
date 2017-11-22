@@ -169,6 +169,7 @@ Eval [
 |freqtable file arg flag|
 freqtable := ZeroArray new: 256.
 arg := Smalltalk arguments.
+flag := 0.
 
 "check input count"
 (2 <= arg size) ifFalse: [ 
@@ -200,6 +201,9 @@ poop := arg at: 1.
 ('-u' = poop) ifTrue: [
  flag := 1.].
 
+(0 = flag) ifTrue: [
+'not right arg bro' displayNl.
+		ObjectMemory quit: 1 ].
 "compression"
 (2 <= flag) ifTrue:[
 "generate compression tree"
@@ -253,30 +257,26 @@ poop := arg at: 1.
 	   stdout << char << '    ' << count
 	   << '    ' << string << Character nl.
 	   stdout flush.
-	   stdout flush.
 	] prefix: ''.
 	].
 
 (flag = 3) ifTrue: [
 "compress"
-
-stdinBits := BitStream new: stdin.
-priority removeFirst inorder: [:char :string :count |
-cunt := 0.
-stdinBits := char.
-	1 to: 8 do: [ :cunt |
+poop := arg at: 2.
+file := FileStream open: poop mode: FileStream read.
+   ordChar := file nextLine asString.
+	stdinBits := BitStream new: file.
+	[stdinBits atEnd] whileFalse: [
 	   stdout << stdinBits nextBit.
-	   cunt = 4 ifTrue: [stdout << ' '].
-	   cunt = 8 ifTrue: [
-		  stdout << ' ' << stdinBits currByte visible << nl.
-	   ].
+	   stdout flush.
+].
+].
+
+"decompress"
+(flag = 1) ifTrue: [
+	1 to: 100  do: [ :x |
+	stdout << ' wassup my dude '.
 	].
-	 stdout << '    ' << count
-		   << '    ' << string << Character nl.
-		   stdout flush.
-		] prefix: ''.
 ].
 ]
-	
-"TEST: echo aaaaaaaaaa bbbbb ccc | charfreq.st"
 
