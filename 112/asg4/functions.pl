@@ -102,15 +102,19 @@ haversine_radians( Lat1, Lon1, Lat2, Lon2, Distance ) :-
 % Functions for determining moves.
 %
 
-match( String) :- start( State), move( State, String).
+match( String) :- 
+%change to start location
+start( State), move( State, String).
 
 move( From_state, String) :-
 	[Head_string | Tail_string] = String, 
+	%change to accept flight paterns
 	trans( From_state, Head_string, To_state), 
 	print_status( From_state, String), 
 	move( To_state, Tail_string).
 
 move( From_state, []) :-
+    %final destination	
 	final( From_state), 
 	print_status( From_state, []).
 
