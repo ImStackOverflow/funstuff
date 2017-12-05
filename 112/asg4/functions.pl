@@ -68,9 +68,10 @@ haversine_distance_radians( Dep, Arr, Distance ) :-
 writeallpaths( Node, Node ) :-
    write( Node ), write( ' is ' ), write( Node ), nl.
 writeallpaths( Node, Next ) :-
-   listpath( Node, Next, [Node], List, time(0, 0) ),
+   listpath( Node, Next, [Node], List, time(0, 0), Penis ),
    write( Node ), write( ' to ' ), write( Next ), write( ' is ' ),
    writepath( List ),
+   writepath(Penis),
    fail.
 
 writepath( [] ) :-
@@ -89,33 +90,36 @@ listpath( Node, End, Outlist ) :-
 listpath( Node, Node, _, [Node] ).
 
 %time is time of arrival
-listpath( Node, End, Tried, [Node|List], Time ) :-
+listpath( Node, End, Tried, [Node|List], Time, Tlist ) :-
    %find flights from current location
    flight( Node, Next, Flight_time ),
+    % write(Node), write(' asshole'),
    %check if chosen flight has reachable time
    is_in_time( Time, Flight_time),
-   %check that chosen flight hasnt been analyzed before
+   %write(Time), write('whore'),   
+%check that chosen flight hasnt been analyzed before
    not( member( Next, Tried )),
    %add departure time of valid flight
-   List is [Time|List],
+   %[Time|Tlist],
+   %write(' fuckermcfuck '),
    %compute arival time
    endtime( Node, Next, Time, Arrived),
-   %add arrival time
-   List is [Arrived|List],
    %search for next path
-   listpath( Next, End, [Next|Tried], List, Arrived ).
+   listpath( Next, End, [Next|Tried], List, Arrived, Arrived ).
 
 %-----------------Graph Paths--------------------
 %-----------------Gay shit ---------------------
 %computes arrival time
-endtime( Arr, Dep, time(Hours, Min), Here) :- 
+endtime( Arr, Dep, time(Hours, Min), Here) :-
+   %write(Dep), write(' fag'), 
     haversine_distance_radians(Dep, Arr, Result),
 	%convert distance to time
 	Result is (Result / 500) + 0.5,
     %compute arrival time	
 	Ass is Hours + (Result / 60),
 	Dick is Min + mod(Result, 60),
-	Here is time(Ass, Dick).
+	Here is time(Ass, Dick),
+        write(Here).
 
 is_in_time( time(Rhours, Rmin), time(Dhours, Dmin)) :-
    Rhours < Dhours,
@@ -136,9 +140,8 @@ fly( Var, Var ) :-
 fly( Dep, Arr ) :-
    airport(Dep, _, _, _),
    airport(Arr, _, _, _),
-  % writeallpaths( Departure, Arrival ),
-   nl, !.
-   
+   writeallpaths( Dep, Arr ),
+   nl, !.   
 % no departure
 fly( Dep, _ ) :-
    not(airport(Dep, _, _, _)),
