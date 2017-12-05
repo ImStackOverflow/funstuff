@@ -51,14 +51,14 @@ haversine_distance( Lat1, Lon1, Lat2, Lon2, Distance ) :-
 % takes the departure area and arrival area and plugs converted 
 % units into the haversine_distance function to be calculated
 % (Converted) returns the distance in radians
-haversine_distance_radians( Departure, Arrival, Converted) :-
-   airport( Departure, _, lat1, lon1 ),
-   airport( Arrival, _, lat2, lon2 ),
+haversine_distance_radians( Dep, Arr, Distance ) :-
+   airport( Dep, _, Lat1, Lon1 ),
+   airport( Arr, _, Lat2, Lon2 ), 
    dm_rads( Lat1, Lat1_rads ),
    dm_rads( Lon1, Lon1_rads ),
    dm_rads( Lat2, Lat2_rads ),
    dm_rads( Lon2, Lon2_rads ),
-   haversine_distance(Lat1_rads, Lon1_rads, Lat2_rads, Lon2_rads, Converted).
+   haversine_distance( Lat1_rads, Lon1_rads, Lat2_rads, Lon2_rads, Distance ).
 
 %-----------------Haversine 2--------------------
 %-----------------Write Paths--------------------
@@ -136,26 +136,18 @@ fly( Var, Var ) :-
 fly( Dep, Arr ) :-
    airport(Dep, _, _, _),
    airport(Arr, _, _, _),
-   writeallpaths( Dep, Arr ),
-   nl,!.
-
-/*
-% no arrival
+  % writeallpaths( Departure, Arrival ),
+   nl, !.
+   
+% no departure
 fly( Dep, _ ) :-
+   not(airport(Dep, _, _, _)),
    write('Error: No argument for arrival area'),
    !, fail.
 
-% no departure
+% no arrival
 fly( _, Arr ) :-
+   not(airport(Arr, _, _, _)),
    write('Error: No argument for departure area'),
    !, fail.
-
-% no departure and arrival
-fly( _, _ ) :-
-   write('Error: No argument for departure and arrival area'),
-   !, fail.
-*/
-
-
-
 
