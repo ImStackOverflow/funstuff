@@ -82,7 +82,7 @@ writepath( [Head|Tail] ) :-
 %-----------------Graph Paths--------------------
 
 % find a path from one node to another.
-/*
+
 listpath( Node, End, Outlist ) :-
    listpath( Node, End, [Node], Outlist ).
 
@@ -92,7 +92,7 @@ listpath( Node, End, Tried, [Node|List] ) :-
    flight( Node, Next, _ ),
    not( member( Next, Tried )),
    listpath( Next, End, [Next|Tried], List ).
-*/
+
 %-----------------Graph Paths--------------------
 %-----------------Input Checks--------------------
 
@@ -103,9 +103,9 @@ fly( Var, Var ) :-
 
 % correct input taken
 fly( Dep, Arr ) :-
-  Departure = flight( Dep, _, _ ),
-  Arrival = flight( _, Arr, _ ),
-  writeallpaths( Departure, Arrival ),
+   airport(Dep, _, _, _),
+   airport(Arr, _, _, _),
+   writeallpaths( Departure, Arrival ),
    nl, !.
 
 /*

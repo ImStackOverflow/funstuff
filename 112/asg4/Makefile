@@ -12,6 +12,10 @@ HTOPTS   = -spte -Thtml
 TTOPTS   = -st -Tlatin1 -P-cbuo
 SQUEEZE  = perl -00pe0
 
+butt : 
+	gprolog
+	[database].
+	consult('functions.pl').
 newest : ${NEW}.tt ${NEW}.view ${NEW}.pdf
 
 all : tt ps pdf
