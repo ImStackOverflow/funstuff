@@ -52,8 +52,8 @@ haversine_distance( Lat1, Lon1, Lat2, Lon2, Distance ) :-
 % units into the haversine_distance function to be calculated
 % (Converted) returns the distance in radians
 haversine_distance_radians( Departure, Arrival, Converted) :-
-   airport( _, _, lat1, lon1 ) = Departure,
-   airport( _, _, lat2, lon2 ) = Arrival,
+   airport( Departure, _, lat1, lon1 ),
+   airport( Arrival, _, lat2, lon2 ),
    dm_rads( Lat1, Lat1_rads ),
    dm_rads( Lon1, Lon1_rads ),
    dm_rads( Lat2, Lat2_rads ),
@@ -68,7 +68,7 @@ haversine_distance_radians( Departure, Arrival, Converted) :-
 writeallpaths( Node, Node ) :-
    write( Node ), write( ' is ' ), write( Node ), nl.
 writeallpaths( Node, Next ) :-
-   listpath( Node, Next, [Node], List ),
+   listpath( Node, Next, [Node], List, time(0, 0) ),
    write( Node ), write( ' to ' ), write( Next ), write( ' is ' ),
    writepath( List ),
    fail.
@@ -88,15 +88,41 @@ listpath( Node, End, Outlist ) :-
 
 listpath( Node, Node, _, [Node] ).
 
-listpath( Node, End, Tried, [Node|List] ) :-
-   flight( Node, Next, _ ),
+%time is time of arrival
+listpath( Node, End, Tried, [Node|List], Time ) :-
+   %find flights from current location
+   flight( Node, Next, Flight_time ),
+   %check if chosen flight has reachable time
+   is_in_time( Time, Flight_time),
+   %check that chosen flight hasnt been analyzed before
    not( member( Next, Tried )),
-   listpath( Next, End, [Next|Tried], List ).
+   %add departure time of valid flight
+   List is [Time|List],
+   %compute arival time
+   endtime( Node, Next, Time, Arrived),
+   %add arrival time
+   List is [Arrived|List],
+   %search for next path
+   listpath( Next, End, [Next|Tried], List, Arrived ).
 
 %-----------------Graph Paths--------------------
 %-----------------Gay shit ---------------------
-endtime( Arr, Dep, Leave, Come) :- 
-    
+%computes arrival time
+endtime( Arr, Dep, time(Hours, Min), Here) :- 
+    haversine_distance_radians(Dep, Arr, Result),
+	%convert distance to time
+	Result is (Result / 500) + 0.5,
+    %compute arrival time	
+	Ass is Hours + (Result / 60),
+	Dick is Min + mod(Result, 60),
+	Here is time(Ass, Dick).
+
+is_in_time( time(Rhours, Rmin), time(Dhours, Dmin)) :-
+   Rhours < Dhours,
+   Rmin < Dmin.
+   
+   	
+	
 
 
 %-----------------Input Checks--------------------
