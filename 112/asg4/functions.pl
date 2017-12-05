@@ -94,6 +94,11 @@ listpath( Node, End, Tried, [Node|List] ) :-
    listpath( Next, End, [Next|Tried], List ).
 
 %-----------------Graph Paths--------------------
+%-----------------Gay shit ---------------------
+endtime( Arr, Dep, Leave, Come) :- 
+    
+
+
 %-----------------Input Checks--------------------
 
 % identical arguments
@@ -105,8 +110,8 @@ fly( Var, Var ) :-
 fly( Dep, Arr ) :-
    airport(Dep, _, _, _),
    airport(Arr, _, _, _),
-   writeallpaths( Departure, Arrival ),
-   nl, !.
+   writeallpaths( Dep, Arr ),
+   nl,!.
 
 /*
 % no arrival
