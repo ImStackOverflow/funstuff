@@ -1,78 +1,4 @@
 % $Id: functions.pl,v 1.3 2016-11-08 15:04:13-08 - - $
-
-/*
-* Airport Database.
-* For each airport:
-* - three-letter airport code
-* - name of city
-* - north latitude: degrees and minutes
-* - west longitude: degrees and minutes
-* North latitudes and West longitudes are in degrees, minutes.
-*/
-
-airport( atl, 'Atlanta         ', degmin(  33,39 ), degmin(  84,25 ) ).
-airport( bos, 'Boston-Logan    ', degmin(  42,22 ), degmin(  71, 2 ) ).
-airport( chi, 'Chicago         ', degmin(  42, 0 ), degmin(  87,53 ) ).
-airport( den, 'Denver-Stapleton', degmin(  39,45 ), degmin( 104,52 ) ).
-airport( dfw, 'Dallas-Ft.Worth ', degmin(  32,54 ), degmin(  97, 2 ) ).
-airport( lax, 'Los Angeles     ', degmin(  33,56 ), degmin( 118,24 ) ).
-airport( mia, 'Miami           ', degmin(  25,49 ), degmin(  80,17 ) ).
-airport( nyc, 'New York City   ', degmin(  40,46 ), degmin(  73,59 ) ).
-airport( sea, 'Seattle-Tacoma  ', degmin(  47,27 ), degmin( 122,18 ) ).
-airport( sfo, 'San Francisco   ', degmin(  37,37 ), degmin( 122,23 ) ).
-airport( sjc, 'San Jose        ', degmin(  37,22 ), degmin( 121,56 ) ).
-
-/*
-* Flight schedule.
-* Flight number, departure airport, destination airport,
-* departure time in hours, minutes.
-*/
-
-flight( bos, nyc, time(  7,30 ) ).
-flight( dfw, den, time(  8, 0 ) ).
-flight( atl, lax, time(  8,30 ) ).
-flight( chi, den, time(  8,30 ) ).
-flight( mia, atl, time(  9, 0 ) ).
-flight( sfo, lax, time(  9, 0 ) ).
-flight( sea, den, time( 10, 0 ) ).
-flight( nyc, chi, time( 11, 0 ) ).
-flight( sea, lax, time( 11, 0 ) ).
-flight( den, dfw, time( 11,15 ) ).
-flight( sjc, lax, time( 11,15 ) ).
-flight( atl, lax, time( 11,30 ) ).
-flight( atl, mia, time( 11,30 ) ).
-flight( chi, nyc, time( 12, 0 ) ).
-flight( lax, atl, time( 12, 0 ) ).
-flight( lax, sfo, time( 12, 0 ) ).
-flight( lax, sjc, time( 12, 0 ) ).
-flight( nyc, bos, time( 12,15 ) ).
-flight( bos, nyc, time( 12,30 ) ).
-flight( den, chi, time( 12,30 ) ).
-flight( dfw, den, time( 12,30 ) ).
-flight( mia, atl, time( 13, 0 ) ).
-flight( sjc, lax, time( 13,15 ) ).
-flight( lax, sea, time( 13,30 ) ).
-flight( chi, den, time( 14, 0 ) ).
-flight( lax, nyc, time( 14, 0 ) ).
-flight( sfo, lax, time( 14, 0 ) ).
-flight( atl, lax, time( 14,30 ) ).
-flight( lax, atl, time( 15, 0 ) ).
-flight( nyc, chi, time( 15, 0 ) ).
-flight( nyc, lax, time( 15, 0 ) ).
-flight( den, dfw, time( 15,15 ) ).
-flight( lax, sjc, time( 15,30 ) ).
-flight( chi, nyc, time( 18, 0 ) ).
-flight( lax, atl, time( 18, 0 ) ).
-flight( lax, sfo, time( 18, 0 ) ).
-flight( nyc, bos, time( 18, 0 ) ).
-flight( sfo, lax, time( 18, 0 ) ).
-flight( sjc, lax, time( 18,15 ) ).
-flight( atl, mia, time( 18,30 ) ).
-flight( den, chi, time( 18,30 ) ).
-flight( lax, sjc, time( 19,30 ) ).
-flight( lax, sfo, time( 20, 0 ) ).
-flight( lax, sea, time( 22,30 ) ).
-
 % math for calculating distance
 
 mathfns( X, List ) :-
@@ -87,36 +13,118 @@ constants( List ) :-
    Epsilon is epsilon,
    List = [Pi, E, Epsilon].
 
-sincos( X, Y ) :-
-   Y is sin( X ) ** 2 + cos( X ) ** 2.
+%
+% functions.pl
+%
 
-haversine_radians( Lat1, Lon1, Lat2, Lon2, Distance ) :-
+% prolog version of not
+not( X ) :- X, !, fail.
+not( _ ).
+
+%-----------------Conversions--------------------
+
+% degrees/minutes -> radians
+
+% convert degrees and minutes of arc to radians
+dm_rads( degmin( Degrees, Minutes ), Radians ) :-
+    Radians is (Degrees + Minutes / 60) * pi / 180.
+
+hm_mins( time(Hrs, Mins), Minutes) :-
+   Hours is Hrs * 60 + Mins.
+
+%-----------------Conversions--------------------
+%-----------------Haversine 1--------------------
+
+% haversine formula
+haversine_distance( Lat1, Lon1, Lat2, Lon2, Distance ) :-
    Dlon is Lon2 - Lon1,
    Dlat is Lat2 - Lat1,
-   A is sin( Dlat / 2 ) ** 2
+   Tmpa is sin( Dlat / 2 ) ** 2
       + cos( Lat1 ) * cos( Lat2 ) * sin( Dlon / 2 ) ** 2,
-   Dist is 2 * atan2( sqrt( A ), sqrt( 1 - A )),
-   Distance is Dist * 3961.
+   Udist is 2 * atan2( sqrt( Tmpa ), sqrt( 1 - Tmpa )),
+   Distance is 3959 * Udist.
 
-%
-% Functions for determining moves.
-%
+%-----------------Haversine 1--------------------
+%-----------------Haversine 2--------------------
 
-match( String) :- 
-%change to start location
-start( State), move( State, String).
+% plug in converted units in order to find the distance
+% takes the departure area and arrival area and plugs converted 
+% units into the haversine_distance function to be calculated
+% (Converted) returns the distance in radians
+haversine_distance_radians( Departure, Arrival, Converted) :-
+   airport( _, _, lat1, lon1 ) = Departure,
+   airport( _, _, lat2, lon2 ) = Arrival,
+   dm_rads( Lat1, Lat1_rads ),
+   dm_rads( Lon1, Lon1_rads ),
+   dm_rads( Lat2, Lat2_rads ),
+   dm_rads( Lon2, Lon2_rads ),
+   haversine_distance(Lat1_rads, Lon1_rads, Lat2_rads, Lon2_rads, Converted).
 
-move( From_state, String) :-
-	[Head_string | Tail_string] = String, 
-	%change to accept flight paterns
-	trans( From_state, Head_string, To_state), 
-	print_status( From_state, String), 
-	move( To_state, Tail_string).
+%-----------------Haversine 2--------------------
+%-----------------Write Paths--------------------
 
-move( From_state, []) :-
-    %final destination	
-	final( From_state), 
-	print_status( From_state, []).
+% prints the flight path onto the console
 
-print_status( State, String) :-
-	write( State), write( ' '), write( String), nl.
+writeallpaths( Node, Node ) :-
+   write( Node ), write( ' is ' ), write( Node ), nl.
+writeallpaths( Node, Next ) :-
+   listpath( Node, Next, [Node], List ),
+   write( Node ), write( ' to ' ), write( Next ), write( ' is ' ),
+   writepath( List ),
+   fail.
+
+writepath( [] ) :-
+   nl.
+writepath( [Head|Tail] ) :-
+   write( ' ' ), write( Head ), writepath( Tail ).
+
+%-----------------Write Paths--------------------
+%-----------------Graph Paths--------------------
+
+% find a path from one node to another.
+/*
+listpath( Node, End, Outlist ) :-
+   listpath( Node, End, [Node], Outlist ).
+
+listpath( Node, Node, _, [Node] ).
+
+listpath( Node, End, Tried, [Node|List] ) :-
+   flight( Node, Next, _ ),
+   not( member( Next, Tried )),
+   listpath( Next, End, [Next|Tried], List ).
+*/
+%-----------------Graph Paths--------------------
+%-----------------Input Checks--------------------
+
+% identical arguments
+fly( Var, Var ) :-
+   write('Error: Identical arguments'),
+   !, fail.
+
+% correct input taken
+fly( Dep, Arr ) :-
+  Departure = flight( Dep, _, _ ),
+  Arrival = flight( _, Arr, _ ),
+  writeallpaths( Departure, Arrival ),
+   nl, !.
+
+/*
+% no arrival
+fly( Dep, _ ) :-
+   write('Error: No argument for arrival area'),
+   !, fail.
+
+% no departure
+fly( _, Arr ) :-
+   write('Error: No argument for departure area'),
+   !, fail.
+
+% no departure and arrival
+fly( _, _ ) :-
+   write('Error: No argument for departure and arrival area'),
+   !, fail.
+*/
+
+
+
+
