@@ -16,6 +16,7 @@ link( f, j ).
 link( g, h ).
 link( h, i ).
 link( i, j ).
+link(k,p).
 
 %
 % Prolog version of not.

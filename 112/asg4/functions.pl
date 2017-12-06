@@ -71,7 +71,6 @@ writeallpaths( Node, Next ) :-
    listpath( Node, Next, [Node], List, time(0, 0), Penis ),
    write( Node ), write( ' to ' ), write( Next ), write( ' is ' ),
    writepath( List ),
-   writepath(Penis),
    fail.
 
 writepath( [] ) :-
@@ -87,43 +86,53 @@ writepath( [Head|Tail] ) :-
 listpath( Node, End, Outlist ) :-
    listpath( Node, End, [Node], Outlist ).
 
-listpath( Node, Node, _, [Node] ).
+%base case for recursion
+listpath( Node, Node, _, [Node], _, _ ).
 
 %time is time of arrival
 listpath( Node, End, Tried, [Node|List], Time, Tlist ) :-
    %find flights from current location
    flight( Node, Next, Flight_time ),
-    % write(Node), write(' asshole'),
-   %check if chosen flight has reachable time
-   is_in_time( Time, Flight_time),
-   write(Time), write('whore'),   
+   
 %check that chosen flight hasnt been analyzed before
    not( member( Next, Tried )),
+    % write(Node), write(' asshole'),
+   %check if chosen flight has reachable time
+
+   is_in_time( Time, Flight_time),
+   write('time before calc is '), write(Time), nl,   
    %add departure time of valid flight
    %[Time|Tlist],
-   write(' fuckermcfuck '),
+   %write(' fuckermcfuck '),
    %compute arival time
    endtime( Node, Next, Time, Arrived),
    %search for next path
+   is_in_time( Arrived, Flight_time),
    listpath( Next, End, [Next|Tried], List, Arrived, Arrived ).
 
 %-----------------Graph Paths--------------------
 %-----------------Gay shit ---------------------
 %computes arrival time
-endtime( Arr, Dep, time(Hours, Min), Here) :-
-   write(Dep), write(' fag'), 
+endtime( Arr, Dep, time(Hours, Min), time(Hhour, Hmin)) :-
+   write('current airpot is '), write(Dep), 
+   write(' to '), write(Arr), nl, 
     haversine_distance_radians(Dep, Arr, Result),
+       write('distance is '), write(Result), nl,
 	%convert distance to time
-	Result is (Result / 500) + 0.5,
-    %compute arrival time	
-	Ass is Hours + (Result / 60),
-	Dick is Min + mod(Result, 60),
-	Here is time(Ass, Dick),
-        write(Here).
+
+	Res is (Result / 500) + (1/2),
+        write('travel time is '), write(Res), nl,
+        %compute arrival time	
+
+	Hhour is Hours + floor(Res),
+        write(Hhour),nl,
+	Hmin is round(Min + ((Res - floor(Res)) * 60)),
+       write(Hmin),nl.
 
 is_in_time( time(Rhours, Rmin), time(Dhours, Dmin)) :-
    Rhours < Dhours,
-   Rmin < Dmin.
+   Rmin < Dmin,
+   write(Rhours), write('penis '),  write(Rmin).
    
    	
 	
