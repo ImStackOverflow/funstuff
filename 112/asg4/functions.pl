@@ -91,48 +91,61 @@ listpath( Node, Node, _, [Node], _, _ ).
 
 %time is time of arrival
 listpath( Node, End, Tried, [Node|List], Time, Tlist ) :-
+
+   nl,nl,write('at '), write(Node), write(' '), write(Time),nl,
+   
    %find flights from current location
    flight( Node, Next, Flight_time ),
-   
-%check that chosen flight hasnt been analyzed before
+   %check that chosen flight hasnt been analyzed before
    not( member( Next, Tried )),
-    % write(Node), write(' asshole'),
+   %write(Node), write(' asshole'), nl,
    %check if chosen flight has reachable time
-
-   is_in_time( Time, Flight_time),
+   
    write('time before calc is '), write(Time), nl,   
+   
    %add departure time of valid flight
    %[Time|Tlist],
    %write(' fuckermcfuck '),
    %compute arival time
    endtime( Node, Next, Time, Arrived),
+   
+   write('poopymcbutthole'), nl,
+   
    %search for next path
    is_in_time( Arrived, Flight_time),
-   listpath( Next, End, [Next|Tried], List, Arrived, Arrived ).
+   write('fliht was in time '), write(Node), write(Next),nl,
+   listpath( Next, End, [Next|Tried], List, Flight_time, Arrived ).
 
 %-----------------Graph Paths--------------------
 %-----------------Gay shit ---------------------
 %computes arrival time
 endtime( Arr, Dep, time(Hours, Min), time(Hhour, Hmin)) :-
-   write('current airpot is '), write(Dep), 
-   write(' to '), write(Arr), nl, 
+   write('current airpot is '), write(Arr), 
+   write(' to '), write(Dep), nl, 
     haversine_distance_radians(Dep, Arr, Result),
-       write('distance is '), write(Result), nl,
+       %write('distance is '), write(Result), nl,
 	%convert distance to time
 
 	Res is (Result / 500) + (1/2),
-        write('travel time is '), write(Res), nl,
+   %     write('travel time is '), write(Res), nl,
         %compute arrival time	
 
-	Hhour is Hours + floor(Res),
-        write(Hhour),nl,
-	Hmin is round(Min + ((Res - floor(Res)) * 60)),
-       write(Hmin),nl.
+	
+	Hmin is mod(round(Min + ((Res - floor(Res)) * 60)),60),
+       %write('min is '), write(Hmin),nl,
+       Hhour is Hours + floor(Res) + div(Hmin,60).
+        %write('hours is'), write(Hhour),nl.
 
 is_in_time( time(Rhours, Rmin), time(Dhours, Dmin)) :-
-   Rhours < Dhours,
-   Rmin < Dmin,
-   write(Rhours), write('penis '),  write(Rmin).
+   Rhours < Dhours.
+   
+is_in_time( time(Rhours, Rmin), time(Dhours, Dmin)) :-
+   write(Rhours), write(' '),  write(Rmin), write(' leaving: '), write(Dhours), write(' '),  write(Dmin),
+   Rhours = Dhours,
+   Rmin < Dmin.
+
+printTime( time(Rhours, Rmin) ) :-
+    write(Rhours), write('penis '),  write(Rmin). 
    
    	
 	

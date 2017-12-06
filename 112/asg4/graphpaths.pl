@@ -63,9 +63,9 @@ writepath( [] ) :-
 writepath( [Head|Tail] ) :-
    write( ' ' ), write( Head ), writepath( Tail ).
 
-/*listpath( Node, End, Outlist ) :-
+listpath( Node, End, Outlist ) :-
    listpath( Node, End, [Node], Outlist ).
-*/
+
 listpath( Node, Node, _, [Node] ).
 listpath( Node, End, Tried, [Node|List] ) :-
    link( Node, Next ),
