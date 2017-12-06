@@ -96,12 +96,12 @@ listpath( Node, End, Tried, [Node|List], Time, Tlist ) :-
     % write(Node), write(' asshole'),
    %check if chosen flight has reachable time
    is_in_time( Time, Flight_time),
-   %write(Time), write('whore'),   
+   write(Time), write('whore'),   
 %check that chosen flight hasnt been analyzed before
    not( member( Next, Tried )),
    %add departure time of valid flight
    %[Time|Tlist],
-   %write(' fuckermcfuck '),
+   write(' fuckermcfuck '),
    %compute arival time
    endtime( Node, Next, Time, Arrived),
    %search for next path
@@ -111,7 +111,7 @@ listpath( Node, End, Tried, [Node|List], Time, Tlist ) :-
 %-----------------Gay shit ---------------------
 %computes arrival time
 endtime( Arr, Dep, time(Hours, Min), Here) :-
-   %write(Dep), write(' fag'), 
+   write(Dep), write(' fag'), 
     haversine_distance_radians(Dep, Arr, Result),
 	%convert distance to time
 	Result is (Result / 500) + 0.5,
