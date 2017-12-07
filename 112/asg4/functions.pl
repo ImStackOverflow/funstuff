@@ -42,7 +42,7 @@ haversine_distance( Lat1, Lon1, Lat2, Lon2, Distance ) :-
    Tmpa is sin( Dlat / 2 ) ** 2
       + cos( Lat1 ) * cos( Lat2 ) * sin( Dlon / 2 ) ** 2,
    Udist is 2 * atan2( sqrt( Tmpa ), sqrt( 1 - Tmpa )),
-   Distance is 3959 * Udist.
+   Distance is 3961 * Udist.
 
 %-----------------Haversine 1--------------------
 %-----------------Haversine 2--------------------
