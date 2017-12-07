@@ -42,7 +42,7 @@ haversine_distance( Lat1, Lon1, Lat2, Lon2, Distance ) :-
    Tmpa is sin( Dlat / 2 ) ** 2
       + cos( Lat1 ) * cos( Lat2 ) * sin( Dlon / 2 ) ** 2,
    Udist is 2 * atan2( sqrt( Tmpa ), sqrt( 1 - Tmpa )),
-   Distance is 3959 * Udist.
+   Distance is 3961 * Udist.
 
 %-----------------Haversine 1--------------------
 %-----------------Haversine 2--------------------
@@ -71,7 +71,6 @@ writeallpaths( Node, Next ) :-
    listpath( Node, Next, [Node], List, time(0, 0), Penis ),
    write( Node ), write( ' to ' ), write( Next ), write( ' is ' ),
    writepath( List ),
-   writepath(Penis),
    fail.
 
 writepath( [] ) :-
@@ -87,43 +86,66 @@ writepath( [Head|Tail] ) :-
 listpath( Node, End, Outlist ) :-
    listpath( Node, End, [Node], Outlist ).
 
-listpath( Node, Node, _, [Node] ).
+%base case for recursion
+listpath( Node, Node, _, [Node], _, _ ).
 
 %time is time of arrival
 listpath( Node, End, Tried, [Node|List], Time, Tlist ) :-
+
+   nl,nl,write('at '), write(Node), write(' '), write(Time),nl,
+   
    %find flights from current location
    flight( Node, Next, Flight_time ),
-    % write(Node), write(' asshole'),
-   %check if chosen flight has reachable time
-   is_in_time( Time, Flight_time),
-   %write(Time), write('whore'),   
-%check that chosen flight hasnt been analyzed before
+   %check that chosen flight hasnt been analyzed before
    not( member( Next, Tried )),
+   %write(Node), write(' asshole'), nl,
+   %check if chosen flight has reachable time
+   
+   write('time before calc is '), write(Time), nl,   
+   
    %add departure time of valid flight
    %[Time|Tlist],
    %write(' fuckermcfuck '),
    %compute arival time
    endtime( Node, Next, Time, Arrived),
+   
+   write('poopymcbutthole'), nl,
+   
    %search for next path
-   listpath( Next, End, [Next|Tried], List, Arrived, Arrived ).
+   is_in_time( Arrived, Flight_time),
+   write('fliht was in time '), write(Node), write(Next),nl,
+   listpath( Next, End, [Next|Tried], List, Flight_time, Arrived ).
 
 %-----------------Graph Paths--------------------
 %-----------------Gay shit ---------------------
 %computes arrival time
-endtime( Arr, Dep, time(Hours, Min), Here) :-
-   %write(Dep), write(' fag'), 
+endtime( Arr, Dep, time(Hours, Min), time(Hhour, Hmin)) :-
+   write('current airpot is '), write(Arr), 
+   write(' to '), write(Dep), nl, 
     haversine_distance_radians(Dep, Arr, Result),
+       %write('distance is '), write(Result), nl,
 	%convert distance to time
-	Result is (Result / 500) + 0.5,
-    %compute arrival time	
-	Ass is Hours + (Result / 60),
-	Dick is Min + mod(Result, 60),
-	Here is time(Ass, Dick),
-        write(Here).
+
+	Res is (Result / 500) + (1/2),
+   %     write('travel time is '), write(Res), nl,
+        %compute arrival time	
+
+	
+	Hmin is mod(round(Min + ((Res - floor(Res)) * 60)),60),
+       %write('min is '), write(Hmin),nl,
+       Hhour is Hours + floor(Res) + div(Hmin,60).
+        %write('hours is'), write(Hhour),nl.
 
 is_in_time( time(Rhours, Rmin), time(Dhours, Dmin)) :-
-   Rhours < Dhours,
+   Rhours < Dhours.
+   
+is_in_time( time(Rhours, Rmin), time(Dhours, Dmin)) :-
+   write(Rhours), write(' '),  write(Rmin), write(' leaving: '), write(Dhours), write(' '),  write(Dmin),
+   Rhours = Dhours,
    Rmin < Dmin.
+
+printTime( time(Rhours, Rmin) ) :-
+    write(Rhours), write('penis '),  write(Rmin). 
    
    	
 	
