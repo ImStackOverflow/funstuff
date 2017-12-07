@@ -65,12 +65,13 @@ writeallpaths( Node, Node ) :-
 writeallpaths( Node, Next ) :-
    listpath( Node, Next, [Node], List, time(0, 0), [Penis] ),
    write( Node ), write( ' to ' ), write( Next ), write( ' is ' ),
-   writepathA( List ),
-      
+   write(Node),
+   write(List),   
    write('fuckmcfuck'),
-length(Penis, X),
+writepathA( List ),
+%length(Penis, X),
 
-   write(X),
+  % write(X),
    fail.
    
 writepath( [] ) :-
@@ -87,8 +88,12 @@ writepathB( [] ) :-
    write('fucking sahit'),
    nl.
    
+
+
+
 writepathA( [Head|Tail] ) :-
-   airport(Head, String, _, _),
+	write(Head),   
+	airport(Head, String, _, _),
    write( 'depart ' ), write( String ), writepathB( Tail ).
 
 writepathB( [Head|Tail] ) :- 
