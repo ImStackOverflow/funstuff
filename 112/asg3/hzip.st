@@ -186,9 +186,6 @@ file := FileStream open: poop mode: FileStream read.
 (3 = arg size) ifTrue: [
    "if 3 args, then output file specified"
    poop := arg at: 3.
-   (File exists: poop) ifFalse: [ 
-      'file dont exist bro' displayNl.
-      ObjectMemory quit: 1 ].
    stdout := FileStream open: poop mode: FileStream write.
    ].
 
