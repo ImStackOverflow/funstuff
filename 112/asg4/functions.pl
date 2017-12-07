@@ -26,13 +26,10 @@ not( _ ).
 % degrees/minutes -> radians
 
 % convert degrees and minutes of arc to radians
-dm_rads( degmin( Degrees, Minutes ), Radians ) :-
-    Radians is (Degrees + Minutes / 60) * pi / 180.
 
-hm_mins( time(Hrs, Mins), Minutes) :-
-   Hours is Hrs * 60 + Mins.
+rads( degmin( Deg, Min ), Radians ) :-
+    Radians is (Deg + Min / 60) * pi / 180.
 
-%-----------------Conversions--------------------
 %-----------------Haversine 1--------------------
 
 % haversine formula
@@ -44,7 +41,6 @@ haversine_distance( Lat1, Lon1, Lat2, Lon2, Distance ) :-
    Udist is 2 * atan2( sqrt( Tmpa ), sqrt( 1 - Tmpa )),
    Distance is 3961 * Udist.
 
-%-----------------Haversine 1--------------------
 %-----------------Haversine 2--------------------
 
 % plug in converted units in order to find the distance
@@ -54,13 +50,12 @@ haversine_distance( Lat1, Lon1, Lat2, Lon2, Distance ) :-
 haversine_distance_radians( Dep, Arr, Distance ) :-
    airport( Dep, _, Lat1, Lon1 ),
    airport( Arr, _, Lat2, Lon2 ), 
-   dm_rads( Lat1, Lat1_rads ),
-   dm_rads( Lon1, Lon1_rads ),
-   dm_rads( Lat2, Lat2_rads ),
-   dm_rads( Lon2, Lon2_rads ),
-   haversine_distance( Lat1_rads, Lon1_rads, Lat2_rads, Lon2_rads, Distance ).
-
-%-----------------Haversine 2--------------------
+   rads( Lat1, Rlat1 ),
+   rads( Lon1, Rlon1 ),
+   rads( Lat2, Rlat2 ),
+   rads( Lon2, Rlon2 ),
+   haversine_distance( Rlat1, Rlon1, Rlat2, Rlon2, Distance ). 
+   
 %-----------------Write Paths--------------------
 
 % prints the flight path onto the console
@@ -68,17 +63,31 @@ haversine_distance_radians( Dep, Arr, Distance ) :-
 writeallpaths( Node, Node ) :-
    write( Node ), write( ' is ' ), write( Node ), nl.
 writeallpaths( Node, Next ) :-
-   listpath( Node, Next, [Node], List, time(0, 0), Penis ),
+   listpath( Node, Next, [Node], List, time(0, 0), [Penis] ),
    write( Node ), write( ' to ' ), write( Next ), write( ' is ' ),
-   writepath( List ),
+   writepathA( List ),
    fail.
-
+   
 writepath( [] ) :-
    nl.
 writepath( [Head|Tail] ) :-
    write( ' ' ), write( Head ), writepath( Tail ).
 
-%-----------------Write Paths--------------------
+
+writepath1( [] ) :-
+   nl.
+writepath2( [] ) :- 
+   nl.
+   
+writepathA( [Head|Tail] ) :-
+   airport(Head, String, _, _),
+   write( 'depart ' ), write( String ), writepathB( Tail ).
+
+writepathB( [Head|Tail] ) :- 
+   airport(Head, String, _, _), 
+   write( 'arrive ' ), write( String ), writepathA( Tail ).
+   
+
 %-----------------Graph Paths--------------------
 
 % find a path from one node to another.
@@ -91,8 +100,9 @@ listpath( Node, Node, _, [Node], _, _ ).
 
 %time is time of arrival
 listpath( Node, End, Tried, [Node|List], Time, Tlist ) :-
+   %addList(Time, Tlist),
 
-   nl,nl,write('at '), write(Node), write(' '), write(Time),nl,
+   %nl,nl,write('at '), write(Node), write(' '), write(Time),nl,
    
    %find flights from current location
    flight( Node, Next, Flight_time ),
@@ -101,7 +111,7 @@ listpath( Node, End, Tried, [Node|List], Time, Tlist ) :-
    %write(Node), write(' asshole'), nl,
    %check if chosen flight has reachable time
    
-   write('time before calc is '), write(Time), nl,   
+   %write('time before calc is '), write(Time), nl,   
    
    %add departure time of valid flight
    %[Time|Tlist],
@@ -109,25 +119,28 @@ listpath( Node, End, Tried, [Node|List], Time, Tlist ) :-
    %compute arival time
    endtime( Node, Next, Time, Arrived),
    
-   write('poopymcbutthole'), nl,
+   %write('poopymcbutthole'), nl,
    
    %search for next path
    is_in_time( Arrived, Flight_time),
-   write('fliht was in time '), write(Node), write(Next),nl,
-   listpath( Next, End, [Next|Tried], List, Flight_time, Arrived ).
+   write('fliht was in time '), write(Node), write(Next), write(Flight_time), nl,
+   %addList(Flight_Time, Tlist), 
+   listpath( Next, End, [Next|Tried], List, Flight_time, [Arrived|Tlist] ).
 
-%-----------------Graph Paths--------------------
-%-----------------Gay shit ---------------------
+%-----------------distance and time functions----------------
+
+
 %computes arrival time
 endtime( Arr, Dep, time(Hours, Min), time(Hhour, Hmin)) :-
-   write('current airpot is '), write(Arr), 
-   write(' to '), write(Dep), nl, 
+   
+   %write('current airpot is '), write(Arr), 
+   %write(' to '), write(Dep), nl, 
     haversine_distance_radians(Dep, Arr, Result),
        %write('distance is '), write(Result), nl,
 	%convert distance to time
 
 	Res is (Result / 500) + (1/2),
-   %     write('travel time is '), write(Res), nl,
+   %write('travel time is '), write(Res), nl,
         %compute arrival time	
 
 	
@@ -140,13 +153,12 @@ is_in_time( time(Rhours, Rmin), time(Dhours, Dmin)) :-
    Rhours < Dhours.
    
 is_in_time( time(Rhours, Rmin), time(Dhours, Dmin)) :-
-   write(Rhours), write(' '),  write(Rmin), write(' leaving: '), write(Dhours), write(' '),  write(Dmin),
    Rhours = Dhours,
    Rmin < Dmin.
-
-printTime( time(Rhours, Rmin) ) :-
-    write(Rhours), write('penis '),  write(Rmin). 
    
+addList(time(Hours,Min), List) :-
+   %write(Hours), write(Min), write(integer(Hours)),
+   append([List], [Min], List).
    	
 	
 
@@ -155,7 +167,7 @@ printTime( time(Rhours, Rmin) ) :-
 
 % identical arguments
 fly( Var, Var ) :-
-   write('Error: Identical arguments'),
+   write('Error: Arguments Identical'),
    !, fail.
 
 % correct input taken
@@ -164,15 +176,3 @@ fly( Dep, Arr ) :-
    airport(Arr, _, _, _),
    writeallpaths( Dep, Arr ),
    nl, !.   
-% no departure
-fly( Dep, _ ) :-
-   not(airport(Dep, _, _, _)),
-   write('Error: No argument for arrival area'),
-   !, fail.
-
-% no arrival
-fly( _, Arr ) :-
-   not(airport(Arr, _, _, _)),
-   write('Error: No argument for departure area'),
-   !, fail.
-
