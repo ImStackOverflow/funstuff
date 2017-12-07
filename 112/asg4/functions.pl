@@ -63,42 +63,29 @@ haversine_distance_radians( Dep, Arr, Distance ) :-
 writeallpaths( Node, Node ) :-
    write( Node ), write( ' is ' ), write( Node ), nl.
 writeallpaths( Node, Next ) :-
-   listpath( Node, Next, [Node], List, time(0, 0), [Penis] ),
-   write( Node ), write( ' to ' ), write( Next ), write( ' is ' ),
-   write(Node),
-   write(List),   
-   write('fuckmcfuck'),
-writepathA( List ),
-%length(Penis, X),
-
-  % write(X),
+   listpath( Node, Next, [Node], List, time(0, 0), [] ),
+   %write( Node ), write( ' to ' ), write( Next ), write( ' is ' ), 
+   writeshit( List),
    fail.
    
-writepath( [] ) :-
+/*writepath( [] ) :-
    nl.
 writepath( [Head|Tail] ) :-
    write( ' ' ), write( Head ), writepath( Tail ).
+*/
+writeshit( [] ) :- nl.
 
-
-writepathA( [] ) :-
-
-   write('fucking sahit'),
-   nl.
-writepathB( [] ) :- 
-   write('fucking sahit'),
-   nl.
+writeshit( [Arr, Dep |Tail]) :-
+   !, flight(Arr, Dep, Time), !,
+   airport(Arr, String, _, _), !,
+   airport(Dep, Str, _, _), !,
+   endtime(Arr, Dep, Time, Red),
+   write('depart '), write(String), write('   '), 
+   writeTime(Time), nl,
    
-
-
-
-writepathA( [Head|Tail] ) :-
-	write(Head),   
-	airport(Head, String, _, _),
-   write( 'depart ' ), write( String ), writepathB( Tail ).
-
-writepathB( [Head|Tail] ) :- 
-   airport(Head, String, _, _), 
-   write( 'arrive ' ), write( String ), writepathA( Tail ).
+   write('arrive '), write(Str), write('   '), 
+   writeTime(Red), nl,
+   writeshit([Dep|Tail]),!.
    
 
 %-----------------Graph Paths--------------------
@@ -113,74 +100,56 @@ listpath( Node, Node, _, [Node], _, _ ).
 
 %time is time of arrival
 listpath( Node, End, Tried, [Node|List], Time, Tlist ) :-
-   %addList(Time, Tlist),
-
-   %nl,nl,write('at '), write(Node), write(' '), write(Time),nl,
-   
    %find flights from current location
    flight( Node, Next, Flight_time ),
    %check that chosen flight hasnt been analyzed before
    not( member( Next, Tried )),
-   %write(Node), write(' asshole'), nl,
    %check if chosen flight has reachable time
    
-   %write('time before calc is '), write(Time), nl,   
-   
    %add departure time of valid flight
-   %[Time|Tlist],
-   %write(' fuckermcfuck '),
    %compute arival time
    endtime( Node, Next, Time, Arrived),
    
-   %write('poopymcbutthole'), nl,
    
    %search for next path
    is_in_time( Arrived, Flight_time),
-   write('fliht was in time '), write(Node), write(Next), write(Flight_time), nl,
-   %addList(Flight_Time, Tlist), 
-   listpath( Next, End, [Next|Tried], List, Flight_time, [Arrived|Tlist] ).
+   listpath( Next, End, [Next|Tried], List, Flight_time, Tlist ).
 
 %-----------------distance and time functions----------------
 
 
 %computes arrival time
 endtime( Arr, Dep, time(Hours, Min), time(Hhour, Hmin)) :-
-   
-   %write('current airpot is '), write(Arr), 
-   %write(' to '), write(Dep), nl, 
     haversine_distance_radians(Dep, Arr, Result),
-       %write('distance is '), write(Result), nl,
-	%convert distance to time
+    
+    %convert distance to time
+   Res is (Result / 500) + (1/2),
+    
+    %compute arrival time   
+   Hmin is mod(round(Min + ((Res - floor(Res)) * 60)),60),
+    Hhour is Hours + floor(Res) + div(Hmin,60).
 
-	Res is (Result / 500) + (1/2),
-   %write('travel time is '), write(Res), nl,
-        %compute arrival time	
-
-	
-	Hmin is mod(round(Min + ((Res - floor(Res)) * 60)),60),
-       %write('min is '), write(Hmin),nl,
-       Hhour is Hours + floor(Res) + div(Hmin,60).
-        %write('hours is'), write(Hhour),nl.
-
-is_in_time( time(Rhours, Rmin), time(Dhours, Dmin)) :-
+is_in_time( time(Rhours, _), time(Dhours, _)) :-
    Rhours < Dhours.
    
 is_in_time( time(Rhours, Rmin), time(Dhours, Dmin)) :-
    Rhours = Dhours,
    Rmin < Dmin.
    
-addList(time(Hours,Min), List) :-
-   %write(Hours), write(Min), write(integer(Hours)),
-   append([List], [Min], List).
-   	
-	
+addList(time(Hours,Min), M1) :-
+  M1 is Min + Hours.
+   
+writeTime(time(Hours,Min)) :- 
+   write(Hours), write(':'), write(Min).
+      
+   
 
 
 %-----------------Input Checks--------------------
 
 % identical arguments
 fly( Var, Var ) :-
-   write('Error: Arguments Identical'),
+   write('Error: Arguments Identical or dont exist'),
    !, fail.
 
 % correct input taken
@@ -188,4 +157,13 @@ fly( Dep, Arr ) :-
    airport(Dep, _, _, _),
    airport(Arr, _, _, _),
    writeallpaths( Dep, Arr ),
-   nl, !.   
+   nl, !, fail. 
+
+
+fly( Dep, _ ) :-
+   not(airport(Dep, _, _, _)),
+   write('airports dont exist '), nl.
+ 
+fly( _, Arr ) :-
+   not(airport(Arr, _, _, _)),
+   write('airports dont exist '), nl.
