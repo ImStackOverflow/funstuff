@@ -43,10 +43,7 @@ haversine_distance( Lat1, Lon1, Lat2, Lon2, Distance ) :-
 
 %-----------------Haversine 2--------------------
 
-% plug in converted units in order to find the distance
-% takes the departure area and arrival area and plugs converted 
-% units into the haversine_distance function to be calculated
-% (Converted) returns the distance in radians
+% returns the distance
 haversine_distance_radians( Dep, Arr, Distance ) :-
    airport( Dep, _, Lat1, Lon1 ),
    airport( Arr, _, Lat2, Lon2 ), 
@@ -58,16 +55,16 @@ haversine_distance_radians( Dep, Arr, Distance ) :-
    
 %-----------------Write Paths--------------------
 
-% prints the flight path onto the console
+% prints the flight path
 
 writeallpaths( Node, Node ) :-
    write( Node ), write( ' is ' ), write( Node ), nl.
 writeallpaths( Node, Next ) :-
    listpath( Node, Next, [Node], List, time(0, 0), [] ),
    %write( Node ), write( ' to ' ), write( Next ), write( ' is ' ), 
+
    writeshit( List),
-   fail.
-   
+  fail. 
 /*writepath( [] ) :-
    nl.
 writepath( [Head|Tail] ) :-
@@ -80,7 +77,7 @@ writeshit( [Arr, Dep |Tail]) :-
    airport(Arr, String, _, _), !,
    airport(Dep, Str, _, _), !,
    endtime(Arr, Dep, Time, Red),
-   write('depart '), write(String), write('   '), 
+    write('depart '), write(String), write('   '), 
    writeTime(Time), nl,
    
    write('arrive '), write(Str), write('   '), 
@@ -108,11 +105,11 @@ listpath( Node, End, Tried, [Node|List], Time, Tlist ) :-
    
    %add departure time of valid flight
    %compute arival time
-   endtime( Node, Next, Time, Arrived),
-   
+   endtime( Node, Next, Time, Arrived), 
    
    %search for next path
    is_in_time( Arrived, Flight_time),
+
    listpath( Next, End, [Next|Tried], List, Flight_time, Tlist ).
 
 %-----------------distance and time functions----------------
