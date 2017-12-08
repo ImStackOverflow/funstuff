@@ -261,7 +261,7 @@ poop := arg at: 1.
 "compress"
 poop := arg at: 2.
 file := FileStream open: poop mode: FileStream read.
-   ordChar := file nextLine asString.
+   ordChar := file nextLine.
    stdinBits := BitStream new: file.
    [stdinBits atEnd] whileFalse: [
       stdout << stdinBits nextBit.
